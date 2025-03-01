@@ -129,6 +129,9 @@ void RunAction::OpenRoot() {
     aTree->Branch("MuPolarization",MuPol,"MuPolarization[3]/D");
     aTree->Branch("EMomentum",EMom,"EMomentum[3]/D");
 
+    //Emma's addition - Feb 2025
+    aTree->Branch("annihil",&annihilCount,"annihil/I");
+    aTree->Branch("brems",&bremsCount,"brems/I");    
   
     //Diagnostic Histograms
 
@@ -372,6 +375,18 @@ void RunAction::SBhabha(G4double Energy)
 {
   EBh=Energy;
  
+}
+
+void RunAction::AnnihilSeen()
+{
+  annihilCount=1; // if you see annihilation, put a 1 here
+ 
+}
+
+
+void RunAction::BremsSeen()
+{
+  bremsCount=1; // if you see Brems, put a 1 here
 }
 
                     
