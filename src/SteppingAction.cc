@@ -148,19 +148,20 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
 
     //Emma's addition - Feb 2025
     // For tagging processes: Scattering, bremsstrahlung, annihilation
+    /*
     if (theParticleName == "e+"){ //do I want this just for positrons?
       // just try printing out all the processes
       // G4cout << "A positron is doing " << theProcessName << G4endl;
-
       if (theProcessName == "annihil") { //annihilation process
         // AnnihilSeen
         runAction->AnnihilSeen();
       } 
       if (theProcessName == "eBrem") { //bremsstrahlung process
-          runAction->AnnihilSeen();
+          runAction->BremsSeen();
         } 
       if (theProcessName == "msc") {} //Scattering process
 
-    }
+    } 
+    */
     
 }

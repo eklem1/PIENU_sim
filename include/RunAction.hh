@@ -62,8 +62,8 @@ class RunAction : public G4UserRunAction {
     void SMuPolarization(G4ThreeVector);
     void SEmomentum (G4ThreeVector);
 
-    void AnnihilSeen();
-    void BremsSeen();
+    // void AnnihilSeen();
+    // void BremsSeen();
 
     void SavePionStart(G4ThreeVector, G4ThreeVector);
     void SavePionStop(G4ThreeVector);
@@ -156,8 +156,8 @@ class RunAction : public G4UserRunAction {
     G4double EPhNX[3];
     G4double EBh;
 
-    G4int annihilCount;
-    G4int bremsCount;
+    // G4int annihilCount;
+    // G4int bremsCount;
 
 
     G4double MuPol[3];
