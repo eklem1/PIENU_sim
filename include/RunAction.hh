@@ -62,6 +62,9 @@ class RunAction : public G4UserRunAction {
     void SMuPolarization(G4ThreeVector);
     void SEmomentum (G4ThreeVector);
 
+  /// Additions based on Tristan's work /////
+    void SPosAnnihil(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
+
     // void AnnihilSeen();
     // void BremsSeen();
     // void MSCSeen();
@@ -156,6 +159,9 @@ class RunAction : public G4UserRunAction {
     G4double EStopX[4],EStopP[4];
     G4double EPhNX[3];
     G4double EBh;
+
+    G4double PosAnnihilPreX[4],PosAnnihilPreP[4];
+    G4double PosAnnihilPostX[4],PosAnnihilPostP[4];
 
     // G4int annihilCount;
     // G4int bremsCount;

@@ -79,15 +79,16 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
 
     if (theParticleName == "pi+") {
       if (theTrack->GetCurrentStepNumber() == 1)
-	runAction->SPionStart(prePosition,preTime,preMomentum,preEnergy);
+	      runAction->SPionStart(prePosition,preTime,preMomentum,preEnergy);
       if (theProcessName == "Decay" | theProcessName == "DecayWithSpin")
-	runAction->SPionDecay(postPosition,postTime,postMomentum,postEnergy);
+	      runAction->SPionDecay(postPosition,postTime,postMomentum,postEnergy);
     }
     if (theParticleName == "mu+") {
       if (theTrack->GetCurrentStepNumber() == 1)
-	runAction->SMuonStart(prePosition,preTime,preMomentum,preEnergy);
+	      runAction->SMuonStart(prePosition,preTime,preMomentum,preEnergy);
+        mutracknumber = theTrack->GetTrackID();
       if (theProcessName == "Decay" | theProcessName == "DecayWithSpin"){
-	runAction->SMuonDecay(postPosition,postTime,postMomentum,postEnergy);
+	      runAction->SMuonDecay(postPosition,postTime,postMomentum,postEnergy);
     	runAction->SMuPolarization(theTrack->GetPolarization()); //Save the polarization of the muon
       }
     }
@@ -145,6 +146,24 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
             }
         }
     }
+
+    /// Additions based on Tristan's work /////
+
+    //checking for annihililation positrons
+    //why not in the NaI?
+    if (theParticleName == "e+" && theProcessName == "annihil" && thePostVolume != "NaI" && thePreVolume != "NaI") 
+    {
+        // Check if primary positron
+        if (theTrack->GetParentID() == 1 || theTrack->GetParentID() == mutracknumber)
+        {
+            // This excludes CsI, here checking that Crystal is not in the pre/post vol name
+            if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
+            {
+                runAction->SPosAnnihil(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+            }
+        }
+    }
+
 
     //Emma's addition - Feb 2025
     // For tagging processes: Scattering, bremsstrahlung, annihilation

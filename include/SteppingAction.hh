@@ -25,6 +25,8 @@ class SteppingAction : public G4UserSteppingAction {
         G4bool savedT1Once;
         G4bool savedT3Once;
 
+        G4int mutracknumber;
+
 };
 
 #endif

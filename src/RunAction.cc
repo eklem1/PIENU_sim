@@ -379,6 +379,30 @@ void RunAction::SBhabha(G4double Energy)
  
 }
 
+
+/// Additions based on Tristan's work /////
+void RunAction::SPosAnnihil(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
+{
+    PosAnnihilPreX[0] = prepos.x();
+    PosAnnihilPreX[1] = prepos.y();
+    PosAnnihilPreX[2] = prepos.z();
+    PosAnnihilPreX[3] = pretime;
+    PosAnnihilPreP[0] = premom.x();
+    PosAnnihilPreP[1] = premom.y();
+    PosAnnihilPreP[2] = premom.z();
+    PosAnnihilPreP[3] = preE;
+
+    PosAnnihilPostX[0] = postpos.x();
+    PosAnnihilPostX[1] = postpos.y();
+    PosAnnihilPostX[2] = postpos.z();
+    PosAnnihilPostX[3] = posttime;
+    PosAnnihilPostP[0] = postmom.x();
+    PosAnnihilPostP[1] = postmom.y();
+    PosAnnihilPostP[2] = postmom.z();
+    PosAnnihilPostP[3] = postE;
+}
+
+
 /*
 void RunAction::AnnihilSeen()
 {
@@ -445,6 +469,8 @@ void RunAction::ClearVariable(){
   RunAction::SPositronStop(tV,temp,tV,temp);
   RunAction::SPhotonuclear(tV);
   RunAction::SBhabha(temp);
+
+  RunAction::SPosAnnihil(temp, temp, tV, tV, tV, tV, temp, temp);
 }
 
 void RunAction::SavePionStart(G4ThreeVector position, G4ThreeVector momentum)
