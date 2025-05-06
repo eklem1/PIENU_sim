@@ -124,6 +124,41 @@ void RunAction::OpenRoot() {
     aTree->Branch("PoStopX",EStopX,"PoStopX[4]/D");
     aTree->Branch("PoStopP",EStopP,"PoStopP[4]/D");
 
+    /// Additions based on Tristan's work /////
+    aTree->Branch("PosBremPreX",PosBremPreX,"PosBremPreX[4]/D");
+    aTree->Branch("PosBremPreP",PosBremPreP,"PosBremPreP[4]/D");
+    aTree->Branch("PosBremPostX",PosBremPostX,"PosBremPostX[4]/D");
+    aTree->Branch("PosBremPostP",PosBremPostP,"PosBremPostP[4]/D");
+    aTree->Branch("PosBhabhaPreX",PosBhabhaPreX,"PosBhabhaPreX[4]/D");
+    aTree->Branch("PosBhabhaPreP",PosBhabhaPreP,"PosBhabhaPreP[4]/D");
+    aTree->Branch("PosBhabhaPostX",PosBhabhaPostX,"PosBhabhaPostX[4]/D");
+    aTree->Branch("PosBhabhaPostP",PosBhabhaPostP,"PosBhabhaPostP[4]/D");
+    aTree->Branch("PosAnnihilPreX",PosAnnihilPreX,"PosAnnihilPreX[4]/D");
+    aTree->Branch("PosAnnihilPreP",PosAnnihilPreP,"PosAnnihilPreP[4]/D");
+    aTree->Branch("PosAnnihilPostX",PosAnnihilPostX,"PosAnnihilPostX[4]/D");
+    aTree->Branch("PosAnnihilPostP",PosAnnihilPostP,"PosAnnihilPostP[4]/D");
+    aTree->Branch("ElecBremPreX",ElecBremPreX,"ElecBremPreX[4]/D");
+    aTree->Branch("ElecBremPreP",ElecBremPreP,"ElecBremPreP[4]/D");
+    aTree->Branch("ElecBremPostX",ElecBremPostX,"ElecBremPostX[4]/D");
+    aTree->Branch("ElecBremPostP",ElecBremPostP,"ElecBremPostP[4]/D");
+    aTree->Branch("PosScatterPreX",PosScatterPreX,"PosScatterPreX[4]/D");
+    aTree->Branch("PosScatterPreP",PosScatterPreP,"PosScatterPreP[4]/D");
+    aTree->Branch("PosScatterPostX",PosScatterPostX,"PosScatterPostX[4]/D");
+    aTree->Branch("PosScatterPostP",PosScatterPostP,"PosScatterPostP[4]/D");
+    aTree->Branch("ElecScatterPreX",ElecScatterPreX,"ElecScatterPreX[4]/D");
+    aTree->Branch("ElecScatterPreP",ElecScatterPreP,"ElecScatterPreP[4]/D");
+    aTree->Branch("ElecScatterPostX",ElecScatterPostX,"ElecScatterPostX[4]/D");
+    aTree->Branch("ElecScatterPostP",ElecScatterPostP,"ElecScatterPostP[4]/D");
+    aTree->Branch("PosTotalBremE",&TotalBremEpos,"PosTotalBremE/D");
+    aTree->Branch("ElecTotalBremE",&TotalBremEelec,"ElecTotalBremE[4]/D");
+    aTree->Branch("PosTotalBhabhaE",&TotalBhabhaEpos,"PosTotalBhabhaE/D");
+    aTree->Branch("ElecinWC3PreX", ElecinWC3PreX, "ElecinWC3PreX[4]/D");
+    aTree->Branch("ElecinWC3PreP", ElecinWC3PreP, "ElecinWC3PreP[4]/D");
+    aTree->Branch("PrimPosinWC3PreX", PrimPosinWC3PreX, "PrimPosinWC3PreX[4]/D");
+    aTree->Branch("PrimPosinWC3PreP", PrimPosinWC3PreP, "PrimPosinWC3PreP[4]/D");
+    aTree->Branch("SecPosinWC3PreX", SecPosinWC3PreX, "SecPosinWC3PreX[4]/D");
+    aTree->Branch("SecPosinWC3PreP", SecPosinWC3PreP, "SecPosinWC3PreP[4]/D");
+
     aTree->Branch("PhotonuclearX",EPhNX,"PhotonuclearX[3]/D");
     aTree->Branch("BhabhaE",&EBh,"BhabhaE/D");
     aTree->Branch("MuPolarization",MuPol,"MuPolarization[3]/D");
@@ -381,6 +416,70 @@ void RunAction::SBhabha(G4double Energy)
 
 
 /// Additions based on Tristan's work /////
+
+void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
+{
+    //G4cout << "MaxBremEpos: " << MaxBremEpos << G4endl;
+    //G4cout << "preE - postE: " << preE - postE << G4endl;
+
+    if (preE - postE > MaxBremEpos)
+    {    
+        PosBremPreX[0] = prepos.x();
+        PosBremPreX[1] = prepos.y();
+        PosBremPreX[2] = prepos.z();
+        PosBremPreX[3] = pretime;
+        PosBremPreP[0] = premom.x();
+        PosBremPreP[1] = premom.y();
+        PosBremPreP[2] = premom.z();
+        PosBremPreP[3] = preE;
+
+        PosBremPostX[0] = postpos.x();
+        PosBremPostX[1] = postpos.y();
+        PosBremPostX[2] = postpos.z();
+        PosBremPostX[3] = posttime;
+        PosBremPostP[0] = postmom.x();
+        PosBremPostP[1] = postmom.y();
+        PosBremPostP[2] = postmom.z();
+        PosBremPostP[3] = postE;
+
+        MaxBremEpos = preE - postE;
+    }
+
+    TotalBremEpos += preE - postE;
+}
+ 
+
+void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
+{
+    //G4cout << "MaxBhabhaEpos: " << MaxBhabhaEpos << G4endl;
+    //G4cout << "preE - postE: " << preE - postE << G4endl;
+
+    if (preE - postE > MaxBhabhaEpos)
+    {    
+        PosBhabhaPreX[0] = prepos.x();
+        PosBhabhaPreX[1] = prepos.y();
+        PosBhabhaPreX[2] = prepos.z();
+        PosBhabhaPreX[3] = pretime;
+        PosBhabhaPreP[0] = premom.x();
+        PosBhabhaPreP[1] = premom.y();
+        PosBhabhaPreP[2] = premom.z();
+        PosBhabhaPreP[3] = preE;
+
+        PosBhabhaPostX[0] = postpos.x();
+        PosBhabhaPostX[1] = postpos.y();
+        PosBhabhaPostX[2] = postpos.z();
+        PosBhabhaPostX[3] = posttime;
+        PosBhabhaPostP[0] = postmom.x();
+        PosBhabhaPostP[1] = postmom.y();
+        PosBhabhaPostP[2] = postmom.z();
+        PosBhabhaPostP[3] = postE;
+
+        MaxBhabhaEpos = preE - postE;
+    }
+
+    TotalBhabhaEpos += preE - postE;
+}
+                   
 void RunAction::SPosAnnihil(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
     PosAnnihilPreX[0] = prepos.x();
@@ -400,6 +499,118 @@ void RunAction::SPosAnnihil(G4double pretime, G4double posttime, G4ThreeVector p
     PosAnnihilPostP[1] = postmom.y();
     PosAnnihilPostP[2] = postmom.z();
     PosAnnihilPostP[3] = postE;
+}
+                   
+void RunAction::SElecBrem(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
+{
+    //G4cout << "MaxBremEelec: " << MaxBremEelec << G4endl;
+    //G4cout << "preE - postE: " << preE - postE << G4endl;
+
+    if (preE - postE > MaxBremEelec)
+    {    
+        ElecBremPreX[0] = prepos.x();
+        ElecBremPreX[1] = prepos.y();
+        ElecBremPreX[2] = prepos.z();
+        ElecBremPreX[3] = pretime;
+        ElecBremPreP[0] = premom.x();
+        ElecBremPreP[1] = premom.y();
+        ElecBremPreP[2] = premom.z();
+        ElecBremPreP[3] = preE;
+
+        ElecBremPostX[0] = postpos.x();
+        ElecBremPostX[1] = postpos.y();
+        ElecBremPostX[2] = postpos.z();
+        ElecBremPostX[3] = posttime;
+        ElecBremPostP[0] = postmom.x();
+        ElecBremPostP[1] = postmom.y();
+        ElecBremPostP[2] = postmom.z();
+        ElecBremPostP[3] = postE;
+
+        MaxBremEelec = preE - postE;
+    }
+
+    TotalBremEelec += preE - postE;
+}
+
+void RunAction::SPosScatter(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
+{
+    PosScatterPreX[0] = prepos.x();
+    PosScatterPreX[1] = prepos.y();
+    PosScatterPreX[2] = prepos.z();
+    PosScatterPreX[3] = pretime;
+    PosScatterPreP[0] = premom.x();
+    PosScatterPreP[1] = premom.y();
+    PosScatterPreP[2] = premom.z();
+    PosScatterPreP[3] = preE;
+
+    PosScatterPostX[0] = postpos.x();
+    PosScatterPostX[1] = postpos.y();
+    PosScatterPostX[2] = postpos.z();
+    PosScatterPostX[3] = posttime;
+    PosScatterPostP[0] = postmom.x();
+    PosScatterPostP[1] = postmom.y();
+    PosScatterPostP[2] = postmom.z();
+    PosScatterPostP[3] = postE;
+}
+                    
+void RunAction::SElecScatter(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
+{
+    ElecScatterPreX[0] = prepos.x();
+    ElecScatterPreX[1] = prepos.y();
+    ElecScatterPreX[2] = prepos.z();
+    ElecScatterPreX[3] = pretime;
+    ElecScatterPreP[0] = premom.x();
+    ElecScatterPreP[1] = premom.y();
+    ElecScatterPreP[2] = premom.z();
+    ElecScatterPreP[3] = preE;
+
+    ElecScatterPostX[0] = postpos.x();
+    ElecScatterPostX[1] = postpos.y();
+    ElecScatterPostX[2] = postpos.z();
+    ElecScatterPostX[3] = posttime;
+    ElecScatterPostP[0] = postmom.x();
+    ElecScatterPostP[1] = postmom.y();
+    ElecScatterPostP[2] = postmom.z();
+    ElecScatterPostP[3] = postE;
+}
+                    
+void RunAction::SeinWC3(G4ThreeVector position, G4double time, G4ThreeVector momentum, G4double Energy)
+{
+    ElecinWC3PreX[0] = position.x();
+    ElecinWC3PreX[1] = position.y();
+    ElecinWC3PreX[2] = position.z();
+    ElecinWC3PreX[3] = time;
+
+    ElecinWC3PreP[0] = momentum.x();
+    ElecinWC3PreP[1] = momentum.y();
+    ElecinWC3PreP[2] = momentum.z();
+    ElecinWC3PreP[3] = Energy;
+}
+
+void RunAction::SprimposinWC3(G4ThreeVector position, G4double time, G4ThreeVector momentum, G4double Energy)
+{
+    PrimPosinWC3PreX[0] = position.x();
+    PrimPosinWC3PreX[1] = position.y();
+    PrimPosinWC3PreX[2] = position.z();
+    PrimPosinWC3PreX[3] = time;
+
+    PrimPosinWC3PreP[0] = momentum.x();
+    PrimPosinWC3PreP[1] = momentum.y();
+    PrimPosinWC3PreP[2] = momentum.z();
+    PrimPosinWC3PreP[3] = Energy;
+}
+
+void RunAction::SsecposinWC3(G4ThreeVector position, G4double time, G4ThreeVector momentum, G4double Energy)
+{
+    SecPosinWC3PreX[0] = position.x();
+    SecPosinWC3PreX[1] = position.y();
+    SecPosinWC3PreX[2] = position.z();
+    SecPosinWC3PreX[3] = time;
+
+    SecPosinWC3PreP[0] = momentum.x();
+    SecPosinWC3PreP[1] = momentum.y();
+    SecPosinWC3PreP[2] = momentum.z();
+    SecPosinWC3PreP[3] = Energy;
 }
 
 
@@ -470,7 +681,24 @@ void RunAction::ClearVariable(){
   RunAction::SPhotonuclear(tV);
   RunAction::SBhabha(temp);
 
+  RunAction::SPosBrem(temp, temp, tV, tV, tV, tV, temp, temp);
+  RunAction::SPosBhabha(temp, temp, tV, tV, tV, tV, temp, temp);
   RunAction::SPosAnnihil(temp, temp, tV, tV, tV, tV, temp, temp);
+  RunAction::SElecBrem(temp, temp, tV, tV, tV, tV, temp, temp);
+  RunAction::SPosScatter(temp, temp, tV, tV, tV, tV, temp, temp);
+  RunAction::SElecScatter(temp, temp, tV, tV, tV, tV, temp, temp);
+
+  RunAction::SeinWC3(tV, temp, tV, temp);
+  RunAction::SprimposinWC3(tV, temp, tV, temp);
+  RunAction::SsecposinWC3(tV, temp, tV, temp);
+
+  MaxBremEpos = 0;
+  MaxBremEelec = 0;
+  TotalBremEpos = 0;
+  TotalBremEelec = 0;
+
+  MaxBhabhaEpos = 0;
+  TotalBhabhaEpos = 0;
 }
 
 void RunAction::SavePionStart(G4ThreeVector position, G4ThreeVector momentum)

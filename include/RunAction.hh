@@ -62,8 +62,17 @@ class RunAction : public G4UserRunAction {
     void SMuPolarization(G4ThreeVector);
     void SEmomentum (G4ThreeVector);
 
-  /// Additions based on Tristan's work /////
+    /// Additions based on Tristan's work /////
+    void SPosBrem(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
+    void SElecBrem(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
+    void SPosScatter(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
+    void SElecScatter(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
+    void SPosBhabha(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
     void SPosAnnihil(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
+
+    void SeinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
+    void SprimposinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
+    void SsecposinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
 
     // void AnnihilSeen();
     // void BremsSeen();
@@ -160,8 +169,29 @@ class RunAction : public G4UserRunAction {
     G4double EPhNX[3];
     G4double EBh;
 
+    G4double PosBremPreX[4],PosBremPreP[4];
+    G4double PosBremPostX[4],PosBremPostP[4];
+    G4double ElecBremPreX[4],ElecBremPreP[4];
+    G4double ElecBremPostX[4],ElecBremPostP[4];
+    G4double PosScatterPreX[4],PosScatterPreP[4];
+    G4double PosScatterPostX[4],PosScatterPostP[4];
+    G4double ElecScatterPreX[4],ElecScatterPreP[4];
+    G4double ElecScatterPostX[4],ElecScatterPostP[4];
+    G4double PosBhabhaPreX[4],PosBhabhaPreP[4];
+    G4double PosBhabhaPostX[4],PosBhabhaPostP[4];
     G4double PosAnnihilPreX[4],PosAnnihilPreP[4];
     G4double PosAnnihilPostX[4],PosAnnihilPostP[4];
+    G4double ElecinWC3PreX[4],ElecinWC3PreP[4];
+    G4double PrimPosinWC3PreX[4],PrimPosinWC3PreP[4];
+    G4double SecPosinWC3PreX[4],SecPosinWC3PreP[4];
+
+    G4double MaxBremEpos = 0;
+    G4double MaxBremEelec = 0;
+    G4double TotalBremEpos = 0;
+    G4double TotalBremEelec = 0;
+
+    G4double MaxBhabhaEpos = 0;
+    G4double TotalBhabhaEpos = 0;
 
     // G4int annihilCount;
     // G4int bremsCount;
