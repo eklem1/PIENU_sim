@@ -3,8 +3,8 @@ module load StdEnv/2020
 module load gcc/9.3.0
 module load geant4/10.06
 module load cmake
-# module load root
-module load root/6.20.04
+module load root
+# module load root/6.20.04
 
 source $G4INSTALL/share/Geant4-10.6.0/geant4make/geant4make.sh
 

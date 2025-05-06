@@ -3,6 +3,8 @@
 #  executed only if G4VVisManager::GetConcreteInstance() is non-zero.
 #
 
+# /process/inactivate msc
+
 /decay/external # Call external decay generator
 /radiative/mu_or_e 1 # choose pi->mu -> e nu
 
@@ -10,7 +12,7 @@
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
-/event/printModulo 10
+/event/printModulo 10000
 /rndm/autoSeed true
 
 #Commands for the pileup
@@ -23,5 +25,5 @@
 /beam/FromData 4
 
 #Number of events to simulate
-/run/beamOn 25000 
+/run/beamOn 600000  
 #/run/beamOn 100

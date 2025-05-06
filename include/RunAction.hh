@@ -64,6 +64,7 @@ class RunAction : public G4UserRunAction {
 
     // void AnnihilSeen();
     // void BremsSeen();
+    // void MSCSeen();
 
     void SavePionStart(G4ThreeVector, G4ThreeVector);
     void SavePionStop(G4ThreeVector);
@@ -158,7 +159,7 @@ class RunAction : public G4UserRunAction {
 
     // G4int annihilCount;
     // G4int bremsCount;
-
+    // G4int mscCount;
 
     G4double MuPol[3];
     G4double EMom[3];

@@ -157,10 +157,13 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
         runAction->AnnihilSeen();
       } 
       if (theProcessName == "eBrem") { //bremsstrahlung process
+          // G4cout << "A positron is doing " << theProcessName << G4endl;
           runAction->BremsSeen();
         } 
-      if (theProcessName == "msc") {} //Scattering process
-
+      if (theProcessName == "msc") { //Scattering process
+          // G4cout << "A positron is doing " << theProcessName << G4endl;
+          runAction->MSCSeen();
+        }
     } 
     */
     

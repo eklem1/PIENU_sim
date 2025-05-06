@@ -132,6 +132,8 @@ void RunAction::OpenRoot() {
     //Emma's addition - Feb 2025
     // aTree->Branch("annihil",&annihilCount,"annihil/I");
     // aTree->Branch("brems",&bremsCount,"brems/I");    
+    // aTree->Branch("msc",&mscCount,"msc/I");    
+
   
     //Diagnostic Histograms
 
@@ -389,6 +391,12 @@ void RunAction::BremsSeen()
 {
   bremsCount=1; // if you see Brems, put a 1 here
 }
+
+void RunAction::MSCSeen()
+{
+  mscCount=1; // if you see msc, put a 1 here
+}
+ 
 */
                     
 void RunAction::SMuPolarization(G4ThreeVector mupolarization)
