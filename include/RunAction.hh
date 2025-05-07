@@ -70,9 +70,9 @@ class RunAction : public G4UserRunAction {
     void SPosBhabha(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
     void SPosAnnihil(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
 
-    void SeinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
-    void SprimposinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
-    void SsecposinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
+    // void SeinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
+    // void SprimposinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
+    // void SsecposinWC3(G4ThreeVector, G4double, G4ThreeVector, G4double);
 
     // void AnnihilSeen();
     // void BremsSeen();

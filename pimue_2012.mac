@@ -25,5 +25,6 @@
 /beam/FromData 4
 
 #Number of events to simulate
-/run/beamOn 600000  
+# /run/beamOn 600000  
+/run/beamOn 100000
 #/run/beamOn 100

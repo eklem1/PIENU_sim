@@ -574,6 +574,7 @@ void RunAction::SElecScatter(G4double pretime, G4double posttime, G4ThreeVector 
     ElecScatterPostP[3] = postE;
 }
                     
+/*
 void RunAction::SeinWC3(G4ThreeVector position, G4double time, G4ThreeVector momentum, G4double Energy)
 {
     ElecinWC3PreX[0] = position.x();
@@ -612,7 +613,7 @@ void RunAction::SsecposinWC3(G4ThreeVector position, G4double time, G4ThreeVecto
     SecPosinWC3PreP[2] = momentum.z();
     SecPosinWC3PreP[3] = Energy;
 }
-
+*/
 
 /*
 void RunAction::AnnihilSeen()
@@ -688,9 +689,9 @@ void RunAction::ClearVariable(){
   RunAction::SPosScatter(temp, temp, tV, tV, tV, tV, temp, temp);
   RunAction::SElecScatter(temp, temp, tV, tV, tV, tV, temp, temp);
 
-  RunAction::SeinWC3(tV, temp, tV, temp);
-  RunAction::SprimposinWC3(tV, temp, tV, temp);
-  RunAction::SsecposinWC3(tV, temp, tV, temp);
+  // RunAction::SeinWC3(tV, temp, tV, temp);
+  // RunAction::SprimposinWC3(tV, temp, tV, temp);
+  // RunAction::SsecposinWC3(tV, temp, tV, temp);
 
   MaxBremEpos = 0;
   MaxBremEelec = 0;
