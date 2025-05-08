@@ -104,6 +104,46 @@ class MCtree {
   // Tristan Oct. 12/17
   Double_t WC3positronX[4];
 
+  ///// Additions based on Tristan's work /////
+  Double_t PosBremPreX[4];
+  Double_t PosBremPreP[4];
+  Double_t PosBremPostX[4];
+  Double_t PosBremPostP[4];
+  Double_t ElecBremPreX[4];
+  Double_t ElecBremPreP[4];
+  Double_t ElecBremPostX[4];
+  Double_t ElecBremPostP[4];
+
+  Double_t PosBhabhaPreX[4];
+  Double_t PosBhabhaPreP[4];
+  Double_t PosBhabhaPostX[4];
+  Double_t PosBhabhaPostP[4];
+
+  Double_t PosAnnihilPreX[4];
+  Double_t PosAnnihilPreP[4];
+  Double_t PosAnnihilPostX[4];
+  Double_t PosAnnihilPostP[4];
+
+  Double_t PosScatterPreX[4];
+  Double_t PosScatterPreP[4];
+  Double_t PosScatterPostX[4];
+  Double_t PosScatterPostP[4];
+  Double_t ElecScatterPreX[4];
+  Double_t ElecScatterPreP[4];
+  Double_t ElecScatterPostX[4];
+  Double_t ElecScatterPostP[4];
+
+  Double_t ElecinWC3PreX[4];
+  Double_t ElecinWC3PreP[4];
+  Double_t PrimPosinWC3PreX[4];
+  Double_t PrimPosinWC3PreP[4];
+  Double_t SecPosinWC3PreX[4];
+  Double_t SecPosinWC3PreP[4];
+
+  Double_t PosTotalBremE;
+  Double_t ElecTotalBremE;
+  Double_t PosTotalBhabhaE;
+
   //Output Variables
 
   Int_t static const MAX_NUM_HITS = 50;
@@ -390,6 +430,46 @@ class MCtree {
   Double_t birksqr;
   int numhits;
   //  Double_t tnai, energy, energy2;
+
+  ///// Additions based on Tristan's work /////
+  Double_t posbremprex[4];
+  Double_t posbremprep[4];
+  Double_t posbrempostx[4];
+  Double_t posbrempostp[4];
+  Double_t elecbremprex[4];
+  Double_t elecbremprep[4];
+  Double_t elecbrempostx[4];
+  Double_t elecbrempostp[4];
+
+  Double_t posbhabhaprex[4];
+  Double_t posbhabhaprep[4];
+  Double_t posbhabhapostx[4];
+  Double_t posbhabhapostp[4];
+
+  Double_t posannihilprex[4];
+  Double_t posannihilprep[4];
+  Double_t posannihilpostx[4];
+  Double_t posannihilpostp[4];
+
+  Double_t posscatterprex[4];
+  Double_t posscatterprep[4];
+  Double_t posscatterpostx[4];
+  Double_t posscatterpostp[4];
+  Double_t elecscatterprex[4];
+  Double_t elecscatterprep[4];
+  Double_t elecscatterpostx[4];
+  Double_t elecscatterpostp[4];
+
+  Double_t elecinwc3prex[4];
+  Double_t elecinwc3prep[4];
+  Double_t primposinwc3prex[4];
+  Double_t primposinwc3prep[4];
+  Double_t secposinwc3prex[4];
+  Double_t secposinwc3prep[4];
+
+  Double_t postotalbreme;
+  Double_t electotalbreme;
+  Double_t postotalbhabhae;
 
   Float_t ampx[48];
   Float_t ampxt[48];

@@ -257,6 +257,48 @@ void MCtree::SetInputFile(const char* fname) {
   // Added by Tristan, Oct. 12/17
   MCTree2->SetBranchAddress("WC3positronX",&WC3positronX);
   */
+
+
+  /// Additions based on Tristan's work /////
+  MCTree2->SetBranchAddress("PosBremPreX",&PosBremPreX);
+  MCTree2->SetBranchAddress("PosBremPreP",&PosBremPreP);
+  MCTree2->SetBranchAddress("PosBremPostX",&PosBremPostX);
+  MCTree2->SetBranchAddress("PosBremPostP",&PosBremPostP);
+  MCTree2->SetBranchAddress("ElecBremPreX",&ElecBremPreX);
+  MCTree2->SetBranchAddress("ElecBremPreP",&ElecBremPreP);
+  MCTree2->SetBranchAddress("ElecBremPostX",&ElecBremPostX);
+  MCTree2->SetBranchAddress("ElecBremPostP",&ElecBremPostP);
+
+  MCTree2->SetBranchAddress("PosBhabhaPreX",&PosBhabhaPreX);
+  MCTree2->SetBranchAddress("PosBhabhaPreP",&PosBhabhaPreP);
+  MCTree2->SetBranchAddress("PosBhabhaPostX",&PosBhabhaPostX);
+  MCTree2->SetBranchAddress("PosBhabhaPostP",&PosBhabhaPostP);
+
+  MCTree2->SetBranchAddress("PosAnnihilPreX",&PosAnnihilPreX);
+  MCTree2->SetBranchAddress("PosAnnihilPreP",&PosAnnihilPreP);
+  MCTree2->SetBranchAddress("PosAnnihilPostX",&PosAnnihilPostX);
+  MCTree2->SetBranchAddress("PosAnnihilPostP",&PosAnnihilPostP);
+
+  MCTree2->SetBranchAddress("PosScatterPreX",&PosScatterPreX);
+  MCTree2->SetBranchAddress("PosScatterPreP",&PosScatterPreP);
+  MCTree2->SetBranchAddress("PosScatterPostX",&PosScatterPostX);
+  MCTree2->SetBranchAddress("PosScatterPostP",&PosScatterPostP);
+  MCTree2->SetBranchAddress("ElecScatterPreX",&ElecScatterPreX);
+  MCTree2->SetBranchAddress("ElecScatterPreP",&ElecScatterPreP);
+  MCTree2->SetBranchAddress("ElecScatterPostX",&ElecScatterPostX);
+  MCTree2->SetBranchAddress("ElecScatterPostP",&ElecScatterPostP);
+
+  MCTree2->SetBranchAddress("ElecinWC3PreX",&ElecinWC3PreX);
+  MCTree2->SetBranchAddress("ElecinWC3PreP",&ElecinWC3PreP);
+  MCTree2->SetBranchAddress("PrimPosinWC3PreX",&PrimPosinWC3PreX);
+  MCTree2->SetBranchAddress("PrimPosinWC3PreP",&PrimPosinWC3PreP);
+  MCTree2->SetBranchAddress("SecPosinWC3PreX",&SecPosinWC3PreX);
+  MCTree2->SetBranchAddress("SecPosinWC3PreP",&SecPosinWC3PreP);
+
+  MCTree2->SetBranchAddress("PosTotalBremE", &PosTotalBremE);
+  MCTree2->SetBranchAddress("ElecTotalBremE", &ElecTotalBremE);
+  MCTree2->SetBranchAddress("PosTotalBhabhaE", &PosTotalBhabhaE);
+  ////////////
   
   //Report
   cout << endl;
@@ -627,6 +669,50 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
 
   // Tristan Feb. 4/15 (Bhabha stuff)  
   OutputTree->Branch("EBina",&eintobina,"EBina/D");
+
+
+  /// Additions based on Tristan's work /////
+  // Bremsstrahlung and scattering diagnostics
+  OutputTree->Branch("PosBremPreX",&posbremprex,"PosBremPreX[4]/D");
+  OutputTree->Branch("PosBremPreP",&posbremprep,"PosBremPreP[4]/D");
+  OutputTree->Branch("PosBremPostX",&posbrempostx,"PosBremPostX[4]/D");
+  OutputTree->Branch("PosBremPostP",&posbrempostp,"PosBremPostP[4]/D");
+  OutputTree->Branch("ElecBremPreX",&elecbremprex,"ElecBremPreX[4]/D");
+  OutputTree->Branch("ElecBremPreP",&elecbremprep,"ElecBremPreP[4]/D");
+  OutputTree->Branch("ElecBremPostX",&elecbrempostx,"ElecBremPostX[4]/D");
+  OutputTree->Branch("ElecBremPostP",&elecbrempostp,"ElecBremPostP[4]/D");
+
+  OutputTree->Branch("PosBhabhaPreX",&posbhabhaprex,"PosBhabhaPreX[4]/D");
+  OutputTree->Branch("PosBhabhaPreP",&posbhabhaprep,"PosBhabhaPreP[4]/D");
+  OutputTree->Branch("PosBhabhaPostX",&posbhabhapostx,"PosBhabhaPostX[4]/D");
+  OutputTree->Branch("PosBhabhaPostP",&posbhabhapostp,"PosBhabhaPostP[4]/D");
+
+  OutputTree->Branch("PosAnnihilPreX",&posannihilprex,"PosAnnihilPreX[4]/D");
+  OutputTree->Branch("PosAnnihilPreP",&posannihilprep,"PosAnnihilPreP[4]/D");
+  OutputTree->Branch("PosAnnihilPostX",&posannihilpostx,"PosAnnihilPostX[4]/D");
+  OutputTree->Branch("PosAnnihilPostP",&posannihilpostp,"PosAnnihilPostP[4]/D");
+
+  OutputTree->Branch("PosScatterPreX",&posscatterprex,"PosScatterPreX[4]/D");
+  OutputTree->Branch("PosScatterPreP",&posscatterprep,"PosScatterPreP[4]/D");
+  OutputTree->Branch("PosScatterPostX",&posscatterpostx,"PosScatterPostX[4]/D");
+  OutputTree->Branch("PosScatterPostP",&posscatterpostp,"PosScatterPostP[4]/D");
+  OutputTree->Branch("ElecScatterPreX",&elecscatterprex,"ElecScatterPreX[4]/D");
+  OutputTree->Branch("ElecScatterPreP",&elecscatterprep,"ElecScatterPreP[4]/D");
+  OutputTree->Branch("ElecScatterPostX",&elecscatterpostx,"ElecScatterPostX[4]/D");
+  OutputTree->Branch("ElecScatterPostP",&elecscatterpostp,"ElecScatterPostP[4]/D");
+
+  OutputTree->Branch("ElecinWC3PreX",&elecinwc3prex,"ElecinWC3PreX[4]/D");
+  OutputTree->Branch("ElecinWC3PreP",&elecinwc3prep,"ElecinWC3PreP[4]/D");
+  OutputTree->Branch("PrimPosinWC3PreX",&primposinwc3prex,"PrimPosinWC3PreX[4]/D");
+  OutputTree->Branch("PrimPosinWC3PreP",&primposinwc3prep,"PrimPosinWC3PreP[4]/D");
+  OutputTree->Branch("SecPosinWC3PreX",&secposinwc3prex,"SecPosinWC3PreX[4]/D");
+  OutputTree->Branch("SecPosinWC3PreP",&secposinwc3prep,"SecPosinWC3PreP[4]/D");
+
+  OutputTree->Branch("PosTotalBremE",&postotalbreme,"PosTotalBremE/D");
+  OutputTree->Branch("ElecTotalBremE",&electotalbreme,"ElecTotalBremE/D");
+
+  OutputTree->Branch("PosTotalBhabhaE",&postotalbhabhae,"PosTotalBhabhaE/D");
+  //////////
 
   
   OutputTree->Branch("MuPolarization",&mupolarization,"MuPolarization[3]/D");
@@ -1744,6 +1830,45 @@ void MCtree::Loop()
       // Added by Tristan, Oct. 12/17
       wc3positronx[i] = WC3positronX[i];
 
+
+      ///// Additions based on Tristan's work /////
+      posbremprex[i] = PosBremPreX[i];
+      posbremprep[i] = PosBremPreP[i];
+      posbrempostx[i] = PosBremPostX[i];
+      posbrempostp[i] = PosBremPostP[i];
+      elecbremprex[i] = ElecBremPreX[i];
+      elecbremprep[i] = ElecBremPreP[i];
+      elecbrempostx[i] = ElecBremPostX[i];
+      elecbrempostp[i] = ElecBremPostP[i];
+
+      posbhabhaprex[i] = PosBhabhaPreX[i];
+      posbhabhaprep[i] = PosBhabhaPreP[i];
+      posbhabhapostx[i] = PosBhabhaPostX[i];
+      posbhabhapostp[i] = PosBhabhaPostP[i];
+
+      posannihilprex[i] = PosAnnihilPreX[i];
+      posannihilprep[i] = PosAnnihilPreP[i];
+      posannihilpostx[i] = PosAnnihilPostX[i];
+      posannihilpostp[i] = PosAnnihilPostP[i];
+
+      posscatterprex[i] = PosScatterPreX[i];
+      posscatterprep[i] = PosScatterPreP[i];
+      posscatterpostx[i] = PosScatterPostX[i];
+      posscatterpostp[i] = PosScatterPostP[i];
+      elecscatterprex[i] = ElecScatterPreX[i];
+      elecscatterprep[i] = ElecScatterPreP[i];
+      elecscatterpostx[i] = ElecScatterPostX[i];
+      elecscatterpostp[i] = ElecScatterPostP[i];
+
+      elecinwc3prex[i] = ElecinWC3PreX[i];
+      elecinwc3prep[i] = ElecinWC3PreP[i];
+      primposinwc3prex[i] = PrimPosinWC3PreX[i];
+      primposinwc3prep[i] = PrimPosinWC3PreP[i];
+      secposinwc3prex[i] = SecPosinWC3PreX[i];
+      secposinwc3prep[i] = SecPosinWC3PreP[i];
+
+      ///////////////
+
       
       if (i<3){ 
 	photonuclearx[i] = PhotonuclearX[i];
@@ -1755,6 +1880,11 @@ void MCtree::Loop()
     ebh=EBh;
     eintobina = EIntoBina;
 
+    ///// Additions based on Tristan's work /////
+    postotalbreme = PosTotalBremE;
+    electotalbreme = ElecTotalBremE;
+    postotalbhabhae = PosTotalBhabhaE;
+    ////////////
 
     MC.Tpos = Tpos;
     MC.PiTime = pitime;
