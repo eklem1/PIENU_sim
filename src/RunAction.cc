@@ -152,12 +152,13 @@ void RunAction::OpenRoot() {
     aTree->Branch("PosTotalBremE",&TotalBremEpos,"PosTotalBremE/D");
     aTree->Branch("ElecTotalBremE",&TotalBremEelec,"ElecTotalBremE[4]/D");
     aTree->Branch("PosTotalBhabhaE",&TotalBhabhaEpos,"PosTotalBhabhaE/D");
-    aTree->Branch("ElecinWC3PreX", ElecinWC3PreX, "ElecinWC3PreX[4]/D");
-    aTree->Branch("ElecinWC3PreP", ElecinWC3PreP, "ElecinWC3PreP[4]/D");
-    aTree->Branch("PrimPosinWC3PreX", PrimPosinWC3PreX, "PrimPosinWC3PreX[4]/D");
-    aTree->Branch("PrimPosinWC3PreP", PrimPosinWC3PreP, "PrimPosinWC3PreP[4]/D");
-    aTree->Branch("SecPosinWC3PreX", SecPosinWC3PreX, "SecPosinWC3PreX[4]/D");
-    aTree->Branch("SecPosinWC3PreP", SecPosinWC3PreP, "SecPosinWC3PreP[4]/D");
+
+    // aTree->Branch("ElecinWC3PreX", ElecinWC3PreX, "ElecinWC3PreX[4]/D");
+    // aTree->Branch("ElecinWC3PreP", ElecinWC3PreP, "ElecinWC3PreP[4]/D");
+    // aTree->Branch("PrimPosinWC3PreX", PrimPosinWC3PreX, "PrimPosinWC3PreX[4]/D");
+    // aTree->Branch("PrimPosinWC3PreP", PrimPosinWC3PreP, "PrimPosinWC3PreP[4]/D");
+    // aTree->Branch("SecPosinWC3PreX", SecPosinWC3PreX, "SecPosinWC3PreX[4]/D");
+    // aTree->Branch("SecPosinWC3PreP", SecPosinWC3PreP, "SecPosinWC3PreP[4]/D");
 
     aTree->Branch("PhotonuclearX",EPhNX,"PhotonuclearX[3]/D");
     aTree->Branch("BhabhaE",&EBh,"BhabhaE/D");

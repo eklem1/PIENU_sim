@@ -181,9 +181,9 @@ class RunAction : public G4UserRunAction {
     G4double PosBhabhaPostX[4],PosBhabhaPostP[4];
     G4double PosAnnihilPreX[4],PosAnnihilPreP[4];
     G4double PosAnnihilPostX[4],PosAnnihilPostP[4];
-    G4double ElecinWC3PreX[4],ElecinWC3PreP[4];
-    G4double PrimPosinWC3PreX[4],PrimPosinWC3PreP[4];
-    G4double SecPosinWC3PreX[4],SecPosinWC3PreP[4];
+    // G4double ElecinWC3PreX[4],ElecinWC3PreP[4];
+    // G4double PrimPosinWC3PreX[4],PrimPosinWC3PreP[4];
+    // G4double SecPosinWC3PreX[4],SecPosinWC3PreP[4];
 
     G4double MaxBremEpos = 0;
     G4double MaxBremEelec = 0;
