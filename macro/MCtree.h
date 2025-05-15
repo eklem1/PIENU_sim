@@ -133,12 +133,12 @@ class MCtree {
   Double_t ElecScatterPostX[4];
   Double_t ElecScatterPostP[4];
 
-  Double_t ElecinWC3PreX[4];
-  Double_t ElecinWC3PreP[4];
-  Double_t PrimPosinWC3PreX[4];
-  Double_t PrimPosinWC3PreP[4];
-  Double_t SecPosinWC3PreX[4];
-  Double_t SecPosinWC3PreP[4];
+  // Double_t ElecinWC3PreX[4];
+  // Double_t ElecinWC3PreP[4];
+  // Double_t PrimPosinWC3PreX[4];
+  // Double_t PrimPosinWC3PreP[4];
+  // Double_t SecPosinWC3PreX[4];
+  // Double_t SecPosinWC3PreP[4];
 
   Double_t PosTotalBremE;
   Double_t ElecTotalBremE;
@@ -460,12 +460,12 @@ class MCtree {
   Double_t elecscatterpostx[4];
   Double_t elecscatterpostp[4];
 
-  Double_t elecinwc3prex[4];
-  Double_t elecinwc3prep[4];
-  Double_t primposinwc3prex[4];
-  Double_t primposinwc3prep[4];
-  Double_t secposinwc3prex[4];
-  Double_t secposinwc3prep[4];
+  // Double_t elecinwc3prex[4];
+  // Double_t elecinwc3prep[4];
+  // Double_t primposinwc3prex[4];
+  // Double_t primposinwc3prep[4];
+  // Double_t secposinwc3prex[4];
+  // Double_t secposinwc3prep[4];
 
   Double_t postotalbreme;
   Double_t electotalbreme;
