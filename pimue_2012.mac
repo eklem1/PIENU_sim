@@ -24,7 +24,11 @@
 # beam from Luca's approximation of the data
 /beam/FromData 4
 
+#new things from Ivan for positron gun
+/gun/energy 70.0 # in MeV units 
+/gun/angle 0.0 # in degree units
+
 #Number of events to simulate
 # /run/beamOn 600000  
-/run/beamOn 100000
+/run/beamOn 10000
 #/run/beamOn 100

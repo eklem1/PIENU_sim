@@ -11,6 +11,7 @@ class PrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcmdWithADouble;
 class G4UIcmdWithABool;
+//class G4UIcmdWithADoubleAndUnit;
 
 class ParticleGunMessenger : public G4UImessenger
 {
@@ -33,6 +34,9 @@ private:
   G4UIcmdWithADouble* fTmax;
 
   G4UIcmdWithADouble* fDatabeam;
+  G4UIcmdWithADouble* fEnergy;
+  G4UIcmdWithADouble* fAngle;
+
 
 };
 #endif

@@ -36,6 +36,8 @@ public:
   G4double r[5];
   G4double L[5][5];
   G4double P0;
+  G4double eEnergy;
+  G4double eAngle;
 
   
   G4double tx_mean,ty_mean,tx_sigma,ty_sigma;
