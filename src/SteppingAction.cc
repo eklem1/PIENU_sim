@@ -164,6 +164,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
     }
 
     /// Additions based on Tristan's work /////
+    // G4cout << "Step process: " << theProcessName << G4endl;
 
     // bremsstrahlung with positrons
     if (theParticleName == "e+" && theProcessName == "eBrem" && thePostVolume != "NaI" && thePreVolume != "NaI")
@@ -174,6 +175,9 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
             // This excludes CsI
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
             {
+                //print out checks
+                // G4int eventNumber = theTrack->GetEvent()->GetEventID();
+                G4cout << "Brems for event, t=" << postTime << ", at z=" << postPosition.z() <<G4endl;
                 runAction->SPosBrem(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
             }
         }

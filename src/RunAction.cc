@@ -106,7 +106,16 @@ void RunAction::OpenRoot() {
 
     remove("password.lck");
     // Create TNtuple to store the hits
-    hitTuple = new TNtuple("hits","Hits","eventID:volumeID0:volumeID1:volumeID2:energyDeposit:startX:startY:startZ:startT:stopX:stopY:stopZ:stopT:Ebirk:PID:CreatorProcess",40000);
+    hitTuple = new TNtuple("hits","Hits","eventID:volumeID0:volumeID1:volumeID2:energyDeposit:startX:startY:startZ:startT:stopX:stopY:stopZ:stopT:Ebirk:PID:CreatorProcess:LimitingProcessID",40000);
+    
+    // aTree->Branch("PosBremPreX",PosBremPreX,"PosBremPreX[4]/D");
+    // aTree->Branch("PosBremPreP",PosBremPreP,"PosBremPreP[4]/D");
+    // aTree->Branch("PosBremPostX",PosBremPostX,"PosBremPostX[4]/D");
+    // aTree->Branch("PosBremPostP",PosBremPostP,"PosBremPostP[4]/D");
+
+    //make nTuples for the processes to save them multiple times per event
+    BremTuple = new TNtuple("Brem","Brem","postX:postY:postZ",40000);
+
 
     aTree =new TTree("tree","pienu");
     aTree = ((TTree*)gROOT->FindObject("tree"));
@@ -228,6 +237,7 @@ void RunAction::OpenRoot() {
     triggeredPositronT3DifferencePZP = new TH1D("triggeredPositronT3DifferencePZP", "Difference between start Pz/P and Pz/P at T3 center for triggered events", 20, 0, 0.8);
 
     hitTuple->SetAutoSave(32000);
+    BremTuple->SetAutoSave(32000);
     aTree->SetAutoSave(32000);
 }
 
@@ -236,6 +246,7 @@ void RunAction::OpenRoot() {
 void RunAction::CloseRoot() {
 
     hitTuple->AutoSave();
+    BremTuple->AutoSave();
 
     // Particle Start Position/Momentum and Stop Position
     pionStartR->Write(); // Pion Start Position R Coordinate
@@ -301,11 +312,14 @@ void RunAction::CloseRoot() {
 void RunAction::FillTuple(G4double E1, G4double E2, G4double E3, G4double E4,
                           G4double E5, G4double E6, G4double E7, G4double E8,
                           G4double E9, G4double E10, G4double E11,
-			  G4double E12, G4double E13, G4double E14,
-                          G4double E15, G4double E16) {
+			                    G4double E12, G4double E13, G4double E14,
+                          G4double E15, G4double E16, G4double E17) {
   
-  E16 = 0;
-  hitTuple->Fill(E1,E2,E3,E4,E5,E6,E7,E8,E9,E10,E11,E12,E13,E14,E15);
+  // E16 = 0; //why?
+  float hitArray[17] = {E1,E2,E3,E4,E5,E6,E7,E8,E9,E10,E11,E12,E13,E14,E15,E16,E17};
+
+  // hitTuple->Fill(E1,E2,E3,E4,E5,E6,E7,E8,E9,E10,E11,E12,E13,E14,E15);
+  hitTuple->Fill(hitArray);
 
 }
 
@@ -444,6 +458,8 @@ void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prep
         PosBremPostP[3] = postE;
 
         MaxBremEpos = preE - postE;
+
+        BremTuple->Fill(postpos.x(), postpos.y(), postpos.z());
     }
 
     TotalBremEpos += preE - postE;

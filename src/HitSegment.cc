@@ -34,7 +34,7 @@ HitSegment::HitSegment()
     fStartX(0), fStartY(0), fStartZ(0), fStartT(0),
     fStopX(0),  fStopY(0),  fStopZ(0),  fStopT(0),
     fPDG(-1), fParticleName(""),fCreatorFlag(0),
-    fCreatorProcessName(""), fEbirk(0),
+    fCreatorProcessName(""), fEbirk(0), fProcessID(0),
     fMerged(false) {}
 
 HitSegment::HitSegment(const HitSegment &right)
@@ -52,6 +52,7 @@ HitSegment::HitSegment(const HitSegment &right)
     fPDG(right.fPDG), fParticleName(right.fParticleName),
     fCreatorFlag(right.fCreatorFlag),
     fCreatorProcessName(right.fCreatorProcessName),
+    fProcessID(right.fProcessID),
     fEbirk(right.fEbirk),
     fMerged(right.fMerged) {
 #ifdef G4VIS_USE
@@ -82,6 +83,7 @@ HitSegment HitSegment::operator=(const HitSegment& op2)
     fParticleName   = op2.fParticleName;
     fCreatorFlag   = op2.fCreatorFlag;
     fCreatorProcessName = op2.fCreatorProcessName;
+    fProcessID = op2.fProcessID;
     fEbirk  = op2.fEbirk;
     fMerged = op2.fMerged;
 #ifdef G4VIS_USE
@@ -150,6 +152,9 @@ void HitSegment::AddStep(G4Step* theStep)
   G4double energyDeposit = theStep->GetTotalEnergyDeposit();
   G4double stepLength = theStep->GetStepLength();
 
+  const G4VProcess *process = theStep->GetPostStepPoint()->GetProcessDefinedStep();
+
+
   // Occasionally, a neutral particle will produce a particle below
   // threshold, and it will be recorded as generating the hit.  All of the
   // energy should be deposited at the stopping point of the track.
@@ -183,7 +188,7 @@ void HitSegment::AddStep(G4Step* theStep)
 
      const G4VProcess* CreatorProcess =
                                    theStep->GetTrack()->GetCreatorProcess();
- 
+
      if (CreatorProcess) {
        fCreatorProcessName = CreatorProcess->GetProcessName();
        G4ProcessType CreatorProcessType = CreatorProcess->GetProcessType();
@@ -191,6 +196,10 @@ void HitSegment::AddStep(G4Step* theStep)
      } else{
        fCreatorFlag = 0;
      }
+
+    //get processID of the step
+    fProcessID = process->GetProcessType() * 1000 + process->GetProcessSubType();
+    // G4cout << "Step process: " << process->GetProcessName() << " #: "<< fProcessID <<G4endl;
 
 #ifdef G4VIS_USE
      const G4TouchableHistory* aHist = 
@@ -212,6 +221,11 @@ void HitSegment::AddStep(G4Step* theStep)
         fStopY = postPos.y();
         fStopZ = postPos.z();
         fStopT = theStep->GetPostStepPoint()->GetGlobalTime();
+
+        //get processID of the step
+        fProcessID = process->GetProcessType() * 1000 + process->GetProcessSubType();
+        // G4cout << "Step process: " << process->GetProcessName() << " #: "<< fProcessID <<G4endl;
+
      } else {
         fTrackID = trackId;
         fParentID = parentId;

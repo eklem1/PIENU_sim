@@ -44,7 +44,8 @@ class RunAction : public G4UserRunAction {
                    G4double E13,
                    G4double E14,
                    G4double E15,
-                   G4double E16);
+                   G4double E16,
+                   G4double E17);
     void FillTree();
 
     void ClearVariable();
@@ -100,6 +101,8 @@ class RunAction : public G4UserRunAction {
 
     TFile*   file;
     TNtuple* hitTuple;
+    TNtuple* BremTuple;
+
     TTree*   aTree;
 
     //Diagnostic Histograms

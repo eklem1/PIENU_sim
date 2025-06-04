@@ -98,8 +98,11 @@ class HitSegment : public G4VHit
     /// The Decay flag
     G4int GetCreatorFlag(void) const { return fCreatorFlag; }
 
-    /// The process
+    /// The creator process
     G4String GetCreatorProcessName(void) const { return fCreatorProcessName; }
+
+    /// The step process ID
+    G4int GetProcessID(void) const { return fProcessID; }
 
     /// Get the visible energy deposited in this hit.
     G4double GetEbirk(void) const { return fEbirk; }
@@ -171,6 +174,9 @@ class HitSegment : public G4VHit
 
     /// The  process name
     G4String fCreatorProcessName;
+
+    // /// The process ID
+    G4int fProcessID;
 
     /// The  visible energy with birks effect
     G4double fEbirk;

@@ -269,7 +269,7 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
 	    
 
 	    
-//            G4cout << "EventID: " << aEvent->GetEventID() << G4endl;
+        //    G4cout << "EventID: " << aEvent->GetEventID() << G4endl;
 //            G4cout << "volumeID[0]: " << volumeID[0] << G4endl;
 //            G4cout << "volumeID[1]: " << volumeID[1] << G4endl;
 //            G4cout << "volumeID[2]: " << volumeID[2] << G4endl;
@@ -299,7 +299,8 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
                                  jhit->GetStopT(),
                                  jhit->GetEbirk(),
                                  jhit->GetPDG(),
-                                 jhit->GetCreatorFlag());
+                                 jhit->GetCreatorFlag(), 
+                                 jhit->GetProcessID());
 #ifdef G4VIS_USE
             jhit->Draw();
 #endif
