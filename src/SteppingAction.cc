@@ -228,6 +228,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
         // Check if primary positron
         if (theTrack->GetParentID() == 1 || theTrack->GetParentID() == mutracknumber)
         {
+            G4cout << "Scatter for event, t=" << postTime << ", at z=" << postPosition.z() <<G4endl;
             runAction->SPosScatter(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
         }
     }

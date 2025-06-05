@@ -174,6 +174,7 @@ class RunAction : public G4UserRunAction {
 
     G4double PosBremPreX[4],PosBremPreP[4];
     G4double PosBremPostX[4],PosBremPostP[4];
+    G4int PosBremCounter;
     G4double ElecBremPreX[4],ElecBremPreP[4];
     G4double ElecBremPostX[4],ElecBremPostP[4];
     G4double PosScatterPreX[4],PosScatterPreP[4];

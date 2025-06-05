@@ -56,6 +56,26 @@ RunAction::~RunAction() {
 // Open a ROOT file and create an Ntuple
 //
 
+class Det {  // each detector gives an energy and time signal
+public:
+  Double_t e; //energy
+  Double_t t; //time
+ 
+//  ClassDef(Det,1)
+};
+ 
+//ClassImp(Det)
+ 
+//class Event { //TObject is not required by this example
+class Event : public TObject {
+public:
+ 
+  Det a; // say there are two detectors (a and b) in the experiment
+  Det b;
+  ClassDef(Event,1)
+};
+
+
 void RunAction::OpenRoot() {
 
 
@@ -113,8 +133,9 @@ void RunAction::OpenRoot() {
     // aTree->Branch("PosBremPostX",PosBremPostX,"PosBremPostX[4]/D");
     // aTree->Branch("PosBremPostP",PosBremPostP,"PosBremPostP[4]/D");
 
-    //make nTuples for the processes to save them multiple times per event
-    BremTuple = new TNtuple("Brem","Brem","postX:postY:postZ",40000);
+    //make nTuples for the processes to save them multiple times per event?
+    //but I also want the eventID linked in here, but that's in a different tree now...
+    BremTuple = new TNtuple("Brem","Brem","postX:postY:postZ:postT",40000);
 
 
     aTree =new TTree("tree","pienu");
@@ -138,6 +159,7 @@ void RunAction::OpenRoot() {
     aTree->Branch("PosBremPreP",PosBremPreP,"PosBremPreP[4]/D");
     aTree->Branch("PosBremPostX",PosBremPostX,"PosBremPostX[4]/D");
     aTree->Branch("PosBremPostP",PosBremPostP,"PosBremPostP[4]/D");
+    aTree->Branch("PosBremCounter",&PosBremCounter,"PosBremCounter/I");
     aTree->Branch("PosBhabhaPreX",PosBhabhaPreX,"PosBhabhaPreX[4]/D");
     aTree->Branch("PosBhabhaPreP",PosBhabhaPreP,"PosBhabhaPreP[4]/D");
     aTree->Branch("PosBhabhaPostX",PosBhabhaPostX,"PosBhabhaPostX[4]/D");
@@ -161,6 +183,10 @@ void RunAction::OpenRoot() {
     aTree->Branch("PosTotalBremE",&TotalBremEpos,"PosTotalBremE/D");
     aTree->Branch("ElecTotalBremE",&TotalBremEelec,"ElecTotalBremE[4]/D");
     aTree->Branch("PosTotalBhabhaE",&TotalBhabhaEpos,"PosTotalBhabhaE/D");
+
+
+    // struct DataArray { double Emu, Pmu, Leaf3; }; DataArray MyDataArray;
+    // aTree->Branch("PosBrem", &PB); 
 
     // aTree->Branch("ElecinWC3PreX", ElecinWC3PreX, "ElecinWC3PreX[4]/D");
     // aTree->Branch("ElecinWC3PreP", ElecinWC3PreP, "ElecinWC3PreP[4]/D");
@@ -434,15 +460,17 @@ void RunAction::SBhabha(G4double Energy)
 
 void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
-    //G4cout << "MaxBremEpos: " << MaxBremEpos << G4endl;
-    //G4cout << "preE - postE: " << preE - postE << G4endl;
+    // G4cout << "MaxBremEpos: " << MaxBremEpos << G4endl;
+    // G4cout << "preE - postE: " << preE - postE << G4endl;
 
-    if (preE - postE > MaxBremEpos)
+    if ((preE - postE > MaxBremEpos) || (pretime == -10000))
     {    
+        //this somehow only filled with the first instance of a process for a given event
         PosBremPreX[0] = prepos.x();
         PosBremPreX[1] = prepos.y();
         PosBremPreX[2] = prepos.z();
         PosBremPreX[3] = pretime;
+
         PosBremPreP[0] = premom.x();
         PosBremPreP[1] = premom.y();
         PosBremPreP[2] = premom.z();
@@ -459,8 +487,19 @@ void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prep
 
         MaxBremEpos = preE - postE;
 
-        BremTuple->Fill(postpos.x(), postpos.y(), postpos.z());
     }
+
+    //counts how many times this process happens in total for an event
+    if (pretime > -10000){ 
+        PosBremCounter += 1;
+    }
+
+      //this fills every step, but then it's in its own seperate tree - not ideal, no eventIDs
+      BremTuple->Fill(postpos.x(), postpos.y(), postpos.z(), posttime); 
+
+      //I want them to instead contain all the times a process occurs, for each event
+      //lets try it in a subbranch?
+      // PosBremPreX[0] = prepos.x();
 
     TotalBremEpos += preE - postE;
 }
@@ -471,7 +510,7 @@ void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector pr
     //G4cout << "MaxBhabhaEpos: " << MaxBhabhaEpos << G4endl;
     //G4cout << "preE - postE: " << preE - postE << G4endl;
 
-    if (preE - postE > MaxBhabhaEpos)
+    if ((preE - postE > MaxBhabhaEpos) || (pretime == -10000))
     {    
         PosBhabhaPreX[0] = prepos.x();
         PosBhabhaPreX[1] = prepos.y();
@@ -523,7 +562,7 @@ void RunAction::SElecBrem(G4double pretime, G4double posttime, G4ThreeVector pre
     //G4cout << "MaxBremEelec: " << MaxBremEelec << G4endl;
     //G4cout << "preE - postE: " << preE - postE << G4endl;
 
-    if (preE - postE > MaxBremEelec)
+    if ((preE - postE > MaxBremEelec) || (pretime == -10000))  
     {    
         ElecBremPreX[0] = prepos.x();
         ElecBremPreX[1] = prepos.y();
@@ -714,6 +753,7 @@ void RunAction::ClearVariable(){
   MaxBremEelec = 0;
   TotalBremEpos = 0;
   TotalBremEelec = 0;
+  PosBremCounter=0;
 
   MaxBhabhaEpos = 0;
   TotalBhabhaEpos = 0;
