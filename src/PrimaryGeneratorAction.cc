@@ -14,7 +14,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 
-#include "TMath.h"
+
 
 #define min(X,Y) ((X) < (Y) ? (X) : (Y))
 // Note: revisions implemented for 2019 BVF format
@@ -93,7 +93,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 if(init==0)
 {
-
 // defining the beam data file
 // 1 - /home/mischke/PlotBeam/BVF2010N448b_20200510.dat
 // 2 - /home/mischke/PlotBeam/BVF2010N448b_20200510.dat
@@ -102,65 +101,6 @@ if(init==0)
 
   const char filename1[] = "/home/mischke/project/mischke/data/alex_26sep.rays";
  const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448a_20200510.dat";
-
-/*if(databeam==1){
-
-G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" Beam file BVF2010preNovB1_011023.dat will be used"<< G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-
-        // BLOCKS 1
-    const char filename2[] = "/project/6000314/civan/mc/bvf/BVF2010preNovB1_011023.dat";
-      P0 = 75.081; // after WC3 shift
-      L[0][0] = 1.0;  L[1][0] = 0.251584;  L[2][0] = -0.0758193;  L[3][0] = 0.0565415;  L[4][0] = -0.0608926;
-      L[0][1] = 0.0;  L[1][1] = 0.967835;  L[2][1] = 0.14589;     L[3][1] = 0.599698;   L[4][1] = 0.118576;
-      L[0][2] = 0.0;  L[1][2] = 0.0;       L[2][2] = 0.986391;    L[3][2] = -0.0112254; L[4][2] = 0.78103;
-      L[0][3] = 0.0;  L[1][3] = 0.0;       L[2][3] = 0.0;         L[3][3] = 0.798148;   L[4][3] = 0.0279001;
-      L[0][4] = 0.0;  L[1][4] = 0.0;       L[2][4] = 0.0;         L[3][4] = 0.0;        L[4][4] = 0.609464;
-      }
-
-      if(databeam==2){
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" Beam file BVF2010preNovB2_301121.dat will be used"<< G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-
-     // BLOCK 2
-     const char filename2[] = "/project/6000314/civan/mc/bvf/BVF2010preNovB2_301121.dat"; // BVF v1
-     P0 = 75.0341; //
-     //  //P0 = 75.0341*(1-0.005); //
-       L[0][0] = 1.0;  L[1][0] = 0.25982;   L[2][0] = -0.0698679;  L[3][0] = 0.0635087;  L[4][0] = -0.0524559;
-       L[0][1] = 0.0;  L[1][1] = 0.965657;  L[2][1] = 0.189198;    L[3][1] = 0.648109;   L[4][1] = 0.195976;
-       L[0][2] = 0.0;  L[1][2] = 0.0;       L[2][2] = 0.97945;     L[3][2] = 0.0496893;  L[4][2] = 0.785995;
-       L[0][3] = 0.0;  L[1][3] = 0.0;       L[2][3] = 0.0;         L[3][3] = 0.757266;   L[4][3] = 0.0882973;
-       L[0][4] = 0.0;  L[1][4] = 0.0;       L[2][4] = 0.0;         L[3][4] = 0.0;        L[4][4] = 0.577284;
-       }
-
-       if(databeam==3){
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" Beam file BVF2010preNovB3_011121.dat will be used"<< G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-     G4cout <<" ***************************"<<G4endl;
-
-      // BLOCK 3
-      const char filename2[] = "/project/6000314/civan/mc/bvf/BVF2010preNovB3_011121.dat";
-      P0 = 74.517543;
-        L[0][0] = 1.0;  L[1][0] = 0.307537;  L[2][0] = -0.067653;   L[3][0] = 0.0366907;  L[4][0] = -0.0714846;
-        L[0][1] = 0.0;  L[1][1] = 0.951536;  L[2][1] = 0.172037;    L[3][1] = 0.530649;   L[4][1] = 0.119482;
-        L[0][2] = 0.0;  L[1][2] = 0.0;       L[2][2] = 0.982765;    L[3][2] = -0.0142829; L[4][2] = 0.782448;
-        L[0][3] = 0.0;  L[1][3] = 0.0;       L[2][3] = 0.0;         L[3][3] = 0.846676;   L[4][3] = 0.0832994;
-        L[0][4] = 0.0;  L[1][4] = 0.0;       L[2][4] = 0.0;         L[3][4] = 0.0;        L[4][4] = 0.601207;
-        }*/
 
 
 if(databeam==1){
@@ -173,15 +113,14 @@ if(databeam==1){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
- const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448a_20200510.dat";
-      //P0 = 74.4222;
-      P0 = 74.7596; //AFter SSC
+    const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448a_20200510.dat";
+    P0 = 74.4222;
   L[0][0] = 1.0;  L[1][0] = 0.312093; L[2][0] = -0.071054;  L[3][0] = 0.0588566;  L[4][0] = -0.0778541;
   L[0][1] = 0.0;  L[1][1] = 0.950051; L[2][1] = 0.224755;   L[3][1] = 0.561289;   L[4][1] = 0.17289;
   L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.971821;   L[3][2] = -0.0100369; L[4][2] = 0.780972;
   L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.825463;   L[4][3] = 0.11143;
   L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.584562;
-}
+  }
 
  if(databeam==2){
   G4cout <<" ***************************"<<G4endl;
@@ -194,9 +133,7 @@ if(databeam==1){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
     const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448b_20200510.dat";
-    //P0 = 73.8663;
-    //P0 = 74.2037;
-    P0 = 74.5052;
+    P0 = 74.1768;
   L[0][0] = 1.0;  L[1][0] = 0.3391;   L[2][0] = -0.0627885; L[3][0] = 0.055023;   L[4][0] = -0.0614339;
   L[0][1] = 0.0;  L[1][1] = 0.94075;  L[2][1] = 0.0934388;  L[3][1] =  0.612371;  L[4][1] = 0.00260394;
   L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.993643;   L[3][2] = -0.100237;  L[4][2] = 0.807246;
@@ -214,24 +151,13 @@ if(databeam==3){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
-  const char filename2[] = "/home/mischke/PlotBeam/BVF2011_20200510.dat";
-  //const char filename2[] = "/project/6000314/civan/mc/bvf/BeamData_G4_SI.dat";
-    //P0 = 73.1953;
-     P0 = 73.5348; // After SSC 1
-    L[0][0] = 1.0;  L[1][0] = 0.30079;  L[2][0] = -0.0820981; L[3][0] = 0.0860666;   L[4][0] = -0.0656662;
+    const char filename2[] = "/home/mischke/PlotBeam/BVF2011_20200510.dat";
+    P0 = 73.5348;
+  L[0][0] = 1.0;  L[1][0] = 0.30079;  L[2][0] = -0.0820981; L[3][0] = 0.0860666;   L[4][0] = -0.0656662;
   L[0][1] = 0.0;  L[1][1] = 0.95369;  L[2][1] = 0.151865;   L[3][1] = 0.596359;    L[4][1] = 0.123908;
   L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.984986;   L[3][2] = -0.00948887; L[4][2] = 0.787578;
   L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.798034;    L[4][3] = 0.0257789;
   L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;         L[4][4] = 0.599492;
-
-    //Definition of the Choleski Matrix Shintaro
-  
-  /*L[0][0] = 1.0;  L[1][0] = 0.501133; L[2][0] = -0.130539;  L[3][0] = 0.0794952;  L[4][0] = -0.128491;
-  L[0][1] = 0.0;  L[1][1] = 0.86537;  L[2][1] = 0.259344;   L[3][1] = 0.387393;   L[4][1] = 0.102995;
-  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.956922;   L[3][2] = -0.0534969; L[4][2] = 0.594524;
-  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.916922;   L[4][3] = 0.0307296;
-  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.786434;*/
-  
   
 }
 if(databeam==4){  
@@ -245,9 +171,7 @@ if(databeam==4){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
        const char filename2[] = "/home/mischke/PlotBeam/BVF2012_20200510.dat";
-    //P0 = 73.9821; v0
-    //P0 = 74.4222; SSC it1
-    P0 = 74.5833;
+    P0 = 74.3024;
   L[0][0] = 1.0;  L[1][0] = 0.286178; L[2][0] = -0.0747011; L[3][0] = 0.0798684;   L[4][0] = -0.0633374;
   L[0][1] = 0.0;  L[1][1] = 0.958177; L[2][1] = 0.171845;   L[3][1] = 0.58738;   L[4][1] = 0.121565;
   L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.982288;   L[3][2] = -0.00513715; L[4][2] = 0.794892;
@@ -317,7 +241,7 @@ init=1;
     //Data parameterization file
  
     //Sample the histograms and construct the correlated variables
-    DoCorrelatedVariables();
+      DoCorrelatedVariables();
 
     //Conversion not needed for the data beam
     P = r[0];
@@ -337,7 +261,6 @@ init=1;
   //G4cout << xv << " " << yv << " " << mdX << " " << mdY << " " << mdZ << G4endl;
   
   G4double momentumFactor = 1.00;// P0 for Gaussian hard wired
-  //G4double momentumFactor = 1.03588;//2011 Shintaro
 
 
   G4double PionMass = G4PionPlus::PionPlusDefinition()->GetPDGMass();
@@ -348,41 +271,20 @@ init=1;
 
   kinEnergyPi = std::sqrt(Momentum*Momentum + PionMass*PionMass) - PionMass;
   kinEnergyMu = std::sqrt(Momentum*Momentum + MuMass*MuMass) - MuMass;
-  //kinEnergyE  = std::sqrt(Momentum*Momentum + EMass*EMass) - EMass;
-  //
-  kinEnergyE = eEnergy*MeV;
-  G4double theta = eAngle*(TMath::Pi()/180.0);
-  G4double ndZ = std::cos(theta);
-
-  G4double cc = std::sqrt(1-ndZ*ndZ);
-
-  TRandom3 rng(0); // Seed = 0 uses time-based seed
-
-    // Sample random angle theta in [0, 2π)
-    G4double phi = rng.Uniform(0, 2 * TMath::Pi());
-
-    // Compute x and y
-    G4double ndX = cc*std::cos(phi);
-    G4double ndY = cc*std::sin(phi);
-
-    //G4cout << " GunEnergy " << kinEnergyE << " Angle " << theta << " (nx,ny,nz) " << ndX << " " << ndY << " " << ndZ << G4endl;
-
+  kinEnergyE  = std::sqrt(Momentum*Momentum + EMass*EMass) - EMass;
 
   // Set the particle position, energy, and momentum direction
   particleGunPi->SetParticlePosition(G4ThreeVector(xv,yv,zv));
   particleGunMu->SetParticlePosition(G4ThreeVector(xv,yv,zv));
-  //particleGunE->SetParticlePosition(G4ThreeVector(xv,yv,zv));
-  particleGunE->SetParticlePosition(G4ThreeVector(0.0,0.0,0.0));
+  particleGunE->SetParticlePosition(G4ThreeVector(xv,yv,zv));
   
   particleGunPi->SetParticleMomentumDirection(G4ThreeVector(mdX,mdY,mdZ));
   particleGunMu->SetParticleMomentumDirection(G4ThreeVector(mdX,mdY,mdZ));
-  //particleGunE->SetParticleMomentumDirection(G4ThreeVector(mdX,mdY,mdZ));
-  particleGunE->SetParticleMomentumDirection(G4ThreeVector(ndX,ndY,ndZ));
+  particleGunE->SetParticleMomentumDirection(G4ThreeVector(mdX,mdY,mdZ));
     
   particleGunPi->SetParticleEnergy(kinEnergyPi);
   particleGunMu->SetParticleEnergy(kinEnergyMu);
   particleGunE->SetParticleEnergy(kinEnergyE);
-  //particleGunE->SetParticleEnergy(70*MeV);
 
   //POLARIZATION
   //particleGunMu->SetParticlePolarization(G4ThreeVector(mdX,mdY,mdZ));
@@ -480,10 +382,10 @@ init=1;
 
   } else { // No pileup
 
-    //particleGunPi->GeneratePrimaryVertex(anEvent); //pion+
+    particleGunPi->GeneratePrimaryVertex(anEvent); //pion+
     //G4cout << particleGunMu->GetParticlePolarization() << G4endl;
     //particleGunMu->GeneratePrimaryVertex(anEvent); 
-    particleGunE->GeneratePrimaryVertex(anEvent); 
+    //particleGunE->GeneratePrimaryVertex(anEvent); 
 
   }
   
@@ -500,33 +402,23 @@ void PrimaryGeneratorAction::FillBeamHistograms()
   while (1)
   {
     *infile2 >> P >> X >> Y >> dX >> dY;
-    //*infile2 >> X >> dX >> Y >> dY >> P;
 
     if (!infile2->good()) break;
 
     // start temporary code
-    P = r4->Gaus(P0,0.6369);
-    //P = r4->Gaus(P0,0.0637);
-    //P = r4->Gaus(P0,0.9553); // 150 %
-
+        P = r4->Gaus(P0,0.6369);
     //  end
     hE->Fill(P / 1000);
     hx->Fill(X / 10);
     hy->Fill(Y / 10);
     htx->Fill(dX);
-    hty->Fill(dY);
-
-    /*hE->Fill(P);
-    hx->Fill(X);
-    hy->Fill(Y);
-    htx->Fill(dX);
-    hty->Fill(dY)*/;
+    hty->Fill(dY); 
 
   }
 
   //Smooth the X and Y distributions
-  hx->Smooth(200);
-  hy->Smooth(200);
+   hx->Smooth(200);
+    hy->Smooth(200);
 
   
   //Fit the tx and ty distributions
@@ -568,7 +460,7 @@ void PrimaryGeneratorAction::DoCorrelatedVariables()
   delete r3;
 
   //G4cout << hE->GetMean() << "   " << hE->GetRMS() << G4endl;
-
+  
   //Normalize the variables
   r[0] = (r[0] - hE->GetMean()) / hE->GetRMS();
   r[1] = (r[1] - hx->GetMean()) / hx->GetRMS();
@@ -593,9 +485,8 @@ void PrimaryGeneratorAction::DoCorrelatedVariables()
   r[2] = rt[2] * hy->GetRMS()  + hy->GetMean();
   r[3] = rt[3] * htx->GetRMS() + htx->GetMean();
   r[4] = rt[4] * hty->GetRMS() + hty->GetMean();
+  
 }
-
-
 
 
 

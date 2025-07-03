@@ -7,7 +7,6 @@
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
 
 ParticleGunMessenger::ParticleGunMessenger(PrimaryGeneratorAction* pga) : fPrimaryGeneratorAction(pga)
@@ -44,22 +43,11 @@ ParticleGunMessenger::ParticleGunMessenger(PrimaryGeneratorAction* pga) : fPrima
   fDatabeam->SetDefaultValue(0.);
   fDatabeam->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fEnergy = new G4UIcmdWithADouble("/gun/energy", this);
-  fEnergy->SetGuidance("Set energy of primary particles.");
-  fEnergy->SetDefaultValue(0.);
-  fEnergy->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fAngle = new G4UIcmdWithADouble("/gun/angle", this);
-  fAngle->SetGuidance("Set energy of primary particles.");
-  fAngle->SetDefaultValue(0.);
-  fAngle->AvailableForStates(G4State_PreInit, G4State_Idle);
-
 } 
 
 ParticleGunMessenger::~ParticleGunMessenger()
 {
   delete fActive;
-  //delete fEnergy;
 }
 
 void ParticleGunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
@@ -83,21 +71,7 @@ void ParticleGunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == fDatabeam){
 	  G4cout<< "fDatabeam (command) was accessed in gunmessenger"<<G4endl;
 	G4cout<< " and the value is="<< newValue << G4endl;
-	//G4cout<< " DataBeam Before  = " << fPrimaryGeneratorAction->databeam << G4endl;
     fPrimaryGeneratorAction->databeam = fDatabeam->GetNewDoubleValue(newValue);
-    //G4cout<< " DataBeam After  = " << fPrimaryGeneratorAction->databeam << G4endl;
-  }
-
-  if (command == fEnergy){
-    //G4cout<< " GunEnergy Before  = " << fPrimaryGeneratorAction->eEnergy << G4endl;
-    fPrimaryGeneratorAction->eEnergy = fEnergy->GetNewDoubleValue(newValue);
-    //G4cout<< " GunEnergy After  = " << fPrimaryGeneratorAction->eEnergy << G4endl;
-  }
-
-  if (command == fAngle){
-    //G4cout<< " GunAngle Before  = " << fPrimaryGeneratorAction->eAngle << G4endl;
-    fPrimaryGeneratorAction->eAngle = fAngle->GetNewDoubleValue(newValue);
-    //G4cout<< " GunAngle After  = " << fPrimaryGeneratorAction->eAngle << G4endl;
   }
 
 }
