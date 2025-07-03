@@ -109,29 +109,37 @@ class MCtree {
   Double_t PosBremPreP[4];
   Double_t PosBremPostX[4];
   Double_t PosBremPostP[4];
+  int PosBremCounter;
+
   Double_t ElecBremPreX[4];
   Double_t ElecBremPreP[4];
   Double_t ElecBremPostX[4];
   Double_t ElecBremPostP[4];
+  int ElecBremCounter;
 
   Double_t PosBhabhaPreX[4];
   Double_t PosBhabhaPreP[4];
   Double_t PosBhabhaPostX[4];
   Double_t PosBhabhaPostP[4];
+  int PosBhabhaCounter;
 
   Double_t PosAnnihilPreX[4];
   Double_t PosAnnihilPreP[4];
   Double_t PosAnnihilPostX[4];
   Double_t PosAnnihilPostP[4];
+  int PosAnnihilCounter;
 
   Double_t PosScatterPreX[4];
   Double_t PosScatterPreP[4];
   Double_t PosScatterPostX[4];
   Double_t PosScatterPostP[4];
+  int PosScatterCounter;
+
   Double_t ElecScatterPreX[4];
   Double_t ElecScatterPreP[4];
   Double_t ElecScatterPostX[4];
   Double_t ElecScatterPostP[4];
+  int ElecScatterCounter;
 
   // Double_t ElecinWC3PreX[4];
   // Double_t ElecinWC3PreP[4];
@@ -436,29 +444,37 @@ class MCtree {
   Double_t posbremprep[4];
   Double_t posbrempostx[4];
   Double_t posbrempostp[4];
+  int posbremcounter;
+
   Double_t elecbremprex[4];
   Double_t elecbremprep[4];
   Double_t elecbrempostx[4];
   Double_t elecbrempostp[4];
+  int elecbremcounter;
 
   Double_t posbhabhaprex[4];
   Double_t posbhabhaprep[4];
   Double_t posbhabhapostx[4];
   Double_t posbhabhapostp[4];
+  int posbhabhacounter;
 
   Double_t posannihilprex[4];
   Double_t posannihilprep[4];
   Double_t posannihilpostx[4];
   Double_t posannihilpostp[4];
+  int posannihilcounter;
 
   Double_t posscatterprex[4];
   Double_t posscatterprep[4];
   Double_t posscatterpostx[4];
   Double_t posscatterpostp[4];
+  int posscattercounter;
+
   Double_t elecscatterprex[4];
   Double_t elecscatterprep[4];
   Double_t elecscatterpostx[4];
   Double_t elecscatterpostp[4];
+  int elecscattercounter;
 
   // Double_t elecinwc3prex[4];
   // Double_t elecinwc3prep[4];

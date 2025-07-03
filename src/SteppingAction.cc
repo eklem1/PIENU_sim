@@ -177,7 +177,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
             {
                 //print out checks
                 // G4int eventNumber = theTrack->GetEvent()->GetEventID();
-                G4cout << "Brems for event, t=" << postTime << ", at z=" << postPosition.z() <<G4endl;
+                // G4cout << "Brems for event, t=" << postTime << ", at z=" << postPosition.z() <<G4endl;
                 runAction->SPosBrem(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
             }
         }
@@ -198,7 +198,6 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
     }
 
     //checking for annihililation positrons
-    //why not in the NaI?
     if (theParticleName == "e+" && theProcessName == "annihil" && thePostVolume != "NaI" && thePreVolume != "NaI") 
     {
         // Check if primary positron
@@ -222,20 +221,31 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
         }
     }
 
-    // scattering with positrons
-    if (theParticleName == "e+" && PointingIntoBina(prePosition, preMomentum) && !PointingIntoBina(postPosition, postMomentum))
+    // scattering with positrons - older version that defines scattering as turning away from BINA
+    // if (theParticleName == "e+" && PointingIntoBina(prePosition, preMomentum) && !PointingIntoBina(postPosition, postMomentum))
+    
+    // scattering with positrons - normal version using the multiscattering process
+    if (theParticleName == "e+" && theProcessName == "msc" && thePostVolume != "NaI" && thePreVolume != "NaI")
     {
         // Check if primary positron
         if (theTrack->GetParentID() == 1 || theTrack->GetParentID() == mutracknumber)
         {
-            G4cout << "Scatter for event, t=" << postTime << ", at z=" << postPosition.z() <<G4endl;
-            runAction->SPosScatter(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+            // This excludes CsI
+            if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
+            {
+                // G4cout << "Scatter for event, t=" << postTime << ", at z=" << postPosition.z() <<G4endl;
+                runAction->SPosScatter(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+            }
         }
     }
 
-    if (theParticleName == "e-" && PointingIntoBina(prePosition, preMomentum) && !PointingIntoBina(postPosition, postMomentum))
+    if (theParticleName == "e-" && theProcessName == "msc" && thePostVolume != "NaI" && thePreVolume != "NaI")
     {
-        runAction->SElecScatter(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+        // This excludes CsI
+        if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
+        {
+            runAction->SElecScatter(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+        }
     }
 
 

@@ -101,7 +101,7 @@ class RunAction : public G4UserRunAction {
 
     TFile*   file;
     TNtuple* hitTuple;
-    TNtuple* BremTuple;
+    // TNtuple* BremTuple;
 
     TTree*   aTree;
 
@@ -174,7 +174,9 @@ class RunAction : public G4UserRunAction {
 
     G4double PosBremPreX[4],PosBremPreP[4];
     G4double PosBremPostX[4],PosBremPostP[4];
-    G4int PosBremCounter;
+    G4int PosBremCounter,PosBhabhaCounter,PosAnnihilCounter;
+    G4int ElecBremCounter,PosScatterCounter,ElecScatterCounter;
+
     G4double ElecBremPreX[4],ElecBremPreP[4];
     G4double ElecBremPostX[4],ElecBremPostP[4];
     G4double PosScatterPreX[4],PosScatterPreP[4];
@@ -196,6 +198,10 @@ class RunAction : public G4UserRunAction {
 
     G4double MaxBhabhaEpos = 0;
     G4double TotalBhabhaEpos = 0;
+
+    G4double MaxScatterEpos = 0;
+    G4double MaxScatterEelec = 0;
+
 
     // G4int annihilCount;
     // G4int bremsCount;

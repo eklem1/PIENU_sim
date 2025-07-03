@@ -135,7 +135,7 @@ void RunAction::OpenRoot() {
 
     //make nTuples for the processes to save them multiple times per event?
     //but I also want the eventID linked in here, but that's in a different tree now...
-    BremTuple = new TNtuple("Brem","Brem","postX:postY:postZ:postT",40000);
+    // BremTuple = new TNtuple("Brem","Brem","postX:postY:postZ:postT",40000);
 
 
     aTree =new TTree("tree","pienu");
@@ -160,26 +160,37 @@ void RunAction::OpenRoot() {
     aTree->Branch("PosBremPostX",PosBremPostX,"PosBremPostX[4]/D");
     aTree->Branch("PosBremPostP",PosBremPostP,"PosBremPostP[4]/D");
     aTree->Branch("PosBremCounter",&PosBremCounter,"PosBremCounter/I");
+
     aTree->Branch("PosBhabhaPreX",PosBhabhaPreX,"PosBhabhaPreX[4]/D");
     aTree->Branch("PosBhabhaPreP",PosBhabhaPreP,"PosBhabhaPreP[4]/D");
     aTree->Branch("PosBhabhaPostX",PosBhabhaPostX,"PosBhabhaPostX[4]/D");
     aTree->Branch("PosBhabhaPostP",PosBhabhaPostP,"PosBhabhaPostP[4]/D");
+    aTree->Branch("PosBhabhaCounter",&PosBhabhaCounter,"PosBhabhaCounter/I");
+
     aTree->Branch("PosAnnihilPreX",PosAnnihilPreX,"PosAnnihilPreX[4]/D");
     aTree->Branch("PosAnnihilPreP",PosAnnihilPreP,"PosAnnihilPreP[4]/D");
     aTree->Branch("PosAnnihilPostX",PosAnnihilPostX,"PosAnnihilPostX[4]/D");
     aTree->Branch("PosAnnihilPostP",PosAnnihilPostP,"PosAnnihilPostP[4]/D");
+    aTree->Branch("PosAnnihilCounter",&PosAnnihilCounter,"PosAnnihilCounter/I");
+
     aTree->Branch("ElecBremPreX",ElecBremPreX,"ElecBremPreX[4]/D");
     aTree->Branch("ElecBremPreP",ElecBremPreP,"ElecBremPreP[4]/D");
     aTree->Branch("ElecBremPostX",ElecBremPostX,"ElecBremPostX[4]/D");
     aTree->Branch("ElecBremPostP",ElecBremPostP,"ElecBremPostP[4]/D");
+    aTree->Branch("ElecBremCounter",&ElecBremCounter,"ElecBremCounter/I");
+
     aTree->Branch("PosScatterPreX",PosScatterPreX,"PosScatterPreX[4]/D");
     aTree->Branch("PosScatterPreP",PosScatterPreP,"PosScatterPreP[4]/D");
     aTree->Branch("PosScatterPostX",PosScatterPostX,"PosScatterPostX[4]/D");
     aTree->Branch("PosScatterPostP",PosScatterPostP,"PosScatterPostP[4]/D");
+    aTree->Branch("PosScatterCounter",&PosScatterCounter,"PosScatterCounter/I");
+
     aTree->Branch("ElecScatterPreX",ElecScatterPreX,"ElecScatterPreX[4]/D");
     aTree->Branch("ElecScatterPreP",ElecScatterPreP,"ElecScatterPreP[4]/D");
     aTree->Branch("ElecScatterPostX",ElecScatterPostX,"ElecScatterPostX[4]/D");
     aTree->Branch("ElecScatterPostP",ElecScatterPostP,"ElecScatterPostP[4]/D");
+    aTree->Branch("ElecScatterCounter",&ElecScatterCounter,"ElecScatterCounter/I");
+
     aTree->Branch("PosTotalBremE",&TotalBremEpos,"PosTotalBremE/D");
     aTree->Branch("ElecTotalBremE",&TotalBremEelec,"ElecTotalBremE[4]/D");
     aTree->Branch("PosTotalBhabhaE",&TotalBhabhaEpos,"PosTotalBhabhaE/D");
@@ -263,7 +274,7 @@ void RunAction::OpenRoot() {
     triggeredPositronT3DifferencePZP = new TH1D("triggeredPositronT3DifferencePZP", "Difference between start Pz/P and Pz/P at T3 center for triggered events", 20, 0, 0.8);
 
     hitTuple->SetAutoSave(32000);
-    BremTuple->SetAutoSave(32000);
+    // BremTuple->SetAutoSave(32000);
     aTree->SetAutoSave(32000);
 }
 
@@ -272,7 +283,7 @@ void RunAction::OpenRoot() {
 void RunAction::CloseRoot() {
 
     hitTuple->AutoSave();
-    BremTuple->AutoSave();
+    // BremTuple->AutoSave();
 
     // Particle Start Position/Momentum and Stop Position
     pionStartR->Write(); // Pion Start Position R Coordinate
@@ -463,9 +474,8 @@ void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prep
     // G4cout << "MaxBremEpos: " << MaxBremEpos << G4endl;
     // G4cout << "preE - postE: " << preE - postE << G4endl;
 
-    if ((preE - postE > MaxBremEpos) || (pretime == -10000))
+    if ((preE - postE > MaxBremEpos) || (pretime == -10000)) //saves step with biggest energy dep
     {    
-        //this somehow only filled with the first instance of a process for a given event
         PosBremPreX[0] = prepos.x();
         PosBremPreX[1] = prepos.y();
         PosBremPreX[2] = prepos.z();
@@ -495,11 +505,7 @@ void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prep
     }
 
       //this fills every step, but then it's in its own seperate tree - not ideal, no eventIDs
-      BremTuple->Fill(postpos.x(), postpos.y(), postpos.z(), posttime); 
-
-      //I want them to instead contain all the times a process occurs, for each event
-      //lets try it in a subbranch?
-      // PosBremPreX[0] = prepos.x();
+      // BremTuple->Fill(postpos.x(), postpos.y(), postpos.z(), posttime); 
 
     TotalBremEpos += preE - postE;
 }
@@ -510,7 +516,7 @@ void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector pr
     //G4cout << "MaxBhabhaEpos: " << MaxBhabhaEpos << G4endl;
     //G4cout << "preE - postE: " << preE - postE << G4endl;
 
-    if ((preE - postE > MaxBhabhaEpos) || (pretime == -10000))
+    if ((preE - postE > MaxBhabhaEpos) || (pretime == -10000)) //saves step with biggest energy dep
     {    
         PosBhabhaPreX[0] = prepos.x();
         PosBhabhaPreX[1] = prepos.y();
@@ -533,11 +539,17 @@ void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector pr
         MaxBhabhaEpos = preE - postE;
     }
 
+    //counts how many times this process happens in total for an event
+    if (pretime > -10000){ 
+        PosBhabhaCounter += 1;
+    }
+
     TotalBhabhaEpos += preE - postE;
 }
                    
 void RunAction::SPosAnnihil(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
+    //should only happen once a track
     PosAnnihilPreX[0] = prepos.x();
     PosAnnihilPreX[1] = prepos.y();
     PosAnnihilPreX[2] = prepos.z();
@@ -555,6 +567,11 @@ void RunAction::SPosAnnihil(G4double pretime, G4double posttime, G4ThreeVector p
     PosAnnihilPostP[1] = postmom.y();
     PosAnnihilPostP[2] = postmom.z();
     PosAnnihilPostP[3] = postE;
+
+    //counts how many times this process happens in total for an event
+    if (pretime > -10000){ 
+        PosAnnihilCounter += 1;
+    }
 }
                    
 void RunAction::SElecBrem(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
@@ -562,7 +579,7 @@ void RunAction::SElecBrem(G4double pretime, G4double posttime, G4ThreeVector pre
     //G4cout << "MaxBremEelec: " << MaxBremEelec << G4endl;
     //G4cout << "preE - postE: " << preE - postE << G4endl;
 
-    if ((preE - postE > MaxBremEelec) || (pretime == -10000))  
+    if ((preE - postE > MaxBremEelec) || (pretime == -10000))  //saves step with biggest energy dep
     {    
         ElecBremPreX[0] = prepos.x();
         ElecBremPreX[1] = prepos.y();
@@ -585,49 +602,74 @@ void RunAction::SElecBrem(G4double pretime, G4double posttime, G4ThreeVector pre
         MaxBremEelec = preE - postE;
     }
 
+    //counts how many times this process happens in total for an event
+    if (pretime > -10000){ 
+        ElecBremCounter += 1;
+    }
+
     TotalBremEelec += preE - postE;
 }
 
 void RunAction::SPosScatter(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
-    PosScatterPreX[0] = prepos.x();
-    PosScatterPreX[1] = prepos.y();
-    PosScatterPreX[2] = prepos.z();
-    PosScatterPreX[3] = pretime;
-    PosScatterPreP[0] = premom.x();
-    PosScatterPreP[1] = premom.y();
-    PosScatterPreP[2] = premom.z();
-    PosScatterPreP[3] = preE;
+    if ((preE - postE > MaxScatterEpos) || (pretime == -10000))  //saves step with biggest energy dep
+    {  
+      PosScatterPreX[0] = prepos.x();
+      PosScatterPreX[1] = prepos.y();
+      PosScatterPreX[2] = prepos.z();
+      PosScatterPreX[3] = pretime;
+      PosScatterPreP[0] = premom.x();
+      PosScatterPreP[1] = premom.y();
+      PosScatterPreP[2] = premom.z();
+      PosScatterPreP[3] = preE;
 
-    PosScatterPostX[0] = postpos.x();
-    PosScatterPostX[1] = postpos.y();
-    PosScatterPostX[2] = postpos.z();
-    PosScatterPostX[3] = posttime;
-    PosScatterPostP[0] = postmom.x();
-    PosScatterPostP[1] = postmom.y();
-    PosScatterPostP[2] = postmom.z();
-    PosScatterPostP[3] = postE;
-}
+      PosScatterPostX[0] = postpos.x();
+      PosScatterPostX[1] = postpos.y();
+      PosScatterPostX[2] = postpos.z();
+      PosScatterPostX[3] = posttime;
+      PosScatterPostP[0] = postmom.x();
+      PosScatterPostP[1] = postmom.y();
+      PosScatterPostP[2] = postmom.z();
+      PosScatterPostP[3] = postE;
+
+      MaxScatterEpos = preE - postE;
+    }
+    //counts how many times this process happens in total for an event
+    if (pretime > -10000){ 
+        PosScatterCounter += 1;
+    }
+} 
                     
 void RunAction::SElecScatter(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
-    ElecScatterPreX[0] = prepos.x();
-    ElecScatterPreX[1] = prepos.y();
-    ElecScatterPreX[2] = prepos.z();
-    ElecScatterPreX[3] = pretime;
-    ElecScatterPreP[0] = premom.x();
-    ElecScatterPreP[1] = premom.y();
-    ElecScatterPreP[2] = premom.z();
-    ElecScatterPreP[3] = preE;
+    if ((preE - postE > MaxScatterEelec) || (pretime == -10000))  //saves step with biggest energy dep
+    {  
+      ElecScatterPreX[0] = prepos.x();
+      ElecScatterPreX[1] = prepos.y();
+      ElecScatterPreX[2] = prepos.z();
+      ElecScatterPreX[3] = pretime;
+      ElecScatterPreP[0] = premom.x();
+      ElecScatterPreP[1] = premom.y();
+      ElecScatterPreP[2] = premom.z();
+      ElecScatterPreP[3] = preE;
 
-    ElecScatterPostX[0] = postpos.x();
-    ElecScatterPostX[1] = postpos.y();
-    ElecScatterPostX[2] = postpos.z();
-    ElecScatterPostX[3] = posttime;
-    ElecScatterPostP[0] = postmom.x();
-    ElecScatterPostP[1] = postmom.y();
-    ElecScatterPostP[2] = postmom.z();
-    ElecScatterPostP[3] = postE;
+      ElecScatterPostX[0] = postpos.x();
+      ElecScatterPostX[1] = postpos.y();
+      ElecScatterPostX[2] = postpos.z();
+      ElecScatterPostX[3] = posttime;
+      ElecScatterPostP[0] = postmom.x();
+      ElecScatterPostP[1] = postmom.y();
+      ElecScatterPostP[2] = postmom.z();
+      ElecScatterPostP[3] = postE;
+
+      MaxScatterEelec = preE - postE;
+
+    }
+
+    //counts how many times this process happens in total for an event
+    if (pretime > -10000){ 
+        ElecScatterCounter += 1;
+    }
 }
                     
 /*
@@ -669,26 +711,6 @@ void RunAction::SsecposinWC3(G4ThreeVector position, G4double time, G4ThreeVecto
     SecPosinWC3PreP[2] = momentum.z();
     SecPosinWC3PreP[3] = Energy;
 }
-*/
-
-/*
-void RunAction::AnnihilSeen()
-{
-  annihilCount=1; // if you see annihilation, put a 1 here
- 
-}
-
-
-void RunAction::BremsSeen()
-{
-  bremsCount=1; // if you see Brems, put a 1 here
-}
-
-void RunAction::MSCSeen()
-{
-  mscCount=1; // if you see msc, put a 1 here
-}
- 
 */
                     
 void RunAction::SMuPolarization(G4ThreeVector mupolarization)
@@ -749,11 +771,21 @@ void RunAction::ClearVariable(){
   // RunAction::SprimposinWC3(tV, temp, tV, temp);
   // RunAction::SsecposinWC3(tV, temp, tV, temp);
 
+  //Counters to get total # of that process per event
+  PosBremCounter=0;
+  PosBhabhaCounter=0;
+  PosAnnihilCounter=0;
+  ElecBremCounter=0;
+  PosScatterCounter=0;
+  ElecScatterCounter=0;
+
   MaxBremEpos = 0;
   MaxBremEelec = 0;
   TotalBremEpos = 0;
   TotalBremEelec = 0;
-  PosBremCounter=0;
+
+  MaxScatterEpos = 0;
+  MaxScatterEelec = 0;
 
   MaxBhabhaEpos = 0;
   TotalBhabhaEpos = 0;
