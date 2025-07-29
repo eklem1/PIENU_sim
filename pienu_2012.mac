@@ -25,11 +25,11 @@
 # beam from Luca's approximation of the data
 /beam/FromData 4
 
-#new things from Ivan for positron gun
+#for positron gun
 /gun/energy 70.0 # in MeV units 
-/gun/angle 0.0 # in degree units
+/gun/angle 27.848 # in degree units -> R=30 mm
 
 
 #Number of events to simulate
 # /run/beamOn 600000 
-/run/beamOn 200
+/run/beamOn 5000
