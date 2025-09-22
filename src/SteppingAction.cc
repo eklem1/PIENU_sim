@@ -170,7 +170,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
     if (theParticleName == "e+" && theProcessName == "eBrem" && thePostVolume != "NaI" && thePreVolume != "NaI")
     {
         // Check if primary positron
-        if (theTrack->GetParentID() == 0 || theTrack->GetParentID() == mutracknumber)
+        if (theTrack->GetParentID() == 0)// || theTrack->GetParentID() == mutracknumber)
         {
             // This excludes CsI
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
@@ -187,7 +187,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
     if (theParticleName == "e+" && theProcessName == "eIoni" && thePostVolume != "NaI" && thePreVolume != "NaI")
     {
         // Check if primary positron
-        if (theTrack->GetParentID() == 0 || theTrack->GetParentID() == mutracknumber)
+        if (theTrack->GetParentID() == 0) //|| theTrack->GetParentID() == mutracknumber)
         {
             // This excludes CsI
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
@@ -201,7 +201,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
     if (theParticleName == "e+" && theProcessName == "annihil" && thePostVolume != "NaI" && thePreVolume != "NaI") 
     {
         // Check if primary positron
-        if (theTrack->GetParentID() == 0 || theTrack->GetParentID() == mutracknumber)
+        if (theTrack->GetParentID() == 0 )//|| theTrack->GetParentID() == mutracknumber)
         {
             // This excludes CsI, here checking that Crystal is not in the pre/post vol name
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
@@ -228,7 +228,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
     if (theParticleName == "e+" && theProcessName == "msc" && thePostVolume != "NaI" && thePreVolume != "NaI")
     {
         // Check if primary positron
-        if (theTrack->GetParentID() == 0 || theTrack->GetParentID() == mutracknumber)
+        if (theTrack->GetParentID() == 0) //|| theTrack->GetParentID() == mutracknumber)
         {
             // This excludes CsI
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
