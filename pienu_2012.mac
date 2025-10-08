@@ -13,7 +13,7 @@
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
-/event/printModulo 1000 #printout counter
+/event/printModulo 100 #printout counter
 /rndm/autoSeed true
 
 #Commands for the pileup
@@ -26,10 +26,10 @@
 /beam/FromData 4
 
 #new things from Ivan for positron gun
-/gun/energy 70.0 # in MeV units 
-/gun/angle 0.0 # in degree units
+# /gun/energy 70.0 # in MeV units 
+# /gun/angle 0.0 # in degree units
 
 
 #Number of events to simulate
 # /run/beamOn 600000 
-/run/beamOn 200
+/run/beamOn 50000

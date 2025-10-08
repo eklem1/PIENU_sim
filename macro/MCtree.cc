@@ -100,6 +100,11 @@ void MCtree::Clear()
       efront[i]=0;
       xbina[i]=-999;
     }
+
+    // extra entries for electrons - Emma
+    et2[4]=0;
+    eBt2[4]=0;
+
    et2_trig = 0.;
   
   tgstartzp =-999;
@@ -206,8 +211,8 @@ void MCtree::SetInputFile(const char* fname) {
   
   cout << "This is a dummy line" << endl;
   
-  MCTree1->Add(fname);
-  MCTree2->Add(fname);
+  MCTree1->Add(fname); //Hits
+  MCTree2->Add(fname); //Tree
   
   MCTree1->SetBranchAddress("eventID",&eventID);
   MCTree1->SetBranchAddress("energyDeposit",&energyDeposit);
@@ -506,8 +511,8 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eBTG",&eBtg,"eBTG[4]/F");
   OutputTree->Branch("eT1",&et1,"eT1[4]/F");
   OutputTree->Branch("eBT1",&eBt1,"eBT1[4]/F");
-  OutputTree->Branch("eT2",&et2,"eT2[4]/F");
-  OutputTree->Branch("eBT2",&eBt2,"eBT2[4]/F");
+  OutputTree->Branch("eT2",&et2,"eT2[5]/F");
+  OutputTree->Branch("eBT2",&eBt2,"eBT2[5]/F");
 
   OutputTree->Branch("eV2",&ev2,"eV2[4]/F");
   OutputTree->Branch("eBV2",&eBv2,"eBV2[4]/F");
@@ -1162,6 +1167,11 @@ void MCtree::Loop()
 	      {
 		et2[3] +=energyDeposit;
 		eBt2[3] += Ebirk;
+	      }
+      else if (PID == 11) //electrons
+	      {
+		et2[4] +=energyDeposit;
+		eBt2[4] += Ebirk;
 	      }
 	  }
 

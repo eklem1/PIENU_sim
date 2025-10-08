@@ -179,7 +179,7 @@ class MCtree {
   Float_t eb2[4];
   Float_t etg[4];
   Float_t et1[4];
-  Float_t et2[4];
+  Float_t et2[5];
   Float_t ev2[4];
   Float_t ev3[4];
 
@@ -187,7 +187,7 @@ class MCtree {
   Float_t eBb2[4];
   Float_t eBtg[4];
   Float_t eBt1[4];
-  Float_t eBt2[4];
+  Float_t eBt2[5];
   Float_t eBv2[4];
   Float_t eBv3[4];
 

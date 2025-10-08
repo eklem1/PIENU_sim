@@ -46,8 +46,10 @@
 
 int main(int argc,char** argv)
 {
-  //  G4String physicsList = "QGSP_BERT";
-   G4String physicsList = "FTFP_BERT_PEN";
+  // G4String physicsList = "FTFP_BERT_EMY";
+  // G4String physicsList = "QGSP_BERT_EMZ";
+
+  G4String physicsList = "FTFP_BERT_PEN";
   // G4String physicsList = "ShieldingLEND_PEN";
 
   G4int seed = 123;
