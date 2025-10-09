@@ -73,6 +73,18 @@ class HitSegment : public G4VHit
     /// definition is in a single volume.
     G4double GetStartT(void) const { return fStartT; }
 
+    /// The X momentum of the hit starting point.  Note that a hit by
+    /// definition is in a single volume.
+    G4double GetMomX(void) const { return fMomX; }
+
+    /// The Y momentum of the hit starting point.  Note that a hit by
+    /// definition is in a single volume.
+    G4double GetMomY(void) const { return fMomY; }
+
+    /// The Z momentum of the hit starting point.  Note that a hit by
+    /// definition is in a single volume.
+    G4double GetMomZ(void) const { return fMomZ; }
+
     /// The X position of the hit stopping point.  Note that a hit by
     /// definition is in a single volume.
     G4double GetStopX(void) const { return fStopX; }
@@ -150,6 +162,15 @@ class HitSegment : public G4VHit
 
     /// The time of the hit starting point.
     G4double fStartT;
+
+    /// The X momentum of the hit starting point.
+    G4double fMomX;
+
+    /// The Y momentum of the hit starting point.
+    G4double fMomY;
+
+    /// The Z momentum of the hit starting point.
+    G4double fMomZ;
 
     /// The X position of the hit stopping point.
     G4double fStopX;

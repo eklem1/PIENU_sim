@@ -35,7 +35,7 @@ HitSegment::HitSegment()
     fStopX(0),  fStopY(0),  fStopZ(0),  fStopT(0),
     fPDG(-1), fParticleName(""),fCreatorFlag(0),
     fCreatorProcessName(""), fEbirk(0), fProcessID(0),
-    fMerged(false) {}
+    fMerged(false), fMomX(0), fMomY(0), fMomZ(0) {}
 
 HitSegment::HitSegment(const HitSegment &right)
     : G4VHit(),
@@ -54,7 +54,11 @@ HitSegment::HitSegment(const HitSegment &right)
     fCreatorProcessName(right.fCreatorProcessName),
     fProcessID(right.fProcessID),
     fEbirk(right.fEbirk),
-    fMerged(right.fMerged) {
+    fMerged(right.fMerged),
+    fMomX(right.fMomX),
+    fMomY(right.fMomY), 
+    fMomZ(right.fMomZ) 
+     {
 #ifdef G4VIS_USE
     fRotation = right.fRotation;
     fTranslation = right.fTranslation;
@@ -86,6 +90,10 @@ HitSegment HitSegment::operator=(const HitSegment& op2)
     fProcessID = op2.fProcessID;
     fEbirk  = op2.fEbirk;
     fMerged = op2.fMerged;
+    fMomX = op2.fMomX;
+    fMomY = op2.fMomY;
+    fMomZ = op2.fMomZ;
+
 #ifdef G4VIS_USE
     fRotation    = op2.fRotation;
     fTranslation = op2.fTranslation;
@@ -146,6 +154,8 @@ void HitSegment::AddStep(G4Step* theStep)
   G4ThreeVector prePos  = theStep->GetPreStepPoint()->GetPosition();
   G4ThreeVector postPos = theStep->GetPostStepPoint()->GetPosition();
 
+  G4ThreeVector momentum = theStep->GetPreStepPoint()->GetMomentum();
+
   G4StepStatus stepStatus = theStep->GetPostStepPoint()->GetStepStatus();
   G4ParticleDefinition* particle =  theStep->GetTrack()->GetDefinition();
 
@@ -177,6 +187,10 @@ void HitSegment::AddStep(G4Step* theStep)
      fStartX = prePos.x();
      fStartY = prePos.y();
      fStartZ = prePos.z();
+     fMomX = momentum.x();
+     fMomY = momentum.y();
+     fMomZ = momentum.z();
+
      fStartT = theStep->GetPreStepPoint()->GetGlobalTime();
      fStopX = postPos.x();
      fStopY = postPos.y();
