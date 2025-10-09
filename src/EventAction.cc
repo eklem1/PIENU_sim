@@ -300,7 +300,13 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
                                  jhit->GetEbirk(),
                                  jhit->GetPDG(),
                                  jhit->GetCreatorFlag(), 
-                                 jhit->GetProcessID());
+                                 jhit->GetProcessID(), 
+                                 jhit->GetTrackID(),
+                                 jhit->GetParentID(),
+                                 jhit->GetMomX(),
+                                 jhit->GetMomY(),
+                                 jhit->GetMomZ()
+                                );
 #ifdef G4VIS_USE
             jhit->Draw();
 #endif

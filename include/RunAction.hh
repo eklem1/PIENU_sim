@@ -45,7 +45,13 @@ class RunAction : public G4UserRunAction {
                    G4double E14,
                    G4double E15,
                    G4double E16,
-                   G4double E17);
+                   G4double E17,
+                   G4double E18,
+                   G4double E19,
+                   G4double E20,
+                   G4double E21,
+                   G4double E22
+                  );
     void FillTree();
 
     void ClearVariable();
