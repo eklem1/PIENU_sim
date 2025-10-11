@@ -101,9 +101,15 @@ void MCtree::Clear()
       xbina[i]=-999;
     }
 
-    // extra entries for electrons - Emma
-    et2[4]=0;
-    eBt2[4]=0;
+  // extra entries for electrons - Emma
+  et2[4]=0;
+  eBt2[4]=0;
+
+  //for tracking backscatter in T2
+  for (int i=0;i<5;i++)
+    {
+      backscatter_T2[i]=0;
+    }
 
    et2_trig = 0.;
   
@@ -228,6 +234,13 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree1->SetBranchAddress("stopT",&StopT);
   MCTree1->SetBranchAddress("PID",&PID);
   MCTree2->SetBranchAddress("eventID",&eventID2);
+
+  //adding for custom backscattering
+  MCTree1->SetBranchAddress("TrackID",&TrackID);
+  MCTree1->SetBranchAddress("MomX",&MomX);
+  MCTree1->SetBranchAddress("MomY",&MomY);
+  MCTree1->SetBranchAddress("MomZ",&MomZ);
+
 
   MCTree2->SetBranchAddress("PiStartX",&PiStartX); 
   MCTree2->SetBranchAddress("PiStartP",&PiStartP);
@@ -513,6 +526,8 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eBT1",&eBt1,"eBT1[4]/F");
   OutputTree->Branch("eT2",&et2,"eT2[5]/F");
   OutputTree->Branch("eBT2",&eBt2,"eBT2[5]/F");
+  OutputTree->Branch("backscatter_T2",&backscatter_T2,"backscatter_T2[5]/I");
+  
 
   OutputTree->Branch("eV2",&ev2,"eV2[4]/F");
   OutputTree->Branch("eBV2",&eBv2,"eBV2[4]/F");
@@ -844,6 +859,8 @@ void MCtree::Loop()
     
     //Clear the variables
     this->Clear();
+    //make a new empty set of trackIDs
+    setOfTracks.clear();
     
   int HIT = 0;
 
@@ -1173,6 +1190,53 @@ void MCtree::Loop()
 		et2[4] +=energyDeposit;
 		eBt2[4] += Ebirk;
 	      }
+
+      //added to look at backscattering, uses custom MC hit tree that includes momentum
+        if (MomZ < 0) 
+        {
+          if (PID == -11) //positrons
+            {
+              bool found = setOfTracks.find(TrackID) == setOfTracks.end();
+              // cout << "backwards positron found, track: " << TrackID << ", if: " << found << endl;
+
+              //now check if this track has already been saved
+              if (setOfTracks.find(TrackID) == setOfTracks.end()){ //track is not saved yet
+                // cout << "backwards positron saved, pz=" << MomZ << ", track: "<< TrackID << endl;
+
+                setOfTracks.insert(TrackID); //add the trackID to the set
+                backscatter_T2[0] += 1; //and save the particle
+              }
+            }
+          else if (PID == 11) //electrons
+            {
+              if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+                setOfTracks.insert(TrackID); 
+                backscatter_T2[1] += 1;
+              }
+            }
+            else if (PID == 22) //gammas
+            {
+              if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+                setOfTracks.insert(TrackID); 
+                backscatter_T2[2] += 1;
+              }
+            }
+            else if (PID == 2112) //neutrons
+            {
+              if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+                setOfTracks.insert(TrackID); 
+                backscatter_T2[3] += 1;
+              }
+            }
+            else //other stuff
+            {
+              if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+                setOfTracks.insert(TrackID); 
+                backscatter_T2[4] += 1;
+              }
+            }
+        }
+
 	  }
 
 

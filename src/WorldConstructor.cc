@@ -800,9 +800,13 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
     G4Tubs* NaI_tub
             = new G4Tubs("NaI",NaI_rmin,NaI_rmax,NaI_dz/2.,0.*deg,360.*deg);
 
-    G4LogicalVolume* NaI_log = 
+    /*  G4LogicalVolume* NaI_log = 
         new G4LogicalVolume(NaI_tub,
                             FindMaterial("G4_SODIUM_IODIDE"),
+                            "NaI",0,0,0);*/
+     G4LogicalVolume* NaI_log = 
+        new G4LogicalVolume(NaI_tub,
+                            FindMaterial("G4_AIR"),
                             "NaI",0,0,0);
 
     visual->SetColor(0.5,0.5,0.5,1); // white
@@ -846,10 +850,15 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
       = new G4Tubs("front",bina_front_rmin,bina_front_rmax,bina_front_dz/2.,
                                                            0.*deg,360.*deg);
 
-    G4LogicalVolume* bina_front_log
+    /*   G4LogicalVolume* bina_front_log
       = new G4LogicalVolume(bina_front_tub,
                             FindMaterial("G4_Al"),
+                            "front",0,0,0);*/
+     G4LogicalVolume* bina_front_log
+      = new G4LogicalVolume(bina_front_tub,
+                            FindMaterial("G4_AIR"),
                             "front",0,0,0);
+    
     bina_front_log->SetSensitiveDetector(factory.MakeSD("crystalSD")); //Chloe's addition
     bina_front_log->SetVisAttributes(visual);
 
@@ -870,9 +879,13 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
       = new G4Tubs("front",bina_front_rm_rmin,bina_front_rm_rmax,bina_front_rm_dz/2.,
                                                            0.*deg,360.*deg);
 
-    G4LogicalVolume* bina_front_rm_log
+    /*    G4LogicalVolume* bina_front_rm_log
       = new G4LogicalVolume(bina_front_rm_tub,
                             FindMaterial("Al2O3"),
+                            "front_rm",0,0,0);*/
+    G4LogicalVolume* bina_front_rm_log
+      = new G4LogicalVolume(bina_front_rm_tub,
+                            FindMaterial("G4_AIR"),
                             "front_rm",0,0,0);
 //    bina_front_rm_log->SetSensitiveDetector(factory.MakeSD("crystalSD")); //Chloe's addition
     bina_front_rm_log->SetVisAttributes(visual);

@@ -69,6 +69,10 @@ class MCtree {
   Float_t StartT,StopT;
   Float_t PID;
 
+  Int_t TrackID;
+  Float_t MomX,MomY,MomZ;
+  std::set<int> setOfTracks;
+
   Double_t PiDecayP[4];
   Double_t PiDecayX[4];
   Double_t MuDecayP[4];
@@ -190,6 +194,8 @@ class MCtree {
   Float_t eBt2[5];
   Float_t eBv2[4];
   Float_t eBv3[4];
+
+  int backscatter_T2[5];
 
   Float_t eCsIUSIch[21];
   Float_t eCsIUSOch[28];
