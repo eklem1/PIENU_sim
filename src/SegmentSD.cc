@@ -68,11 +68,13 @@ G4bool SegmentSD::ProcessHits(G4Step* theStep, G4TouchableHistory*)
    G4Track* track = theStep->GetTrack();
    auto info = (MyTrackInformation*) track->GetUserInformation();
 
-   bool passed = false;
-   if (info) {
-      bool passed = info->GetPassedVolume();
-   }
-   currentHit->SetBINAflag(passed);
+   // bool passed = false;
+   // if (info) {
+   //    bool passed = info->GetPassedVolume();
+   // }
+   // currentHit->SetBINAflag(passed);
+   
+   currentHit->SetBINAflag(info ? info->GetPassedVolume() : false);
 
    currentHit->AddStep(theStep);
 
