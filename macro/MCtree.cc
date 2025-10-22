@@ -1166,32 +1166,6 @@ void MCtree::Loop()
             t2_e[hitt2] = energyDeposit;
             t2_t[hitt2] = StartT;
 
-<<<<<<< HEAD
-            if(PID>1000) t2_pid[hitt2] = 0; else t2_pid[hitt2] = PID;
-            hitt2++;
-            
-            if (PID == 211)
-            {
-              et2[1] +=energyDeposit;
-              eBt2[1] += Ebirk;
-            }
-            else if (PID == -13)
-            {
-              et2[2] +=energyDeposit;
-              eBt2[2] += Ebirk;
-            }
-            else if (PID == -11) 
-            {
-              et2[3] +=energyDeposit;
-              eBt2[3] += Ebirk;
-            }
-            else if (PID == 11) //electrons
-            {
-              et2[4] +=energyDeposit;
-              eBt2[4] += Ebirk;
-            }
-          }
-=======
 	    if(PID>1000) t2_pid[hitt2] = 0; else t2_pid[hitt2] = PID;
 	    hitt2++;
 	    
