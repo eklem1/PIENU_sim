@@ -1,6 +1,6 @@
 #include "RunAction.hh"
 #include "SteppingAction.hh"
-
+#include "MyTrackInformation.hh"
 #include "G4VProcess.hh"
 #include "G4StepStatus.hh"
 
@@ -66,8 +66,37 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
       const G4VProcess* theCreatorProcess = theTrack->GetCreatorProcess();
       if (theCreatorProcess) theCreatorProcessName = theCreatorProcess->GetProcessName();
 
+        auto info = (MyTrackInformation*) theTrack->GetUserInformation();
+        if (!info) {
+            info = new MyTrackInformation();
+            theTrack->SetUserInformation(info);
+        }
+
+        // Check if entering BINA
+        auto postVol = theStep->GetPostStepPoint()->GetPhysicalVolume();
+        if (postVol && postVol->GetName() == "NaI") {
+            info->SetPassedVolume(true);
+        }
+        // // Propagate flag to all secondaries created in this step
+        // const auto* secondaries = theStep->GetSecondaryInCurrentStep();
+        // if (secondaries) {
+        //     for (auto secTrack : *secondaries) {
+        //         auto secInfo = new MyTrackInformation(info->GetPassedVolume());
+        //         secTrack->SetUserInformation(secInfo);
+        //     }
+        // }
+
+        //if this is a daugher particle, check if the parent has been in BINA already 
+        if (theTrack->GetParentID() > 0) {
+            auto parentInfo = static_cast<MyTrackInformation*>(theStep->GetTrack()->GetUserInformation());
+            if (parentInfo && parentInfo->GetPassedVolume())
+                info->SetPassedVolume(true);
+        }
+
+
     } else { return; }
-    
+
+
     //Record the position of a photon-capture with neutron emission
     if (theParticleName == "neutron" && 
 	theCreatorProcessName == "PhotonInelastic" &&

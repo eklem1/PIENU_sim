@@ -122,6 +122,9 @@ class HitSegment : public G4VHit
     void SetMergedFlag(G4bool status) { fMerged = status; }
     G4bool GetMergedFlag() const { return fMerged; }
 
+    void SetBINAflag(G4bool status) { fBINAflag = status; }
+    G4bool GetBINAflag() const { return fBINAflag; }
+
     ///Clear the track id and time
     void Clear(void);
 
@@ -204,6 +207,9 @@ class HitSegment : public G4VHit
 
     /// Flag that determines if the hit was merged into another hit
     G4bool fMerged;
+
+    /// Flag that determines if the particle or it's parent has ever been in BINA
+    G4bool fBINAflag;
 
 #ifdef G4VIS_USE
     /// Coordinate transformations needed for hit-volume drawing

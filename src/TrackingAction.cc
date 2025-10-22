@@ -1,6 +1,6 @@
 
 #include "TrackingAction.hh"
-
+#include "MyTrackInformation.hh"
 #include "RunAction.hh"
 
 #include "G4Track.hh"
@@ -22,6 +22,12 @@ TrackingAction::~TrackingAction() {
 // This function is called when a new track is taken off of the stack
 //
 void TrackingAction::PreUserTrackingAction(const G4Track* theTrack) {
+    auto trackNonConst = const_cast<G4Track*>(theTrack);
+
+    // Always attach a MyTrackInformation to every new track
+    // (secondary info propagation happens in SteppingAction)
+    MyTrackInformation* info = new MyTrackInformation();
+    trackNonConst->SetUserInformation(info);
 
     G4ThreeVector momentum =
     theTrack->GetDynamicParticle()->GetMomentum();

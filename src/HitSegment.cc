@@ -35,7 +35,7 @@ HitSegment::HitSegment()
     fStopX(0),  fStopY(0),  fStopZ(0),  fStopT(0),
     fPDG(-1), fParticleName(""),fCreatorFlag(0),
     fCreatorProcessName(""), fEbirk(0), fProcessID(0),
-    fMerged(false), fMomX(0), fMomY(0), fMomZ(0) {}
+    fMerged(false), fMomX(0), fMomY(0), fMomZ(0), fBINAflag(false) {}
 
 HitSegment::HitSegment(const HitSegment &right)
     : G4VHit(),
@@ -57,7 +57,9 @@ HitSegment::HitSegment(const HitSegment &right)
     fMerged(right.fMerged),
     fMomX(right.fMomX),
     fMomY(right.fMomY), 
-    fMomZ(right.fMomZ) 
+    fMomZ(right.fMomZ),
+    fBINAflag(right.fBINAflag)
+
      {
 #ifdef G4VIS_USE
     fRotation = right.fRotation;
@@ -93,6 +95,8 @@ HitSegment HitSegment::operator=(const HitSegment& op2)
     fMomX = op2.fMomX;
     fMomY = op2.fMomY;
     fMomZ = op2.fMomZ;
+    fBINAflag = op2.fBINAflag;
+
 
 #ifdef G4VIS_USE
     fRotation    = op2.fRotation;
@@ -229,6 +233,15 @@ void HitSegment::AddStep(G4Step* theStep)
      // Record the track that contributes to this hit.
      G4int trackId = theStep->GetTrack()->GetTrackID();
      G4int parentId = theStep->GetTrack()->GetParentID();
+
+    //  if ((fHitVolume.GetVolume())->GetName() == "NaI"){
+    //     //particle currently in BINA
+    //     fBINAflag = true;
+    //  } else {
+    //     //particle not currently in BINA, but could have been previously
+    //     fBINAflag = (fBINAflag or false); 
+    //  }
+
 
      if (trackId == fTrackID) {
         fStopX = postPos.x();

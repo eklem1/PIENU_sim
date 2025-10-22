@@ -69,8 +69,10 @@ class MCtree {
   Float_t StartT,StopT;
   Float_t PID;
 
-  Int_t TrackID;
+  Float_t TrackID;
   Float_t MomX,MomY,MomZ;
+  Float_t BINAflag;
+  
   std::set<int> setOfTracks;
 
   Double_t PiDecayP[4];
