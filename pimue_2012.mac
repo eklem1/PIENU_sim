@@ -28,10 +28,10 @@
 # /gun/energy 70.0 # in MeV units 
 # /gun/angle 0.0 # in degree units
 
-/vis/open VRML2FILE
-/vis/drawVolume
+# /vis/open VRML2FILE
+# /vis/drawVolume
 
 #Number of events to simulate
 # /run/beamOn 600000  
-# /run/beamOn 10000
-/run/beamOn 100
+/run/beamOn 50000
+#/run/beamOn 100

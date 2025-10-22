@@ -105,13 +105,13 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
         // collection
         G4String HCname = HCT->GetHCname(i);
 
-	G4int volumeID[3];
+	    G4int volumeID[3];
 
         if (SDname == "crystalSD") { volumeID[0] = 5;
         } else if (SDname == "scintSD") { volumeID[0] = 1; }
-	else if (SDname =="wireChamberSD") { volumeID[0] = 2;}
+	    else if (SDname =="wireChamberSD") { volumeID[0] = 2;}
 
-	//        G4cout << SDname << " " << volumeID[0] << G4endl;
+	    //G4cout << SDname << " " << volumeID[0] << G4endl;
 
         // Get the unique id number of the ith hit collection
         G4int fHCID = SDman->GetCollectionID(SDname+"/"+HCname);
@@ -222,8 +222,10 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
 
 	      //	        G4cout << (jhit->GetVolumeID().GetVolume())->GetName()<< G4endl;
                if ((jhit->GetVolumeID().GetVolume())->GetName() == "NaI") {
-		 volumeID[1] = jhit->GetVolumeID().GetReplicaNumber(0);
-		 volumeID[2] = 100;
+                volumeID[1] = jhit->GetVolumeID().GetReplicaNumber(0);
+                volumeID[2] = 100;
+
+                // jhit->SetBINAflag(true);
                } 
 	       
 	       else if((jhit->GetVolumeID().GetVolume())->GetName() == "front"){//chloe's addition
@@ -266,7 +268,6 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
 		}
 	      
 	    }
-	    
 
 	    
         //    G4cout << "EventID: " << aEvent->GetEventID() << G4endl;
@@ -285,6 +286,10 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
 //            G4cout << "Ebirk:       " << jhit->GetEbirk()/MeV << "MeV" << G4endl;
 //            G4cout << "PDG:         " << jhit->GetPDG() << G4end;
 //            G4cout << "CreatorFlag: " << jhit->GetCreatorFlag() << G4endl;
+
+        //    G4cout << "EventID, track: " << aEvent->GetEventID() << ", " << jhit->GetTrackID() << G4endl;
+        //    G4cout << "BINA flag: " << jhit->GetBINAflag() << G4endl;
+
 
             runAction->FillTuple(aEvent->GetEventID(),
                                  volumeID[0], volumeID[1], volumeID[2],
@@ -305,7 +310,8 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
                                  jhit->GetParentID(),
                                  jhit->GetMomX(),
                                  jhit->GetMomY(),
-                                 jhit->GetMomZ()
+                                 jhit->GetMomZ(),
+                                 jhit->GetBINAflag()
                                 );
 #ifdef G4VIS_USE
             jhit->Draw();

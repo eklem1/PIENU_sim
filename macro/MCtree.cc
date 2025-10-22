@@ -240,6 +240,7 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree1->SetBranchAddress("MomX",&MomX);
   MCTree1->SetBranchAddress("MomY",&MomY);
   MCTree1->SetBranchAddress("MomZ",&MomZ);
+  MCTree1->SetBranchAddress("BINAflag",&BINAflag);  
 
 
   MCTree2->SetBranchAddress("PiStartX",&PiStartX); 
@@ -1190,13 +1191,18 @@ void MCtree::Loop()
 		eBt2[4] += Ebirk;
 	      }
 
+      cout << "bina flag = " << BINAflag << endl;
+
       //added to look at backscattering, uses custom MC hit tree that includes momentum
-        if (MomZ < 0) 
+        // if (MomZ > 0) 
+        if (BINAflag == 1) 
         {
+            cout << "backscatter found " << TrackID << endl;
+
           if (PID == -11) //positrons
             {
               bool found = setOfTracks.find(TrackID) == setOfTracks.end();
-              // cout << "backwards positron found, track: " << TrackID << ", if: " << found << endl;
+              cout << "backwards positron found, track: " << TrackID << ", if: " << found << endl;
 
               //now check if this track has already been saved
               if (setOfTracks.find(TrackID) == setOfTracks.end()){ //track is not saved yet
@@ -1208,6 +1214,8 @@ void MCtree::Loop()
             }
           else if (PID == 11) //electrons
             {
+              cout << "backwards electron found, track: " << TrackID << endl;
+
               if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
                 setOfTracks.insert(TrackID); 
                 backscatter_T2[1] += 1;
