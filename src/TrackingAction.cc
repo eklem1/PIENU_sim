@@ -26,8 +26,15 @@ void TrackingAction::PreUserTrackingAction(const G4Track* theTrack) {
 
     // Always attach a MyTrackInformation to every new track
     // (secondary info propagation happens in SteppingAction)
-    MyTrackInformation* info = new MyTrackInformation();
-    trackNonConst->SetUserInformation(info);
+    // but the secondary particles may already have one created
+    // MyTrackInformation* info = new MyTrackInformation();
+    // trackNonConst->SetUserInformation(info);
+
+    if (!theTrack->GetUserInformation()) {
+        // Only create a new object if none exists
+        MyTrackInformation* info = new MyTrackInformation();
+        trackNonConst->SetUserInformation(info);
+    }
 
     G4ThreeVector momentum =
     theTrack->GetDynamicParticle()->GetMomentum();

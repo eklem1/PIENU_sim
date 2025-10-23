@@ -77,21 +77,25 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
         if (postVol && postVol->GetName() == "NaI") {
             info->SetPassedVolume(true);
         }
-        // // Propagate flag to all secondaries created in this step
-        // const auto* secondaries = theStep->GetSecondaryInCurrentStep();
-        // if (secondaries) {
-        //     for (auto secTrack : *secondaries) {
-        //         auto secInfo = new MyTrackInformation(info->GetPassedVolume());
-        //         secTrack->SetUserInformation(secInfo);
-        //     }
-        // }
 
-        //if this is a daugher particle, check if the parent has been in BINA already 
-        if (theTrack->GetParentID() > 0) {
-            auto parentInfo = static_cast<MyTrackInformation*>(theStep->GetTrack()->GetUserInformation());
-            if (parentInfo && parentInfo->GetPassedVolume())
-                info->SetPassedVolume(true);
+        // Propagate flag to all secondaries created in this step, even if in this step
+        // the particle is not in BINA, but could have been previously
+        const auto* secondaries = theStep->GetSecondaryInCurrentStep();
+        if (secondaries) {
+            for (auto secTrack : *secondaries) {
+                // G4cout << postEnergy/MeV << G4endl;
+                auto secInfo = new MyTrackInformation(info->GetPassedVolume());
+                secTrack->SetUserInformation(secInfo);
+            }
         }
+
+        // //and if this is a daugher particle created after the step, check if the parent has been in BINA already 
+        // if (theTrack->GetParentID() > 0) {
+        //     //I feel like this line doesn't get the parent track??
+        //     auto parentInfo = static_cast<MyTrackInformation*>(theStep->GetTrack()->GetUserInformation());
+        //     if (parentInfo && parentInfo->GetPassedVolume())
+        //         info->SetPassedVolume(true);
+        // }
 
 
     } else { return; }

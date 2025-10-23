@@ -75,7 +75,6 @@ G4bool SegmentSD::ProcessHits(G4Step* theStep, G4TouchableHistory*)
    // currentHit->SetBINAflag(passed);
    
    currentHit->SetBINAflag(info ? info->GetPassedVolume() : false);
-
    currentHit->AddStep(theStep);
 
   return true;
