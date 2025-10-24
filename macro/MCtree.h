@@ -198,6 +198,7 @@ class MCtree {
   Float_t eBv3[4];
 
   int backscatter_T2[5];
+  int backscatter_WC3[5];
 
   Float_t eCsIUSIch[21];
   Float_t eCsIUSOch[28];

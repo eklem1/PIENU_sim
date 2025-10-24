@@ -109,6 +109,7 @@ void MCtree::Clear()
   for (int i=0;i<5;i++)
     {
       backscatter_T2[i]=0;
+      backscatter_WC3[i]=0;
     }
 
    et2_trig = 0.;
@@ -528,6 +529,7 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eT2",&et2,"eT2[5]/F");
   OutputTree->Branch("eBT2",&eBt2,"eBT2[5]/F");
   OutputTree->Branch("backscatter_T2",&backscatter_T2,"backscatter_T2[5]/I");
+  OutputTree->Branch("backscatter_WC3",&backscatter_WC3,"backscatter_WC3[5]/I");
   
 
   OutputTree->Branch("eV2",&ev2,"eV2[4]/F");
@@ -1192,6 +1194,59 @@ void MCtree::Loop()
 		eBt2[4] += Ebirk;
 	      }
 
+      // cout << "bina flag = " << BINAflag << endl;
+
+      //added to look at backscattering, uses custom MC hit tree that includes momentum
+      // if (MomZ > 0) 
+      if (BINAflag == 1) //for backscatter
+      // if (BINAflag == 0) 
+      {
+          cout << "backscatter found in T2 " << TrackID << endl;
+
+        if (PID == -11) //positrons
+          {
+            bool found = setOfTracks.find(TrackID) == setOfTracks.end();
+            cout << "backwards positron found, track: " << TrackID << ", if: " << found << endl;
+
+            //now check if this track has already been saved
+            if (setOfTracks.find(TrackID) == setOfTracks.end()){ //track is not saved yet
+              // cout << "backwards positron saved, pz=" << MomZ << ", track: "<< TrackID << endl;
+
+              setOfTracks.insert(TrackID); //add the trackID to the set
+              backscatter_T2[0] += 1; //and save the particle
+            }
+          }
+        else if (PID == 11) //electrons
+          {
+            cout << "backwards electron found, track: " << TrackID << endl;
+
+            if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+              setOfTracks.insert(TrackID); 
+              backscatter_T2[1] += 1;
+            }
+          }
+          else if (PID == 22) //gammas
+          {
+            if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+              setOfTracks.insert(TrackID); 
+              backscatter_T2[2] += 1;
+            }
+          }
+          else if (PID == 2112) //neutrons
+          {
+            if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+              setOfTracks.insert(TrackID); 
+              backscatter_T2[3] += 1;
+            }
+          }
+          else //other stuff
+          {
+            if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
+              setOfTracks.insert(TrackID); 
+              backscatter_T2[4] += 1;
+            }
+          }
+      }
       
 	  }
 
@@ -1420,8 +1475,7 @@ void MCtree::Loop()
 		}
 	      }
 
-      cout << "bina flag = " << BINAflag << endl;
-
+      // cout << "bina flag = " << BINAflag << endl;
       //added to look at backscattering, uses custom MC hit tree that includes momentum
       // if (MomZ > 0) 
       if (BINAflag == 1) //for backscatter
@@ -1439,7 +1493,7 @@ void MCtree::Loop()
               // cout << "backwards positron saved, pz=" << MomZ << ", track: "<< TrackID << endl;
 
               setOfTracks.insert(TrackID); //add the trackID to the set
-              backscatter_T2[0] += 1; //and save the particle
+              backscatter_WC3[0] += 1; //and save the particle
             }
           }
         else if (PID == 11) //electrons
@@ -1448,28 +1502,28 @@ void MCtree::Loop()
 
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
-              backscatter_T2[1] += 1;
+              backscatter_WC3[1] += 1;
             }
           }
           else if (PID == 22) //gammas
           {
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
-              backscatter_T2[2] += 1;
+              backscatter_WC3[2] += 1;
             }
           }
           else if (PID == 2112) //neutrons
           {
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
-              backscatter_T2[3] += 1;
+              backscatter_WC3[3] += 1;
             }
           }
           else //other stuff
           {
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
-              backscatter_T2[4] += 1;
+              backscatter_WC3[4] += 1;
             }
           }
       }
