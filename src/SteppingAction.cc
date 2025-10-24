@@ -66,6 +66,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
       const G4VProcess* theCreatorProcess = theTrack->GetCreatorProcess();
       if (theCreatorProcess) theCreatorProcessName = theCreatorProcess->GetProcessName();
 
+        //Emma - for tracking backscatter
         auto info = (MyTrackInformation*) theTrack->GetUserInformation();
         if (!info) {
             info = new MyTrackInformation();
@@ -74,9 +75,11 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
 
         // Check if entering BINA
         auto postVol = theStep->GetPostStepPoint()->GetPhysicalVolume();
-        if (postVol && postVol->GetName() == "NaI") {
-            info->SetPassedVolume(true);
-        }
+        if (postVol){
+		if ( postVol->GetName() == "NaI" || postVol->GetName() == "front_rm" || postVol->GetName() == "front") {
+            //G4cout << "name: " << postVol->GetName() << G4endl;
+	    info->SetPassedVolume(true);
+        }}
 
         // Propagate flag to all secondaries created in this step, even if in this step
         // the particle is not in BINA, but could have been previously
