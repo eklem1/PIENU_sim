@@ -207,10 +207,42 @@ void HitSegment::AddStep(G4Step* theStep)
      const G4VProcess* CreatorProcess =
                                    theStep->GetTrack()->GetCreatorProcess();
 
+
      if (CreatorProcess) {
        fCreatorProcessName = CreatorProcess->GetProcessName();
        G4ProcessType CreatorProcessType = CreatorProcess->GetProcessType();
-       fCreatorFlag = CreatorProcessType + 1;
+       // fCreatorFlag = CreatorProcessType + 1; \\why?
+       fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType();
+
+      /* //for debugging specific HadInElastic processes
+      if (CreatorProcess->GetProcessType() == 4 && CreatorProcess->GetProcessSubType() == 121){
+           G4cout << "HadInElastic process detected" << G4endl;
+          //HadInElastic interactions
+          if (CreatorProcess->GetProcessName() == "pi+Inelastic"){
+           G4cout << "pi+Inelastic process detected" << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() +1;
+          } else if (CreatorProcess->GetProcessName() == "neutronInelastic"){
+           G4cout << "neutronInelastic process detected" << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() +2;
+          } else if (CreatorProcess->GetProcessName() == "photonNuclear"){
+            G4cout << "photonNuclear process detected" << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() +3;
+          } else {
+           G4cout << "other process detected: " << CreatorProcess->GetProcessName() << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType();
+          }
+
+      } else {
+          fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType();
+      
+      }
+      */
+
+      //  G4cout << "Creator process: " << CreatorProcess->GetProcessName() << ": #s f: "<< CreatorProcess->GetProcessType() << " s: "<< CreatorProcess->GetProcessSubType() << " t: " << CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() << G4endl;
      } else{
        fCreatorFlag = 0;
      }
