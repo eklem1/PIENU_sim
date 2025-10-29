@@ -111,7 +111,7 @@ void MCtree::Clear()
       backscatter_T2[i]=0;
       backscatter_WC3[i]=0;
     }
-
+   backscatter_WC3[5]=0;
    et2_trig = 0.;
   
   tgstartzp =-999;
@@ -242,6 +242,7 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree1->SetBranchAddress("MomY",&MomY);
   MCTree1->SetBranchAddress("MomZ",&MomZ);
   MCTree1->SetBranchAddress("BINAflag",&BINAflag);  
+  MCTree1->SetBranchAddress("ParentID",&ParentID);
 
 
   MCTree2->SetBranchAddress("PiStartX",&PiStartX); 
@@ -529,7 +530,7 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eT2",&et2,"eT2[5]/F");
   OutputTree->Branch("eBT2",&eBt2,"eBT2[5]/F");
   OutputTree->Branch("backscatter_T2",&backscatter_T2,"backscatter_T2[5]/I");
-  OutputTree->Branch("backscatter_WC3",&backscatter_WC3,"backscatter_WC3[5]/I");
+  OutputTree->Branch("backscatter_WC3",&backscatter_WC3,"backscatter_WC3[6]/I");
   
 
   OutputTree->Branch("eV2",&ev2,"eV2[4]/F");
@@ -1483,8 +1484,8 @@ void MCtree::Loop()
       {
           cout << "backscatter found in WC3 " << TrackID << endl;
 
-        if (PID == -11) //positrons
-          {
+          if (PID == -11) //positrons
+	  {
             bool found = setOfTracks.find(TrackID) == setOfTracks.end();
             cout << "backwards positron found, track: " << TrackID << ", if: " << found << endl;
 
@@ -1494,7 +1495,12 @@ void MCtree::Loop()
 
               setOfTracks.insert(TrackID); //add the trackID to the set
               backscatter_WC3[0] += 1; //and save the particle
-            }
+
+              //only primary positrons, so their parent is the pion
+            	if (ParentID==1){
+	    		      backscatter_WC3[5] += 1;
+	    	      }
+	    }
           }
         else if (PID == 11) //electrons
           {

@@ -68,6 +68,7 @@ class MCtree {
 	
   Float_t StartT,StopT;
   Float_t PID;
+  Float_t ParentID;
 
   Float_t TrackID;
   Float_t MomX,MomY,MomZ;
@@ -198,7 +199,7 @@ class MCtree {
   Float_t eBv3[4];
 
   int backscatter_T2[5];
-  int backscatter_WC3[5];
+  int backscatter_WC3[6];
 
   Float_t eCsIUSIch[21];
   Float_t eCsIUSOch[28];

@@ -29,8 +29,10 @@
 # /gun/energy 70.0 # in MeV units 
 # /gun/angle 0.0 # in degree units
 
+# prints out all processes defined in the physics list
+# /run/particle/dumpOrderingParam
 
 #Number of events to simulate
 # /run/beamOn 600000 
 /run/beamOn 50000
-# /run/beamOn 5000
+#/run/beamOn 10000
