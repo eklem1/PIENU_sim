@@ -75,6 +75,12 @@ class MCtree {
   Float_t BINAflag;
   
   std::set<int> setOfTracks;
+  std::set<int> setOfTracksT2;
+
+  std::set<int> setOfTracksWC3_1;
+  std::set<int> setOfTracksWC3_2;
+  std::set<int> setOfTracksWC3_3;
+
 
   Double_t PiDecayP[4];
   Double_t PiDecayX[4];
@@ -200,6 +206,7 @@ class MCtree {
 
   int backscatter_T2[5];
   int backscatter_WC3[6];
+  int backscatter_WC3planes[3];
 
   Float_t eCsIUSIch[21];
   Float_t eCsIUSOch[28];
