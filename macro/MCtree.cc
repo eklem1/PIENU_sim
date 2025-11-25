@@ -249,6 +249,7 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree1->SetBranchAddress("MomZ",&MomZ);
   MCTree1->SetBranchAddress("BINAflag",&BINAflag);  
   MCTree1->SetBranchAddress("ParentID",&ParentID);
+  MCTree1->SetBranchAddress("GrandParentID",&GrandParentID);
 
 
   MCTree2->SetBranchAddress("PiStartX",&PiStartX); 
@@ -1520,20 +1521,18 @@ void MCtree::Loop()
               setOfTracks.insert(TrackID); //add the trackID to the set
               backscatter_WC3[0] += 1; //and save the particle
 
-              //only primary positrons, so their parent is the pion
-            	if (ParentID==1){
-                cout << "primary positron found" << endl;
-
-	    		      backscatter_WC3[5] += 1;
-                
-	    	      }
-              // pimue case - parent is the primary muon
-              // if (ParentID==2){
+              //pienu case - only primary positrons, so their parent is the pion
+            	// if (ParentID==1){
               //   cout << "primary positron found" << endl;
-
 	    		    //   backscatter_WC3[5] += 1;
                 
 	    	      // }
+              
+              // pimue case - parent is the primary muon, grandparent is the pion
+              if (GrandParentID==1){
+                cout << "primary positron found" << endl;
+	    		      backscatter_WC3[5] += 1;
+	    	      }
 
             }
           }

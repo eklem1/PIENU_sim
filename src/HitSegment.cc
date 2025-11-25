@@ -35,7 +35,7 @@ HitSegment::HitSegment()
     fStopX(0),  fStopY(0),  fStopZ(0),  fStopT(0),
     fPDG(-1), fParticleName(""),fCreatorFlag(0),
     fCreatorProcessName(""), fEbirk(0), fProcessID(0),
-    fMerged(false), fMomX(0), fMomY(0), fMomZ(0), fBINAflag(false) {}
+    fMerged(false), fMomX(0), fMomY(0), fMomZ(0), fBINAflag(false), fGParentID(-1) {}
 
 HitSegment::HitSegment(const HitSegment &right)
     : G4VHit(),
@@ -58,7 +58,8 @@ HitSegment::HitSegment(const HitSegment &right)
     fMomX(right.fMomX),
     fMomY(right.fMomY), 
     fMomZ(right.fMomZ),
-    fBINAflag(right.fBINAflag)
+    fBINAflag(right.fBINAflag),
+    fGParentID(right.fGParentID)
 
      {
 #ifdef G4VIS_USE
@@ -96,6 +97,7 @@ HitSegment HitSegment::operator=(const HitSegment& op2)
     fMomY = op2.fMomY;
     fMomZ = op2.fMomZ;
     fBINAflag = op2.fBINAflag;
+    fGParentID = op2.fGParentID;
 
 
 #ifdef G4VIS_USE
@@ -114,6 +116,8 @@ void HitSegment::Clear()
   fStopT  = 0;
   fPDG    = -1;
   fEbirk  = 0;
+  fGParentID = -1;
+
 }
 
 HitSegment HitSegment::operator+=(const HitSegment& op2)

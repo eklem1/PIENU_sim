@@ -286,8 +286,9 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
 //            G4cout << "Ebirk:       " << jhit->GetEbirk()/MeV << "MeV" << G4endl;
 //            G4cout << "PDG:         " << jhit->GetPDG() << G4end;
 //            G4cout << "CreatorFlag: " << jhit->GetCreatorFlag() << G4endl;
-
         //    G4cout << "EventID, track: " << aEvent->GetEventID() << ", " << jhit->GetTrackID() << G4endl;
+        //    G4cout << "GParentID: " << jhit->GetGParentID() << G4endl; //why is this only 0 or 1?
+
         //    G4cout << "BINA flag: " << jhit->GetBINAflag() << G4endl;
 
 
@@ -311,7 +312,9 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
                                  jhit->GetMomX(),
                                  jhit->GetMomY(),
                                  jhit->GetMomZ(),
-                                 jhit->GetBINAflag()
+                                 jhit->GetBINAflag(),
+                                 jhit->GetGParentID()
+
                                 );
 #ifdef G4VIS_USE
             jhit->Draw();

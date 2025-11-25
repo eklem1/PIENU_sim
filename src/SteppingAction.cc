@@ -71,6 +71,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
         if (!info) {
             info = new MyTrackInformation();
             theTrack->SetUserInformation(info);
+
         }
 
         // Check if entering BINA
@@ -81,24 +82,18 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
 	    info->SetPassedVolume(true);
         }}
 
+        G4int gpID = theTrack->GetParentID(); // get the parentID to propogate as grandparentID to secondaries
+
         // Propagate flag to all secondaries created in this step, even if in this step
         // the particle is not in BINA, but could have been previously
         const auto* secondaries = theStep->GetSecondaryInCurrentStep();
         if (secondaries) {
+                // G4cout << "new secondaies get GP-ID: " << gpID << G4endl; //this looks fine
             for (auto secTrack : *secondaries) {
-                // G4cout << postEnergy/MeV << G4endl;
-                auto secInfo = new MyTrackInformation(info->GetPassedVolume());
+                auto secInfo = new MyTrackInformation(info->GetPassedVolume(), gpID);
                 secTrack->SetUserInformation(secInfo);
             }
         }
-
-        // //and if this is a daugher particle created after the step, check if the parent has been in BINA already 
-        // if (theTrack->GetParentID() > 0) {
-        //     //I feel like this line doesn't get the parent track??
-        //     auto parentInfo = static_cast<MyTrackInformation*>(theStep->GetTrack()->GetUserInformation());
-        //     if (parentInfo && parentInfo->GetPassedVolume())
-        //         info->SetPassedVolume(true);
-        // }
 
 
     } else { return; }
