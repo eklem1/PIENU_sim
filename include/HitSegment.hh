@@ -125,6 +125,9 @@ class HitSegment : public G4VHit
     void SetBINAflag(G4bool status) { fBINAflag = status; }
     G4bool GetBINAflag() const { return fBINAflag; }
 
+    void SetGParentID(int ID) { fGParentID = ID; }
+    G4int GetGParentID() const { return fGParentID; }
+
     ///Clear the track id and time
     void Clear(void);
 
@@ -210,6 +213,9 @@ class HitSegment : public G4VHit
 
     /// Flag that determines if the particle or it's parent has ever been in BINA
     G4bool fBINAflag;
+
+    /// The grandParentID of the trajectory that made this hit.
+    G4int fGParentID;
 
 #ifdef G4VIS_USE
     /// Coordinate transformations needed for hit-volume drawing

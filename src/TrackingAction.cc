@@ -22,18 +22,18 @@ TrackingAction::~TrackingAction() {
 // This function is called when a new track is taken off of the stack
 //
 void TrackingAction::PreUserTrackingAction(const G4Track* theTrack) {
-    auto trackNonConst = const_cast<G4Track*>(theTrack);
 
-    // Always attach a MyTrackInformation to every new track
+    //  Attach a MyTrackInformation to every new track
     // (secondary info propagation happens in SteppingAction)
     // but the secondary particles may already have one created
-    // MyTrackInformation* info = new MyTrackInformation();
-    // trackNonConst->SetUserInformation(info);
 
-    if (!theTrack->GetUserInformation()) {
+    G4int gpID = 0; // default for primaries
+
+    if (!theTrack->GetUserInformation()) { //only primary particles should have this be the case
         // Only create a new object if none exists
-        MyTrackInformation* info = new MyTrackInformation();
-        trackNonConst->SetUserInformation(info);
+        MyTrackInformation* info = new MyTrackInformation(false, gpID);
+        theTrack->SetUserInformation(info);
+        // G4cout << "new track & userInfo, trackID: " << theTrack->GetParentID() << G4endl;
     }
 
     G4ThreeVector momentum =

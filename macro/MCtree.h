@@ -69,6 +69,7 @@ class MCtree {
   Float_t StartT,StopT;
   Float_t PID;
   Float_t ParentID;
+  Float_t GrandParentID;
 
   Float_t TrackID;
   Float_t MomX,MomY,MomZ;
