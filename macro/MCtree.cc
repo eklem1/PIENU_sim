@@ -110,8 +110,10 @@ void MCtree::Clear()
     {
       backscatter_T2[i]=0;
       backscatter_WC3[i]=0;
+      backscatter_WC3_E[i]=0;
     }
    backscatter_WC3[5]=0;
+   backscatter_WC3_E[5]=0;
 
   for (int i=0;i<3;i++)
     {
@@ -539,6 +541,7 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("backscatter_T2",&backscatter_T2,"backscatter_T2[5]/I");
   OutputTree->Branch("backscatter_WC3",&backscatter_WC3,"backscatter_WC3[6]/I");
   OutputTree->Branch("backscatter_WC3planes",&backscatter_WC3planes,"backscatter_WC3planes[3]/I");
+  OutputTree->Branch("backscatter_WC3_E",&backscatter_WC3_E,"backscatter_WC3_E[6]/F");
   
 
   OutputTree->Branch("eV2",&ev2,"eV2[4]/F");
@@ -1545,18 +1548,21 @@ void MCtree::Loop()
 
               setOfTracks.insert(TrackID); //add the trackID to the set
               backscatter_WC3[0] += 1; //and save the particle
+              backscatter_WC3_E[0] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
 
               //pienu case - only primary positrons, so their parent is the pion
             	// if (ParentID==1){
               //   cout << "primary positron found" << endl;
 	    		    //   backscatter_WC3[5] += 1;
-                
+              //   backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
 	    	      // }
               
               // pimue case - parent is the primary muon, grandparent is the pion
               if (GrandParentID==1){
                 cout << "primary positron found" << endl;
 	    		      backscatter_WC3[5] += 1;
+                backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+                
 	    	      }
 
             }
@@ -1568,6 +1574,8 @@ void MCtree::Loop()
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
               backscatter_WC3[1] += 1;
+              backscatter_WC3_E[1] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ);; //add all backscatter energies
+
             }
           }
           else if (PID == 22) //gammas
@@ -1575,6 +1583,8 @@ void MCtree::Loop()
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
               backscatter_WC3[2] += 1;
+              backscatter_WC3_E[2] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ);; //add all backscatter energies
+
             }
           }
           else if (PID == 2112) //neutrons
@@ -1582,6 +1592,8 @@ void MCtree::Loop()
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
               backscatter_WC3[3] += 1;
+              backscatter_WC3_E[3] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
             }
           }
           else //other stuff
@@ -1589,6 +1601,8 @@ void MCtree::Loop()
             if (setOfTracks.find(TrackID) == setOfTracks.end()){ 
               setOfTracks.insert(TrackID); 
               backscatter_WC3[4] += 1;
+              backscatter_WC3_E[4] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
             }
           }
       }
@@ -2933,6 +2947,11 @@ void MCtree::Loop()
     
     if (entry%1000==0) cout << "Entries processed: " << entry << "\r" << flush;
     
+  }
+
+  // get the mean energy
+  for(int i=0; i<6; i++){
+    backscatter_WC3_E[i] = backscatter_WC3_E[i] / backscatter_WC3[i];
   }
   
   cout << endl;

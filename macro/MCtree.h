@@ -205,9 +205,10 @@ class MCtree {
   Float_t eBv2[4];
   Float_t eBv3[4];
 
-  int backscatter_T2[5];
-  int backscatter_WC3[6];
-  int backscatter_WC3planes[3];
+  int backscatter_T2[5]; //holds number of each type of backscatter particle per event in T2
+  int backscatter_WC3[6]; //holds number of each type of backscatter particle per event in WC3
+  float backscatter_WC3_E[6]; //holds average energy of each type of backscatter particle per event in WC3
+  int backscatter_WC3planes[3]; //holds number of each type of backscatter particle per event in each plane of WC3
 
   Float_t eCsIUSIch[21];
   Float_t eCsIUSOch[28];

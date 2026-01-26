@@ -120,69 +120,61 @@ double eTime  = MC.PosTime; //e_time_VT_t[0]*0.625;
   for(int i=0; i<NTKRS; i++) {
     if(tkrs[i].GetName()=="TgS3") continue;
 
- //   if(i==2 && nzpl<4) { // no fit in S3WC3 when more than one plane is missed
- //     trks[i]->Clear(); 
- //     continue;
- //   }   
-    
-   if (i == 2 && nzpl >= 4)
-   {
-    man().CSrv().FindTrks(tkrs[i], *trks[i]); // Find tracks; trks[i] is clean inside
-    man().CSrv().Fit(*trks[i]);               // Fit all found tracks
-    man().ISrv().CleanTrks(*trks[i]);         // Clean of fake tracks
+    //   if(i==2 && nzpl<4) { // no fit in S3WC3 when more than one plane is missed
+    //     trks[i]->Clear(); 
+    //     continue;
+    //   }   
+      
+    if (i == 2 && nzpl >= 4)
+    {
+        man().CSrv().FindTrks(tkrs[i], *trks[i]); // Find tracks; trks[i] is clean inside
+        man().CSrv().Fit(*trks[i]);               // Fit all found tracks
+        man().ISrv().CleanTrks(*trks[i]);         // Clean of fake tracks
 
-    // Fill the memeber N, number of tracks, 
-    // for convinience to work with trees interactively
-    trks[i]->N = trks[i]->GetN();
+        // Fill the memeber N, number of tracks, 
+        // for convinience to work with trees interactively
+        trks[i]->N = trks[i]->GetN();
 
-    if(i<3)    MC.trks[i] = *trks[i];
-   }
-   else if (i == 2 && nzpl < 4)
-   {
-     trks[i]->Clear();
-
-     trks[i]->N = trks[i]->GetN();
-     if(i<3)    MC.trks[i] = *trks[i];
-   }
-   else 
-   {
-    man().CSrv().FindTrks(tkrs[i], *trks[i]); // Find tracks; trks[i] is clean inside
-    man().CSrv().Fit(*trks[i]);               // Fit all found tracks
-    man().ISrv().CleanTrks(*trks[i]);         // Clean of fake tracks
-
-    // Fill the memeber N, number of tracks, 
-    // for convinience to work with trees interactively
-    trks[i]->N = trks[i]->GetN();
-
-    if(i<3)    MC.trks[i] = *trks[i];     
-   }
-    //    if(i==2)  cout<< "Number of tracks found in DS tracker i="<<i<<" : N="<<trks[i]->GetN()<<endl;
-
-     
-
-
-
-
-    
-    /*
-    if(i!=2) continue;
-    cout<<"**** Check Tracking, Event "<<E.eventID<<endl;
-    printf("Tracker: %d, Trks found: %d, Status: 0x%x\n",i+1,trks[i]->GetN(),trks[i]->status);
-    for(int j=0; j<trks[i]->GetN(); j++) {
-      cout<<"tx ty x0 y0 "<<trks[i]->GetTrk(j).tx<<" "<<trks[i]->GetTrk(j).ty<<" "
-	  <<trks[i]->GetTrk(j).x0<<" "<<trks[i]->GetTrk(j).y0<<endl;
+        if(i<3)    MC.trks[i] = *trks[i];
     }
-    //trks[i]->DumpTrks();
+    else if (i == 2 && nzpl < 4)
+    {
+        trks[i]->Clear();
 
-    cout<<"proot tracks\n";
-    for(int j=0; j<E.trks[i].GetN(); j++) {
-      cout<<"tx ty x0 y0 "<<E.trks[i].GetTrk(j).tx<<" "<<E.trks[i].GetTrk(j).ty<<" "
-	  <<E.trks[i].GetTrk(j).x0<<" "<<E.trks[i].GetTrk(j).y0<<endl;
+        trks[i]->N = trks[i]->GetN();
+        if(i<3)    MC.trks[i] = *trks[i];
     }
+    else 
+    {
+        man().CSrv().FindTrks(tkrs[i], *trks[i]); // Find tracks; trks[i] is clean inside
+        man().CSrv().Fit(*trks[i]);               // Fit all found tracks
+        man().ISrv().CleanTrks(*trks[i]);         // Clean of fake tracks
 
+        // Fill the memeber N, number of tracks, 
+        // for convinience to work with trees interactively
+        trks[i]->N = trks[i]->GetN();
 
+        if(i<3)    MC.trks[i] = *trks[i];     
+    }
+      //    if(i==2)  cout<< "Number of tracks found in DS tracker i="<<i<<" : N="<<trks[i]->GetN()<<endl;
+      
+      /*
+      if(i!=2) continue;
+      cout<<"**** Check Tracking, Event "<<E.eventID<<endl;
+      printf("Tracker: %d, Trks found: %d, Status: 0x%x\n",i+1,trks[i]->GetN(),trks[i]->status);
+      
+      for(int j=0; j<trks[i]->GetN(); j++) {
+        cout<<"tx ty x0 y0 "<<trks[i]->GetTrk(j).tx<<" "<<trks[i]->GetTrk(j).ty<<" "
+      <<trks[i]->GetTrk(j).x0<<" "<<trks[i]->GetTrk(j).y0<<endl;
+      }
+      //trks[i]->DumpTrks();
 
-    */
+      cout<<"proot tracks\n";
+      for(int j=0; j<E.trks[i].GetN(); j++) {
+        cout<<"tx ty x0 y0 "<<E.trks[i].GetTrk(j).tx<<" "<<E.trks[i].GetTrk(j).ty<<" "
+      <<E.trks[i].GetTrk(j).x0<<" "<<E.trks[i].GetTrk(j).y0<<endl;
+      }
+      */
   }
 
 
