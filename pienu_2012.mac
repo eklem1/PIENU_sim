@@ -7,13 +7,13 @@
 # /process/inactivate msc
 
 /decay/external # Call external decay generator
-/radiative/mu_or_e 2 # choose pi->e nu (g)
+/radiative/mu_or_e 0 # choose pi->e nu (g)
 
 
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0 #2 to get full tracking info
-/event/printModulo 100 #printout counter
+/tracking/verbose 2 #2 to get full tracking info printed out
+/event/printModulo 1000 #printout counter
 /rndm/autoSeed true
 
 #Commands for the pileup
@@ -34,5 +34,5 @@
 
 #Number of events to simulate
 # /run/beamOn 600000 
-/run/beamOn 100
-# /run/beamOn 1000
+# /run/beamOn 200
+/run/beamOn 50000

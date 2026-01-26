@@ -284,13 +284,14 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
 //            G4cout << "GetStopZ:    " << jhit->GetStopZ()/cm << "cm" << G4endl;
 //            G4cout << "GetStopT:    " << jhit->GetStopT()/ns << "ns" << G4endl;
 //            G4cout << "Ebirk:       " << jhit->GetEbirk()/MeV << "MeV" << G4endl;
-//            G4cout << "PDG:         " << jhit->GetPDG() << G4end;
+//            G4cout << "PDG:         " << jhit->GetPDG() << G4endl;
 //            G4cout << "CreatorFlag: " << jhit->GetCreatorFlag() << G4endl;
         //    G4cout << "EventID, track: " << aEvent->GetEventID() << ", " << jhit->GetTrackID() << G4endl;
-        //    G4cout << "GParentID: " << jhit->GetGParentID() << G4endl; //why is this only 0 or 1?
 
+        //    G4cout << "Track: " << jhit->GetTrackID() << G4endl;
         //    G4cout << "BINA flag: " << jhit->GetBINAflag() << G4endl;
-
+        //    G4cout << "PDG: " << jhit->GetPDG() << G4endl;
+        //    G4cout << "GParentID: " << jhit->GetGParentID() << G4endl;
 
             runAction->FillTuple(aEvent->GetEventID(),
                                  volumeID[0], volumeID[1], volumeID[2],
