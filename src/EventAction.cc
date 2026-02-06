@@ -269,24 +269,24 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
 	      
 	    }
 
-	    
+	
         //    G4cout << "EventID: " << aEvent->GetEventID() << G4endl;
-//            G4cout << "volumeID[0]: " << volumeID[0] << G4endl;
-//            G4cout << "volumeID[1]: " << volumeID[1] << G4endl;
-//            G4cout << "volumeID[2]: " << volumeID[2] << G4endl;
-//            G4cout << "Energy:      " << jhit->GetEnergyDeposit()/MeV << "MeV" << G4endl;
-//            G4cout << "GetStartX:   " << jhit->GetStartX()/cm << "cm" << G4endl;
-//            G4cout << "GetStartY:   " << jhit->GetStartY()/cm << "cm" << G4endl;
-//            G4cout << "GetStartZ:   " << jhit->GetStartZ()/cm << "cm" << G4endl;
-//            G4cout << "GetStartT:   " << jhit->GetStartT()/ns << "ns" << G4endl;
-//            G4cout << "GetStopX:    " << jhit->GetStopX()/cm << "cm" << G4endl;
-//            G4cout << "GetStopY:    " << jhit->GetStopY()/cm << "cm" << G4endl;
-//            G4cout << "GetStopZ:    " << jhit->GetStopZ()/cm << "cm" << G4endl;
-//            G4cout << "GetStopT:    " << jhit->GetStopT()/ns << "ns" << G4endl;
-//            G4cout << "Ebirk:       " << jhit->GetEbirk()/MeV << "MeV" << G4endl;
-//            G4cout << "PDG:         " << jhit->GetPDG() << G4endl;
-//            G4cout << "CreatorFlag: " << jhit->GetCreatorFlag() << G4endl;
-        //    G4cout << "EventID, track: " << aEvent->GetEventID() << ", " << jhit->GetTrackID() << G4endl;
+        //    G4cout << "volumeID[0]: " << volumeID[0] << G4endl;
+        //    G4cout << "volumeID[1]: " << volumeID[1] << G4endl;
+        //    G4cout << "volumeID[2]: " << volumeID[2] << G4endl;
+        //    G4cout << "Energy:      " << jhit->GetEnergyDeposit()/MeV << "MeV" << G4endl;
+        //    G4cout << "GetStartX:   " << jhit->GetStartX()/cm << "cm" << G4endl;
+        //    G4cout << "GetStartY:   " << jhit->GetStartY()/cm << "cm" << G4endl;
+        //    G4cout << "GetStartZ:   " << jhit->GetStartZ()/cm << "cm" << G4endl;
+        //    G4cout << "GetStartT:   " << jhit->GetStartT()/ns << "ns" << G4endl;
+        //    G4cout << "GetStopX:    " << jhit->GetStopX()/cm << "cm" << G4endl;
+        //    G4cout << "GetStopY:    " << jhit->GetStopY()/cm << "cm" << G4endl;
+        //    G4cout << "GetStopZ:    " << jhit->GetStopZ()/cm << "cm" << G4endl;
+        //    G4cout << "GetStopT:    " << jhit->GetStopT()/ns << "ns" << G4endl;
+        //    G4cout << "Ebirk:       " << jhit->GetEbirk()/MeV << "MeV" << G4endl;
+        //    G4cout << "PDG:         " << jhit->GetPDG() << G4endl;
+        //    G4cout << "CreatorFlag: " << jhit->GetCreatorFlag() << G4endl;
+        //    G4cout << "EventID, track, Step # " << aEvent->GetEventID() << ", " << jhit->GetTrackID() << ", " << jhit->GetStepNumber() << G4endl;
 
         //    G4cout << "Track: " << jhit->GetTrackID() << G4endl;
         //    G4cout << "BINA flag: " << jhit->GetBINAflag() << G4endl;
@@ -314,7 +314,8 @@ void EventAction::EndOfEventAction(const G4Event* aEvent) {
                                  jhit->GetMomY(),
                                  jhit->GetMomZ(),
                                  jhit->GetBINAflag(),
-                                 jhit->GetGParentID()
+                                 jhit->GetGParentID(),
+                                 jhit->GetStepNumber()
 
                                 );
 #ifdef G4VIS_USE

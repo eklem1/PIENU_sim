@@ -128,6 +128,8 @@ class HitSegment : public G4VHit
     void SetGParentID(int ID) { fGParentID = ID; }
     G4int GetGParentID() const { return fGParentID; }
 
+    G4int GetStepNumber(void) const { return fStepNumber; }
+
     ///Clear the track id and time
     void Clear(void);
 
@@ -216,6 +218,9 @@ class HitSegment : public G4VHit
 
     /// The grandParentID of the trajectory that made this hit.
     G4int fGParentID;
+
+    //the step number 
+    G4int fStepNumber;
 
 #ifdef G4VIS_USE
     /// Coordinate transformations needed for hit-volume drawing

@@ -35,7 +35,8 @@ HitSegment::HitSegment()
     fStopX(0),  fStopY(0),  fStopZ(0),  fStopT(0),
     fPDG(-1), fParticleName(""),fCreatorFlag(0),
     fCreatorProcessName(""), fEbirk(0), fProcessID(0),
-    fMerged(false), fMomX(0), fMomY(0), fMomZ(0), fBINAflag(false), fGParentID(-1) {}
+    fMerged(false), fMomX(0), fMomY(0), fMomZ(0), fBINAflag(false), fGParentID(-1),
+    fStepNumber(-1) {}
 
 HitSegment::HitSegment(const HitSegment &right)
     : G4VHit(),
@@ -59,7 +60,8 @@ HitSegment::HitSegment(const HitSegment &right)
     fMomY(right.fMomY), 
     fMomZ(right.fMomZ),
     fBINAflag(right.fBINAflag),
-    fGParentID(right.fGParentID)
+    fGParentID(right.fGParentID),
+    fStepNumber(right.fStepNumber)
 
      {
 #ifdef G4VIS_USE
@@ -98,6 +100,7 @@ HitSegment HitSegment::operator=(const HitSegment& op2)
     fMomZ = op2.fMomZ;
     fBINAflag = op2.fBINAflag;
     fGParentID = op2.fGParentID;
+    fStepNumber = op2.fStepNumber;
 
 
 #ifdef G4VIS_USE
@@ -117,6 +120,7 @@ void HitSegment::Clear()
   fPDG    = -1;
   fEbirk  = 0;
   fGParentID = -1;
+  fStepNumber = -1;
 
 }
 
@@ -191,6 +195,7 @@ void HitSegment::AddStep(G4Step* theStep)
 
      fTrackID = theStep->GetTrack()->GetTrackID();
      fParentID = theStep->GetTrack()->GetParentID();
+     fStepNumber = theStep->GetTrack()->GetCurrentStepNumber();
 
      fStartX = prePos.x();
      fStartY = prePos.y();
@@ -264,7 +269,7 @@ void HitSegment::AddStep(G4Step* theStep)
      fTranslation = aTrans.NetTranslation();
 #endif
 
-  } else {
+  } else { //what things end up here??
 
      // Record the track that contributes to this hit.
      G4int trackId = theStep->GetTrack()->GetTrackID();
@@ -289,7 +294,7 @@ void HitSegment::AddStep(G4Step* theStep)
         fProcessID = process->GetProcessType() * 1000 + process->GetProcessSubType();
         // G4cout << "Step process: " << process->GetProcessName() << " #: "<< fProcessID <<G4endl;
 
-     } else {
+     } else { 
         fTrackID = trackId;
         fParentID = parentId;
      }

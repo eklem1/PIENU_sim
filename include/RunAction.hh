@@ -52,7 +52,9 @@ class RunAction : public G4UserRunAction {
                    G4double E21,
                    G4double E22,
                    G4double E23,
-                   G4double E24
+                   G4double E24,
+                   G4double E25
+
                   );
     void FillTree();
 
