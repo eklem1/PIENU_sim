@@ -153,7 +153,7 @@ void RunAction::OpenRoot() {
 
     remove("password.lck");
     // Create TNtuple to store the hits
-    hitTuple = new TNtuple("hits","Hits","eventID:volumeID0:volumeID1:volumeID2:energyDeposit:startX:startY:startZ:startT:stopX:stopY:stopZ:stopT:Ebirk:PID:CreatorProcess:LimitingProcessID:TrackID:ParentID:MomX:MomY:MomZ:BINAflag:GrandParentID",40000);
+    hitTuple = new TNtuple("hits","Hits","eventID:volumeID0:volumeID1:volumeID2:energyDeposit:startX:startY:startZ:startT:stopX:stopY:stopZ:stopT:Ebirk:PID:CreatorProcess:LimitingProcessID:TrackID:ParentID:MomX:MomY:MomZ:BINAflag:GrandParentID:StepNumber",40000);
     
     // aTree->Branch("PosBremPreX",PosBremPreX,"PosBremPreX[4]/D");
     // aTree->Branch("PosBremPreP",PosBremPreP,"PosBremPreP[4]/D");
@@ -380,18 +380,18 @@ void RunAction::FillTuple(G4double E1, G4double E2, G4double E3, G4double E4,
                           G4double E15, G4double E16, G4double E17, 
                           G4double E18, G4double E19,
                           G4double E20,  G4double E21, G4double E22,
-                          G4double E23, G4double E24
+                          G4double E23, G4double E24, G4double E25
                         ) {
   
   // E16 = 0; //why?
-  float hitArray[24] = {E1,E2,E3,E4,
+  float hitArray[25] = {E1,E2,E3,E4,
                         E5,E6,E7,E8,
                         E9,E10,E11,
                         E12,E13,E14,
                         E15,E16,E17,
                         E18,E19,
                         E20,E21,E22, 
-                        E23,E24
+                        E23,E24,E25
                       };
 
   // hitTuple->Fill(E1,E2,E3,E4,E5,E6,E7,E8,E9,E10,E11,E12,E13,E14,E15);
