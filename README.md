@@ -13,6 +13,12 @@ Run macros: pienu_2012.mac & pimue_2012.mac
         cmake ..
         make
 
+### Versions
+There are some version of MC building files used to run different versions of the MC.
+* Geometry:
+  * WorldConstructor.ccAir : Sets the NaI calo, Al layer and Al-oxide and to air material - essentially removing them
+  * WorldConstructor.ccCsIAir : Additionally also sets the CsI crystals to air
+
 ### MCtoData
 This code takes the raw root file from the MC, and converts it into a root file that imitates the real data root file, that can then be used for analysis.
 

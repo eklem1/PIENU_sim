@@ -281,6 +281,25 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
 
 
     /*
+    // looking at electrons from bhabha 
+    if (theParticleName == "e-" && theProcessName == "hIoni")
+    {
+        // Check if it came from the primary positron - how to do this??
+        if (theTrack->GetParentID() == 1 || theTrack->GetParentID() == mutracknumber)
+        {
+            if (prePosition[2]< 40 && theTrack->GetCurrentStepNumber()==1) //only upstream of WC3, only first step
+            {
+                //print out checks
+                G4int eventNumber = theTrack->GetEvent()->GetEventID();
+                G4cout << "bhabha for event, t=" << postTime << ", at z=" << postPosition.z() <<G4endl;
+                runAction->electronBhabha(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+            }
+        }
+    }
+    */
+
+
+    /*
     // Seems to tag e/e- in three regions along z of WC3, I don't think I need these for now
     // for electrons
     if (theParticleName == "e-" && insideWC3_1(prePosition)) WC3_1eflag = 1;
@@ -319,28 +338,6 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
         WC3_2secposflag = 0;
         WC3_3secposflag = 0;
     }
-    */
-
-
-    //Emma's addition - Feb 2025
-    // For tagging processes: Scattering, bremsstrahlung, annihilation
-    /*
-    if (theParticleName == "e+"){ //do I want this just for positrons?
-      // just try printing out all the processes
-      // G4cout << "A positron is doing " << theProcessName << G4endl;
-      if (theProcessName == "annihil") { //annihilation process
-        // AnnihilSeen
-        runAction->AnnihilSeen();
-      } 
-      if (theProcessName == "eBrem") { //bremsstrahlung process
-          // G4cout << "A positron is doing " << theProcessName << G4endl;
-          runAction->BremsSeen();
-        } 
-      if (theProcessName == "msc") { //Scattering process
-          // G4cout << "A positron is doing " << theProcessName << G4endl;
-          runAction->MSCSeen();
-        }
-    } 
     */
     
 }
