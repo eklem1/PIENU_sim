@@ -89,37 +89,64 @@ void RunAction::OpenRoot() {
   }
   while (fd<0);
 
-  
   // Intelligently select filenames to use for output
-  std::ifstream fin;
-  bool isOpen = false;
+    std::ifstream fin;
+    bool isOpen = false;
     int i = 1;
     std::string filename = "";
     std::string extension=".root";
     //char env;
-    
-    while (isOpen == false) {
+
+    //first try to use provided run number
+    if (GlobalFileNumber != -1) {
+      std::cout << "File number is " << GlobalFileNumber << std::endl;
       
-        filename.clear();
-        filename.insert(0,itoa(i,10));
-	char *env = getenv("MCOUTPUT");
-	filename.insert(0,env);
-        filename.append(extension);
-        fin.open(filename.c_str(),std::ios::in);
+      filename.clear();
+      // filename.insert(0,itoa(GlobalFileNumber,10)); // had a problem with 0
+      filename = std::to_string(GlobalFileNumber);
+      std::cout << "Trying to save to: " << filename << std::endl;
 
-        if (fin.fail()) {
+      char *env = getenv("MCOUTPUT");
+      filename.insert(0,env);
+      filename.append(extension);
 
-            std::cout << "Saving to: " << filename << std::endl;
-            isOpen = true;
+      std::cout << "Trying to save to: " << filename << std::endl;
 
-        } else {
+      fin.open(filename.c_str(),std::ios::in);
 
-            i++;
+      if (fin.fail()) {
+        std::cout << "Saving to: " << filename << std::endl;
 
-        }
-
-        fin.close();
+      } else { //failed to be able to open the hardcoded file number
+          GlobalFileNumber = -1;
+      }
     }
+    else{
+      std::cout << "Use normal way" << std::endl;
+    }
+
+    if (GlobalFileNumber == -1){ 
+      //normal file numbering where code looks for the next highest number not already used
+      while (isOpen == false) {
+        
+          filename.clear();
+          filename.insert(0,itoa(i,10));
+          char *env = getenv("MCOUTPUT");
+          filename.insert(0,env);
+          filename.append(extension);
+          fin.open(filename.c_str(),std::ios::in);
+
+          if (fin.fail()) {
+
+              std::cout << "Saving to: " << filename << std::endl;
+              isOpen = true;
+
+          } else {
+              i++;
+          }
+          fin.close();
+      }
+  }
 
     // Create a new Root file
     file = new TFile(filename.c_str(),"RECREATE");

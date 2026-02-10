@@ -44,6 +44,8 @@
 // argv[0] is always the name of the program
 // argv[1] points to the first argument, and so on
 
+int GlobalFileNumber = -1;
+
 int main(int argc,char** argv)
 {
   // G4String physicsList = "FTFP_BERT_EMY";
@@ -53,7 +55,28 @@ int main(int argc,char** argv)
   // G4String physicsList = "ShieldingLEND_PEN";
 
   G4int seed = 123;
-  if (argc  > 2) seed = atoi(argv[argc-1]);
+
+  //looking for flags to read in the seed and / or a provided file number to save the 
+  // root file to
+  int opt;
+  while ((opt = getopt(argc, argv, "f:s:")) != -1) {
+      switch (opt) {
+          case 'f':
+              GlobalFileNumber = std::stoi(optarg);
+              break;
+          case 's':
+              seed = std::stoi(optarg);
+              break;
+      }
+  }
+
+  if (GlobalFileNumber == -1 && seed == 123){
+    // If user didn't specify a seed, fall back to old logic
+    if (argc  > 2) seed = atoi(argv[argc-1]);
+  }
+
+  std::cout << "Run number = " << GlobalFileNumber << std::endl;
+  std::cout << "Seed = " << seed << std::endl;
 
   // Choose the Random engine
 
@@ -133,18 +156,11 @@ int main(int argc,char** argv)
 //     UImanager->ApplyCommand(command+outputFilename);
 //  }
 
+if (argc > 1) {
 #ifndef WIN32
-  G4int optmax = argc;
-  if (argc > 2)  { optmax = optmax-1; }
-
-  if (optind < optmax)
-  {
-     G4String command = "/control/execute ";
-     for ( ; optind < optmax; optind++)
-     {
-         G4String macroFilename = argv[optind];
-         UImanager->ApplyCommand(command+macroFilename);
-     }
+  for (int i = optind; i < argc; i++) {
+      G4String macroFilename = argv[i];
+      UImanager->ApplyCommand("/control/execute " + macroFilename);
   }
 #else  // Simple UI for Windows runs, no possibility of additional arguments
   if (argc!=1)
@@ -154,7 +170,7 @@ int main(int argc,char** argv)
      UImanager->ApplyCommand(command+fileName);
   }
 #endif
-  else  {
+} else  {
      // Define (G)UI terminal for interactive mode
 #ifdef G4UI_USE
      G4UIExecutive * ui = new G4UIExecutive(argc,argv);

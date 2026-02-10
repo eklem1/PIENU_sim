@@ -14,6 +14,8 @@ class TTree;
 class G4Run;
 class RunActionMessenger;
 
+extern int GlobalFileNumber;
+
 class RunAction : public G4UserRunAction {
 
   public:
