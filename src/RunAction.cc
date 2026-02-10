@@ -710,6 +710,29 @@ void RunAction::SElecScatter(G4double pretime, G4double posttime, G4ThreeVector 
         ElecScatterCounter += 1;
     }
 }
+
+/*
+void RunAction::electronBhabha(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
+{
+  //I want to be able to save this info for all hits, but the MC tree doesn't fit this?
+      prebhabhaPelec[0] = premom.x();
+      prebhabhaPelec[1] = premom.y();
+      prebhabhaPelec[2] = premom.z();
+      prebhabhaPelec[3] = preE;
+
+      // ElecScatterPostX[0] = postpos.x();
+      // ElecScatterPostX[1] = postpos.y();
+      // ElecScatterPostX[2] = postpos.z();
+      // ElecScatterPostX[3] = posttime;
+      
+      // postbhabhaPelec 0] = postmom.x();
+      // postbhabhaPelec[1] = postmom.y();
+      // postbhabhaPelec[2] = postmom.z();
+      // postbhabhaPelec[3] = postE;
+
+}
+*/
+
                     
 /*
 void RunAction::SeinWC3(G4ThreeVector position, G4double time, G4ThreeVector momentum, G4double Energy)
