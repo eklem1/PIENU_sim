@@ -12,7 +12,7 @@
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
-/event/printModulo 1000
+/event/printModulo 10000
 /rndm/autoSeed true
 
 #Commands for the pileup
@@ -32,6 +32,5 @@
 # /vis/drawVolume
 
 #Number of events to simulate
-# /run/beamOn 600000  
-/run/beamOn 50000
+/run/beamOn 200000
 #/run/beamOn 100

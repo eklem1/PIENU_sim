@@ -12,8 +12,8 @@
 
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 2 #2 to get full tracking info printed out
-/event/printModulo 1000 #printout counter
+/tracking/verbose 0 #2 to get full tracking info printed out
+/event/printModulo 10000 #printout counter
 /rndm/autoSeed true
 
 #Commands for the pileup
@@ -35,4 +35,4 @@
 #Number of events to simulate
 # /run/beamOn 600000 
 # /run/beamOn 200
-/run/beamOn 50000
+/run/beamOn 200000

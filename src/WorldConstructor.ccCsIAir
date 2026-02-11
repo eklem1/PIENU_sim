@@ -239,6 +239,7 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
     // Detector --- Construct the toplevel detector volume.
     //------------------------------ 
 
+     /* //completely removing the CsI to remove any backscatter from it
      GeoConstructor& CsI = Get<GeoConstructor>("CsI");
     
      G4LogicalVolume* logCsI = CsI.GetPiece(); // logical volume
@@ -252,7 +253,7 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
                      0);
     
          Region->AddRootLogicalVolume(logCsI);
-    
+    */
 
     GeoConstructor& SiStrip = Get<GeoConstructor>("SiStrip");
 
