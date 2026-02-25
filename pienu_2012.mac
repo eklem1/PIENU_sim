@@ -12,8 +12,8 @@
 
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0 #2 to get full tracking info printed out
-/event/printModulo 10000 #printout counter
+/tracking/verbose 0
+/event/printModulo 1000 #printout counter
 /rndm/autoSeed true
 
 #Commands for the pileup
