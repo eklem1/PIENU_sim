@@ -80,7 +80,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
   delete particleGunE;
   delete fMessenger;
 
-  infile1->close();
   infile2->close();
 }
 
@@ -93,17 +92,77 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 if(init==0)
 {
-// defining the beam data file
-// 1 - /home/mischke/PlotBeam/BVF2010N448b_20200510.dat
-// 2 - /home/mischke/PlotBeam/BVF2010N448b_20200510.dat
-// 3 - /home/mischke/PlotBeam/BVF2011_20200510.dat
-// 4 - /home/mischke/PlotBeam/BVF2012_20200510.dat
+  // defining the beam data file
+  // 1 - /home/mischke/PlotBeam/BVF2010preNovb1-2_011023.dat
+  // 2 - /home/mischke/PlotBeam/BVF2010preNovb3_301121.dat
+  // 3 - /home/mischke/PlotBeam/BVF2010preNovb4_011121.dat
+  // 4 - /home/mischke/PlotBeam/BVF2010N448b_20200510.dat
+  // 5 - /home/mischke/PlotBeam/BVF2010N448b_20200510.dat
+  // 6 - /home/mischke/PlotBeam/BVF2011_20200510.dat
+  // 7 - /home/mischke/PlotBeam/BVF2012_20200510.dat
 
-  const char filename1[] = "/home/mischke/project/mischke/data/alex_26sep.rays";
- const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448a_20200510.dat";
+  G4cout<< "DataBeam  Generator  " << databeam  << G4endl;
 
+   const char* filename2 = "/home/mischke/PlotBeam/BVF2010N448a_20200510.dat";
 
-if(databeam==1){
+ if(databeam==1){
+     G4cout <<" ***************************"<<G4endl;	 
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" Beam file BVF2010preNovB1-2_011023.dat will be used"<< G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+
+	// BLOCKS 1
+     filename2 = "/home/mischke/PlotBeam/BVF2010preNovb1-2_011023.dat";
+      P0 = 75.081; // after WC3 shift
+      L[0][0] = 1.0;  L[1][0] = 0.251584;  L[2][0] = -0.0758193;  L[3][0] = 0.0565415;  L[4][0] = -0.0608926;
+      L[0][1] = 0.0;  L[1][1] = 0.967835;  L[2][1] = 0.14589;     L[3][1] = 0.599698;   L[4][1] = 0.118576;
+      L[0][2] = 0.0;  L[1][2] = 0.0;       L[2][2] = 0.986391;    L[3][2] = -0.0112254; L[4][2] = 0.78103;
+      L[0][3] = 0.0;  L[1][3] = 0.0;       L[2][3] = 0.0;         L[3][3] = 0.798148;   L[4][3] = 0.0279001;
+      L[0][4] = 0.0;  L[1][4] = 0.0;       L[2][4] = 0.0;         L[3][4] = 0.0;        L[4][4] = 0.609464;
+      }
+ 
+      if(databeam==2){
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" Beam file BVF2010preNovB3_301121.dat will be used"<< G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+
+     // BLOCK 2
+     filename2 = "/home/mischke/PlotBeam/BVF2010preNovb3_301121.dat"; // BVF v1
+     P0 = 75.0341; // 
+     //  //P0 = 75.0341*(1-0.005); //
+       L[0][0] = 1.0;  L[1][0] = 0.25982;   L[2][0] = -0.0698679;  L[3][0] = 0.0635087;  L[4][0] = -0.0524559;
+       L[0][1] = 0.0;  L[1][1] = 0.965657;  L[2][1] = 0.189198;    L[3][1] = 0.648109;   L[4][1] = 0.195976;
+       L[0][2] = 0.0;  L[1][2] = 0.0;       L[2][2] = 0.97945;     L[3][2] = 0.0496893;  L[4][2] = 0.785995;
+       L[0][3] = 0.0;  L[1][3] = 0.0;       L[2][3] = 0.0;         L[3][3] = 0.757266;   L[4][3] = 0.0882973;
+       L[0][4] = 0.0;  L[1][4] = 0.0;       L[2][4] = 0.0;         L[3][4] = 0.0;        L[4][4] = 0.577284;
+       }
+     if(databeam==3){
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" Beam file BVF2010preNovB4_011121.dat will be used"<< G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+     G4cout <<" ***************************"<<G4endl;
+       
+      // BLOCK 3
+      filename2 = "/home/mischke/PlotBeam/BVF2010preNovb4_011121.dat";
+      P0 = 74.517543;
+	L[0][0] = 1.0;  L[1][0] = 0.307537;  L[2][0] = -0.067653;   L[3][0] = 0.0366907;  L[4][0] = -0.0714846;
+	L[0][1] = 0.0;  L[1][1] = 0.951536;  L[2][1] = 0.172037;    L[3][1] = 0.530649;   L[4][1] = 0.119482;
+        L[0][2] = 0.0;  L[1][2] = 0.0;       L[2][2] = 0.982765;    L[3][2] = -0.0142829; L[4][2] = 0.782448;
+	L[0][3] = 0.0;  L[1][3] = 0.0;       L[2][3] = 0.0;         L[3][3] = 0.846676;   L[4][3] = 0.0832994;             
+        L[0][4] = 0.0;  L[1][4] = 0.0;       L[2][4] = 0.0;         L[3][4] = 0.0;        L[4][4] = 0.601207;	
+	}
+
+if(databeam==4){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
@@ -113,7 +172,7 @@ if(databeam==1){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
-    const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448a_20200510.dat";
+    filename2 = "/home/mischke/PlotBeam/BVF2010N448a_20200510.dat";
     P0 = 74.4222;
   L[0][0] = 1.0;  L[1][0] = 0.312093; L[2][0] = -0.071054;  L[3][0] = 0.0588566;  L[4][0] = -0.0778541;
   L[0][1] = 0.0;  L[1][1] = 0.950051; L[2][1] = 0.224755;   L[3][1] = 0.561289;   L[4][1] = 0.17289;
@@ -122,7 +181,7 @@ if(databeam==1){
   L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.584562;
   }
 
- if(databeam==2){
+ if(databeam==5){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
@@ -132,7 +191,7 @@ if(databeam==1){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
-    const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448b_20200510.dat";
+     filename2 = "/home/mischke/PlotBeam/BVF2010N448b_20200510.dat";
     P0 = 74.1768;
   L[0][0] = 1.0;  L[1][0] = 0.3391;   L[2][0] = -0.0627885; L[3][0] = 0.055023;   L[4][0] = -0.0614339;
   L[0][1] = 0.0;  L[1][1] = 0.94075;  L[2][1] = 0.0934388;  L[3][1] =  0.612371;  L[4][1] = 0.00260394;
@@ -141,7 +200,7 @@ if(databeam==1){
   L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.586992;
   }
   
-if(databeam==3){
+if(databeam==6){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
@@ -151,7 +210,7 @@ if(databeam==3){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
-    const char filename2[] = "/home/mischke/PlotBeam/BVF2011_20200510.dat";
+    filename2 = "/home/mischke/PlotBeam/BVF2011_20200510.dat";
     P0 = 73.5348;
   L[0][0] = 1.0;  L[1][0] = 0.30079;  L[2][0] = -0.0820981; L[3][0] = 0.0860666;   L[4][0] = -0.0656662;
   L[0][1] = 0.0;  L[1][1] = 0.95369;  L[2][1] = 0.151865;   L[3][1] = 0.596359;    L[4][1] = 0.123908;
@@ -160,7 +219,7 @@ if(databeam==3){
   L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;         L[4][4] = 0.599492;
   
 }
-if(databeam==4){  
+if(databeam==7){  
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
@@ -170,7 +229,7 @@ if(databeam==4){
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
   G4cout <<" ***************************"<<G4endl;
-       const char filename2[] = "/home/mischke/PlotBeam/BVF2012_20200510.dat";
+        filename2 = "/home/mischke/PlotBeam/BVF2012_20200510.dat";
     P0 = 74.3024;
   L[0][0] = 1.0;  L[1][0] = 0.286178; L[2][0] = -0.0747011; L[3][0] = 0.0798684;   L[4][0] = -0.0633374;
   L[0][1] = 0.0;  L[1][1] = 0.958177; L[2][1] = 0.171845;   L[3][1] = 0.58738;   L[4][1] = 0.121565;
@@ -179,28 +238,10 @@ if(databeam==4){
   L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.59069;
  }
   	  
-  // Momentum scaled (Feb. 27/19)
-  //const char filename2[] = "/home/mischke/project/mischke/data/PositronBeam_74p0_20190226.dat";
-
-  infile1 = new std::ifstream(filename1);
   infile2 = new std::ifstream(filename2);
-
-  if(!(*infile1)) {
-     G4cerr << "Error opening input file " << filename1 << G4endl;
-     G4Exception("error","error",FatalException,"error");
-  }
-
   if(!(*infile2)) {
      G4cerr << "Error opening input file " << filename2 << G4endl;
      G4Exception("error","error",FatalException,"error");
-  }
-
- 
-  // An extra check - probably not needed
-  std::filebuf* inbuff = infile1->rdbuf();
-  if(!inbuff->is_open()) {
-    G4cerr << "Input file could not be opened " << filename1 << G4endl;
-    G4Exception("error","error",FatalException,"error");
   }
 
   //Fill the histogram to sample
@@ -217,27 +258,11 @@ init=1;
   // Variables to store the final vertex position
   G4double xv,yv,zv,mdX,mdY,mdZ,kinEnergyPi,kinEnergyMu,kinEnergyE;
 
-  // If we're at the end of the file, rewind.
-  if (infile1->eof()) {
-    infile1->clear();
-    infile1->seekg(0);
-  }
-
   if (infile2->eof()) {
     infile2->clear();
     infile2->seekg(0);
   }
-
-  // Read in a line from the file
-  if (databeam==0){
-    //Revmoc file
-    *infile1 >> X >> dX >> Y >> dY >> P;
-    // Convert the angles to radians and find the x and y length of a
-    // vector if the total length is 1.
-    mdX = std::sin(dX/1000.0);
-    mdY = std::sin(dY/1000.0);
-    mdZ = std::sqrt(1-mdX*mdX-mdY*mdY);
-  } else {
+  
     //Data parameterization file
  
     //Sample the histograms and construct the correlated variables
@@ -251,7 +276,6 @@ init=1;
     mdY = r[4];
     if (mdX*mdX+mdY*mdY<=1) mdZ = std::sqrt(1-mdX*mdX-mdY*mdY);
     else mdZ = 1.0;
-  }
 
   // Scale and shift the vector.  Everything is in centimeters.
   xv = -60*cm*(mdX/mdZ) + X*cm;
@@ -398,13 +422,18 @@ void PrimaryGeneratorAction::FillBeamHistograms()
   G4double P, X, Y, dX, dY;
    TRandom3  *r4 = new TRandom3(0);
    gRandom = r4;
+   
+ int count = 0;
 
-  while (1)
+ while (1)
   {
     *infile2 >> P >> X >> Y >> dX >> dY;
 
     if (!infile2->good()) break;
-
+   
+    if(count == 0)  G4cout << "  P  " << P << "  X  " << X << G4endl;
+    count = 1;
+    
     // start temporary code
         P = r4->Gaus(P0,0.6369);
     //  end
