@@ -22,7 +22,7 @@
 /pileup/Tmax 5000
 
 # beam from Luca's approximation of the data
-/beam/FromData 4
+/beam/FromData 7 #-> 2012 data in new primary gen action
 
 #new things from Ivan for positron gun
 # /gun/energy 70.0 # in MeV units 
