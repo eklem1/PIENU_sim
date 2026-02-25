@@ -4,7 +4,7 @@
 #include "G4VProcess.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
-
+#include "MyTrackInformation.hh"
 #include "SegmentSD.hh"
 #include "HitSegment.hh"
 
@@ -64,7 +64,17 @@ G4bool SegmentSD::ProcessHits(G4Step* theStep, G4TouchableHistory*)
      fLastHit = fHits->entries()-1;
   }
 
-  currentHit->AddStep(theStep);
+   //get flag info
+   G4Track* track = theStep->GetTrack();
+   auto info = (MyTrackInformation*) track->GetUserInformation();
+
+   
+   // If info is not null, it calls info->GetPassedVolume().
+   // If info is null, it just uses false.
+   currentHit->SetBINAflag(info ? info->GetPassedVolume() : false);
+   currentHit->SetGParentID(info ? info->GetGrandparentID() : -1);
+
+   currentHit->AddStep(theStep);
 
   return true;
 }

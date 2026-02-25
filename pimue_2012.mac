@@ -12,7 +12,7 @@
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
-/event/printModulo 1000
+/event/printModulo 10000
 /rndm/autoSeed true
 
 #Commands for the pileup
@@ -28,10 +28,9 @@
 # /gun/energy 70.0 # in MeV units 
 # /gun/angle 0.0 # in degree units
 
-/vis/open VRML2FILE
-/vis/drawVolume
+# /vis/open VRML2FILE
+# /vis/drawVolume
 
 #Number of events to simulate
-# /run/beamOn 600000  
-# /run/beamOn 10000
-/run/beamOn 100
+/run/beamOn 200000
+#/run/beamOn 100

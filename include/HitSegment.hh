@@ -73,6 +73,18 @@ class HitSegment : public G4VHit
     /// definition is in a single volume.
     G4double GetStartT(void) const { return fStartT; }
 
+    /// The X momentum of the hit starting point.  Note that a hit by
+    /// definition is in a single volume.
+    G4double GetMomX(void) const { return fMomX; }
+
+    /// The Y momentum of the hit starting point.  Note that a hit by
+    /// definition is in a single volume.
+    G4double GetMomY(void) const { return fMomY; }
+
+    /// The Z momentum of the hit starting point.  Note that a hit by
+    /// definition is in a single volume.
+    G4double GetMomZ(void) const { return fMomZ; }
+
     /// The X position of the hit stopping point.  Note that a hit by
     /// definition is in a single volume.
     G4double GetStopX(void) const { return fStopX; }
@@ -109,6 +121,14 @@ class HitSegment : public G4VHit
 
     void SetMergedFlag(G4bool status) { fMerged = status; }
     G4bool GetMergedFlag() const { return fMerged; }
+
+    void SetBINAflag(G4bool status) { fBINAflag = status; }
+    G4bool GetBINAflag() const { return fBINAflag; }
+
+    void SetGParentID(int ID) { fGParentID = ID; }
+    G4int GetGParentID() const { return fGParentID; }
+
+    G4int GetStepNumber(void) const { return fStepNumber; }
 
     ///Clear the track id and time
     void Clear(void);
@@ -151,6 +171,15 @@ class HitSegment : public G4VHit
     /// The time of the hit starting point.
     G4double fStartT;
 
+    /// The X momentum of the hit starting point.
+    G4double fMomX;
+
+    /// The Y momentum of the hit starting point.
+    G4double fMomY;
+
+    /// The Z momentum of the hit starting point.
+    G4double fMomZ;
+
     /// The X position of the hit stopping point.
     G4double fStopX;
 
@@ -183,6 +212,15 @@ class HitSegment : public G4VHit
 
     /// Flag that determines if the hit was merged into another hit
     G4bool fMerged;
+
+    /// Flag that determines if the particle or it's parent has ever been in BINA
+    G4bool fBINAflag;
+
+    /// The grandParentID of the trajectory that made this hit.
+    G4int fGParentID;
+
+    //the step number 
+    G4int fStepNumber;
 
 #ifdef G4VIS_USE
     /// Coordinate transformations needed for hit-volume drawing

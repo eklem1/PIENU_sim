@@ -7,13 +7,13 @@
 # /process/inactivate msc
 
 /decay/external # Call external decay generator
-/radiative/mu_or_e 2 # choose pi->e nu (g)
+/radiative/mu_or_e 0 # choose pi->e nu (g)
 
 
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0
-/event/printModulo 1000 #printout counter
+/tracking/verbose 0 #2 to get full tracking info printed out
+/event/printModulo 10000 #printout counter
 /rndm/autoSeed true
 
 #Commands for the pileup
@@ -29,7 +29,10 @@
 # /gun/energy 70.0 # in MeV units 
 # /gun/angle 0.0 # in degree units
 
+# prints out all processes defined in the physics list
+# /run/particle/dumpOrderingParam
 
 #Number of events to simulate
 # /run/beamOn 600000 
-/run/beamOn 50000
+# /run/beamOn 200
+/run/beamOn 200000
