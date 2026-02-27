@@ -570,6 +570,11 @@ class MCtree {
   Float_t Rwc3_2_besttrack;
   Float_t Rwc3_2_maxrad;
   Float_t Old_Rwc3_2;
+
+  // Emma, Feb 2026
+  Float_t R_proj;
+  Float_t R_truth;
+  Float_t x_proct, y_proct, wc3_2_Z;
  
   Int_t eventnumber;
 

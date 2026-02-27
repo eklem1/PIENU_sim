@@ -698,6 +698,12 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("Rwc3_2_besttrack",&Rwc3_2_besttrack,"Rwc3_2_besttrack/F");
   OutputTree->Branch("Rwc3_2_maxrad",&Rwc3_2_maxrad,"Rwc3_2_maxrad/F");
 
+  // Emma, Feb 2026
+  //projected R value in WC3 of primary positron based on it's starting trajectory
+  OutputTree->Branch("R_projected",&R_proj,"R_projected/F"); 
+  OutputTree->Branch("R_truth",&R_truth,"R_truth/F"); 
+  
+
   //Location of the photonuclear reactions with neutron emission
   OutputTree->Branch("PhotonuclearX",&photonuclearx,"PhotonuclearX[3]/D");
   
@@ -1526,19 +1532,19 @@ void MCtree::Loop()
               backscatter_WC3_E[0] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
 
               //pienu case - only primary positrons, so their parent is the pion
-            	// if (ParentID==1){
-              //   cout << "primary positron found" << endl;
-	    		    //   backscatter_WC3[5] += 1;
-              //   backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
-	    	      // }
-              
-              // pimue case - parent is the primary muon, grandparent is the pion
-              if (GrandParentID==1){
+            	if (ParentID==1){
                 cout << "primary positron found" << endl;
 	    		      backscatter_WC3[5] += 1;
                 backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
-                
 	    	      }
+              
+              // // pimue case - parent is the primary muon, grandparent is the pion
+              // if (GrandParentID==1){
+              //   cout << "primary positron found" << endl;
+	    		    //   backscatter_WC3[5] += 1;
+              //   backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+                
+	    	      // }
 
             }
           }
@@ -1582,8 +1588,21 @@ void MCtree::Loop()
           }
       }
 
-	  }
-
+      if (PID == -11){ //positrons
+          //also add R_truth info here, filling only if it hasn't been filled yet?
+          //pienu case - only primary positrons, so their parent is the pion
+          if (R_truth == -1000){ //only look to fill if no R truth has been recorded yet
+            if (ParentID==1){
+              R_truth = sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
+              // cout << "fill it: " << R_truth << endl;
+            }
+            
+            // // pimue case - parent is the primary muon, grandparent is the pion
+            // if (GrandParentID==1){
+            // }
+          }
+	    }
+    }
 
         // Silicon Detectors
 
@@ -2089,6 +2108,12 @@ void MCtree::Loop()
         emomentum[i] = EMomentum[i];
       }
     }
+
+    //Get Projected R value in WC3 from positron starting position
+    Float_t wc3_2_Z = 56.755; // z at WC3_2
+    x_proct = PoStartX[0] + PoStartP[0] * (wc3_2_Z - PoStartX[2])/PoStartP[2]; //is this the right momentum to use, prob not??
+    y_proct = PoStartX[1] + PoStartP[1] * (wc3_2_Z - PoStartX[2])/PoStartP[2];
+    R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
     
     ebh=EBh;
     eintobina = EIntoBina;
@@ -2899,6 +2924,8 @@ void MCtree::Loop()
     for (int i=0;i<MAX_NUM_HITS;i++) s3_x_posi[i] = 0;
     for (int i=0;i<MAX_NUM_HITS;i++) s3_y_posi[i] = 0;
 
+    //Emma Feb 2026
+    R_truth = R_proj = -1000;
     
     // Tristan, Sep. 29/17
     Xwc3_1 = 999;
