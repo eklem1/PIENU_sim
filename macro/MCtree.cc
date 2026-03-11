@@ -1770,7 +1770,7 @@ void MCtree::Loop()
         // Tristan Oct. 20/17
         etgr[l]   = resolution->T2Resolution(eBtg[l],0.07);
         et1r[l]   = resolution->T2Resolution(eBt1[l],0.018);
-          et2r[l]   = resolution->T2Resolution(eBt2[l],0.30);
+        et2r[l]   = resolution->T2Resolution(eBt2[l],0.30);
         //et2r[l]   = resolution->T2Resolution(eBt2[l],0.226);
         ev2r[l]   = resolution->T2Resolution(eBv2[l],0.19);
         ev3r[l]   = resolution->T2Resolution(eBv3[l],0.19);
@@ -1897,7 +1897,6 @@ void MCtree::Loop()
       elecscatterpostp[i] = ElecScatterPostP[i];
 
       ///////////////
-
       
       if (i<3){ 
         photonuclearx[i] = PhotonuclearX[i];
@@ -2186,7 +2185,7 @@ void MCtree::Loop()
 
       
     
-      //**********************************
+    //**********************************
 
     // let's sort ss3_2
     size = ss3_2n;
@@ -2308,131 +2307,130 @@ void MCtree::Loop()
 
       /*if(N>1){
 
-        for(int hh=0; hh<Nampx; hh++)
+      for(int hh=0; hh<Nampx; hh++)
       cout << "ampxn["<<hh<<"]  " << ampxn[hh] << endl;
           
-        for (int k=0; k<N ;k++)
+      for (int k=0; k<N ;k++)
+        {
+        cout << "Cluster="<<k<<" size of cluster: " << ix[k].size() << endl;
+        for(int j=0; j<ix[k].size(); j++)
+          cout << "hit: "<<ix[k].at(j)<<" amp: " << ampxn[ix[k].at(j)] << endl;
+        }
+        }*/
+
+      // changing the number of hits to clusters!
+
+      Nclusty = N;   //  ############## fix MC.S3 code below
+          
+      // now let's find the highest strip in each clusters
+      //           cout <<" ****Starting the cycle of clusters with a Number of clusters : "  << N<< endl;
+      for (int k=0; k<N; k++) {
+
+        int ie[2]={-1,-1}; // highest/next strip
+        int ii;
+
+        // Search for highest strip in each cluster
+
+        int ch;
+        double BIG = -1;
+        for (uint j=0; j<ix[k].size(); j++)
           {
-      cout << "Cluster="<<k<<" size of cluster: " << ix[k].size() << endl;
-      for(int j=0; j<ix[k].size(); j++)
-        cout << "hit: "<<ix[k].at(j)<<" amp: " << ampxn[ix[k].at(j)] << endl;
+          int l = ix[k].at(j);
+          if (ampy[l]>BIG)
+          {
+            BIG = ampy[l];
+            ie[0] = j;
+            //ie[0] = l;
           }
-          }*/
-
-                          // changing the number of hits to clusters!
-
-          Nclusty = N;   //  ############## fix MC.S3 code below
+        }
           
-                    // now let's find the highest strip in each clusters
-          //           cout <<" ****Starting the cycle of clusters with a Number of clusters : "  << N<< endl;
-                          for (int k=0; k<N; k++) {
+        // Search for next adjucent highest strip
 
-                            int ie[2]={-1,-1}; // highest/next strip
-          int ii;
+        //if(k>0) cout << "ix[k].size(),  ie[0]  " << ix[k].size() << "  " << ie[0] << endl;
 
-                    // Search for highest strip in each cluster
+        //if(k>0) cout << "ampxn[" << ie[0] << "] " << ampxn[ie[0]] << endl;
 
-                            int ch;
-                            double BIG = -1;
-                            for (uint j=0; j<ix[k].size(); j++)
-                              {
-                              int l = ix[k].at(j);
-                              if (ampy[l]>BIG)
-                                {
-                                BIG = ampy[l];
-                                ie[0] = j;
-              //ie[0] = l;
-                                }
-                              }
-          
-                            // Search for next adjucent highest strip
-
-                //if(k>0) cout << "ix[k].size(),  ie[0]  " << ix[k].size() << "  " << ie[0] << endl;
-
-          //if(k>0) cout << "ampxn[" << ie[0] << "] " << ampxn[ie[0]] << endl;
-          
-          //ie[0] = 0;
-                            ie[1] = ie[0];
-                            BIG = -1;
-                            for (uint j=0; j<ix[k].size();j++)
-                              {
-                                int l = ix[k].at(j);
-              //cout << " l, ampxn[l], ampxn[ie[0]], ampx[l]  " << l << "  " << ampxn[l] << "  " <<  ampxn[ie[0]] << "  " << ampx[l] << endl;
-                                if(abs(ampyn[l]-ampyn[ix[k].at(ie[0])])==1 && ampy[l]>BIG)   // ##### fixed error in array index
-              
-              //if(abs(ampxn[l]-ampxn[ie[0]])==1 && ampx[l]>BIG)
-                                  {
+        //ie[0] = 0;
+        ie[1] = ie[0];
+        BIG = -1;
+        for (uint j=0; j<ix[k].size();j++)
+        {
+          int l = ix[k].at(j);
+          //cout << " l, ampxn[l], ampxn[ie[0]], ampx[l]  " << l << "  " << ampxn[l] << "  " <<  ampxn[ie[0]] << "  " << ampx[l] << endl;
+          if(abs(ampyn[l]-ampyn[ix[k].at(ie[0])])==1 && ampy[l]>BIG)   // ##### fixed error in array index
+          //if(abs(ampxn[l]-ampxn[ie[0]])==1 && ampx[l]>BIG)
+          {
             BIG = ampy[l]; ie[1]=j;
             //ie[1]=l;
-                //	     cout << " BIG, ie[1]  "  << BIG << "   " << ie[1]  << endl;
-                                  }
-                              }
+            //	     cout << " BIG, ie[1]  "  << BIG << "   " << ie[1]  << endl;
+          }
+        }
 
-          //cout << "OK" << endl;
+        //cout << "OK" << endl;
 
-          // if(ix[k].size()>1)
-          //   cout << "ie[0],  ie[1]  " << ie[0] << "  " << ie[1] << endl;
+        // if(ix[k].size()>1)
+        //   cout << "ie[0],  ie[1]  " << ie[0] << "  " << ie[1] << endl;
 
-          
-          //           cout << "found the hits in the cluster, the highest w="<< ampxn[ix[k].at(ie[0])] << " and the next highest is" << ampxn[ix[k].at(ie[1])] << endl;  //  ##### fixed error in array index
+        
+        //           cout << "found the hits in the cluster, the highest w="<< ampxn[ix[k].at(ie[0])] << " and the next highest is" << ampxn[ix[k].at(ie[1])] << endl;  //  ##### fixed error in array index
 
-                            int left = min(ie[0],ie[1]);
-                            double gc0 = 1, gc1 = 1, gcleft = 1;
-                            double aQ, aQ2, at;
-          //         cout <<" debug 1 (left):"<<left<< " and k="<<k << " and ix(k).size="<<ix[k].size() <<endl;
-          //            cout <<" debug 1.5 ie[0]="<<ie[0]<<" ie[1]="<<ie[1]<<endl;
-                            aQ = ampy[ix[k].at(left)];
-          at = ampyt[ix[k].at(ie[0])];
-          // aQ = ampx[left];
+        int left = min(ie[0],ie[1]);
+        double gc0 = 1, gc1 = 1, gcleft = 1;
+        double aQ, aQ2, at;
+        //         cout <<" debug 1 (left):"<<left<< " and k="<<k << " and ix(k).size="<<ix[k].size() <<endl;
+        //            cout <<" debug 1.5 ie[0]="<<ie[0]<<" ie[1]="<<ie[1]<<endl;
+        aQ = ampy[ix[k].at(left)];
+        at = ampyt[ix[k].at(ie[0])];
+        // aQ = ampx[left];
 
           //            cout <<" debug 2" <<endl;
 
-                aQ2 = ampy[ix[k].at(ie[0])];
-                            // aQ2 = ampx[ie[0]];
-          //          cout << "Energy is << "<< aQ << endl;  // ############ left energy only
-                            if( ie[1]!=ie[0])
-                              {
-              aQ2 += ampy[ix[k].at(ie[1])];
-              at = (ampyt[ix[k].at(ie[0])]*ampy[ix[k].at(ie[0])] + ampyt[ix[k].at(ie[1])]*ampy[ix[k].at(ie[1])])/aQ2;
-                                // aQ2 += ampx[ie[1]];
-            /*
-                              cout<< " debug3 cluster with more then one hit****************************"<<endl;
-                              cout<< " ix[k].at(left)  "<< ix[k].at(left)<< endl;
-                              cout<< " ix[k].at(ie[1])  "<< ix[k].at(ie[1])<<endl;
-                              cout<< " aQw="<<ampxn[ix[k].at(left)]<<" aQ2w="<<ampxn[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
-                              cout<< " aQ="<<ampx[ix[k].at(left)]<<" aQ2="<<ampx[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
-            */
-                              }
+        aQ2 = ampy[ix[k].at(ie[0])];
+        // aQ2 = ampx[ie[0]];
+        //          cout << "Energy is << "<< aQ << endl;  // ############ left energy only
+        if( ie[1]!=ie[0])
+        {
+          aQ2 += ampy[ix[k].at(ie[1])];
+          at = (ampyt[ix[k].at(ie[0])]*ampy[ix[k].at(ie[0])] + ampyt[ix[k].at(ie[1])]*ampy[ix[k].at(ie[1])])/aQ2;
+                            // aQ2 += ampx[ie[1]];
+          /*
+                            cout<< " debug3 cluster with more then one hit****************************"<<endl;
+                            cout<< " ix[k].at(left)  "<< ix[k].at(left)<< endl;
+                            cout<< " ix[k].at(ie[1])  "<< ix[k].at(ie[1])<<endl;
+                            cout<< " aQw="<<ampxn[ix[k].at(left)]<<" aQ2w="<<ampxn[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
+                            cout<< " aQ="<<ampx[ix[k].at(left)]<<" aQ2="<<ampx[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
+          */
+        }
             
-                            double aPosi=ampyn[ix[k].at(left)]*1.28-30.08;
-          // double aPosi=ampxn[left]*1.28-30.08;
-                            double aQR=aQ/aQ2;
-          //   cout<< "Position before is " << aPosi << " and aQR="<<aQR<<endl;
+        double aPosi=ampyn[ix[k].at(left)]*1.28-30.08;
+        // double aPosi=ampxn[left]*1.28-30.08;
+        double aQR=aQ/aQ2;
+        //   cout<< "Position before is " << aPosi << " and aQR="<<aQR<<endl;
 
-                            double fPosi=0;
-                            if (aQR<=0.14)       {fPosi=1;} // 0.25
-                            else if (aQR<=0.34)  {fPosi=0.75;} // 0.40
-                            else if (aQR<=0.51) {fPosi=0.50;} // 0.60
-                            else if (aQR<=0.75) {fPosi=0.25;} // 0.80
-                            else if (aQR<=1)    {fPosi=0;} // 1.0
-                            aPosi=(ampyn[ix[k].at(left)]+fPosi)*1.28-30.08;
-          // aPosi=(ampxn[left]+fPosi)*1.28-30.08;
-    
-
-          //    cout<< "Position after is " << aPosi << endl;
+        double fPosi=0;
+        if (aQR<=0.14)       {fPosi=1;} // 0.25
+        else if (aQR<=0.34)  {fPosi=0.75;} // 0.40
+        else if (aQR<=0.51) {fPosi=0.50;} // 0.60
+        else if (aQR<=0.75) {fPosi=0.25;} // 0.80
+        else if (aQR<=1)    {fPosi=0;} // 1.0
+        aPosi=(ampyn[ix[k].at(left)]+fPosi)*1.28-30.08;
+        // aPosi=(ampxn[left]+fPosi)*1.28-30.08;
 
 
-              // changing the position information
-                MC.S3_Y_ch[k] = aPosi;
-                s3_y_posi[k] = aPosi;
-                aqr_y[k] = aQR;
-                MC.S3_Y_t[k] = at;
-                ampn_y[k] = ampyn[ix[k].at(left)];
-                tcl_y[k] = at;
+        //    cout<< "Position after is " << aPosi << endl;
 
-              }
 
-              MC.S3_Y_N = Nclusty;
+        // changing the position information
+        MC.S3_Y_ch[k] = aPosi;
+        s3_y_posi[k] = aPosi;
+        aqr_y[k] = aQR;
+        MC.S3_Y_t[k] = at;
+        ampn_y[k] = ampyn[ix[k].at(left)];
+        tcl_y[k] = at;
+
+      }
+
+      MC.S3_Y_N = Nclusty;
     
     }
 
@@ -2486,7 +2484,7 @@ void MCtree::Loop()
         MC.S1_X_ch[i] = (ss1_1w[i]-24)*1.28;
         MC.S1_X_ch[i] = ss1_1x[i];
         MC.S1_X_t[i] = ss1_1t[i];
-              MC.S1_Y_N = ss1_2n;
+        MC.S1_Y_N = ss1_2n;
         MC.S1_Y_ch[i] = (ss1_2w[i]-24)*1.28;
         MC.S1_Y_ch[i] = ss1_2y[i];
         MC.S1_Y_t[i] = ss1_2t[i];
@@ -2496,16 +2494,16 @@ void MCtree::Loop()
         MC.S2_X_ch[i] = (ss2_1w[i]-24)*1.28;
         MC.S2_X_ch[i] = ss2_1x[i];
         MC.S2_X_t[i] = ss2_1t[i];
-              MC.S2_Y_N = ss2_2n;
+        MC.S2_Y_N = ss2_2n;
         MC.S2_Y_ch[i] = (ss2_2w[i]-24)*1.28;
         MC.S2_Y_ch[i] = ss2_2y[i];
         MC.S2_Y_t[i] = ss2_2t[i];
         
         //     MC.S3_X_N = Nclustx;
         //	MC.S3_X_ch[i] = (ss3_1w[i]-24)*1.28;
-              //      MC.S3_X_t[i] = ss3_1t[i];
-        
-              // MC.S3_Y_N = Nclusty;
+        //      MC.S3_X_t[i] = ss3_1t[i];
+
+        // MC.S3_Y_N = Nclusty;
         // MC.S3_Y_ch[i] = (ss3_2w[i]-24)*1.28;
         // MC.S3_Y_t[i] = ss3_2t[i];
         
@@ -2573,33 +2571,33 @@ void MCtree::Loop()
     //Float_t Z = 55.855; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
     if(MC.trks[2].GetN()>0)
       {
-      //Float_t X = (trkC.tx*Z+trkC.x0); //X at WC3_2
-      //Float_t Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
-      //Float_t R = sqrt(X*X+Y*Y); // R at WC3_2
-            X = (trkC.tx*Z+trkC.x0); //X at WC3_2
-            X_1 = (trkC.tx*Z_1+trkC.x0); //X at WC3_2
-            Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
-            R = sqrt(X*X+Y*Y); // R at WC3_2
-      Xwc3_1 =X_1;
-      Xwc3_2 =X;
-      Ywc3_2 =Y;
-      Zwc3_2 =Z;
-      Rwc3_2= R;
-            // Tristan, June 26/17
-            X = (trkE.tx*Z+trkE.x0); //X at WC3_2
-            Y = (trkE.ty*Z+trkE.y0); //Y at WC3_2
-      Rwc3_2_maxrad = sqrt(X*X + Y*Y);
+        //Float_t X = (trkC.tx*Z+trkC.x0); //X at WC3_2
+        //Float_t Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
+        //Float_t R = sqrt(X*X+Y*Y); // R at WC3_2
+        X = (trkC.tx*Z+trkC.x0); //X at WC3_2
+        X_1 = (trkC.tx*Z_1+trkC.x0); //X at WC3_2
+        Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
+        R = sqrt(X*X+Y*Y); // R at WC3_2
+        Xwc3_1 =X_1;
+        Xwc3_2 =X;
+        Ywc3_2 =Y;
+        Zwc3_2 =Z;
+        Rwc3_2= R;
+        // Tristan, June 26/17
+        X = (trkE.tx*Z+trkE.x0); //X at WC3_2
+        Y = (trkE.ty*Z+trkE.y0); //Y at WC3_2
+        Rwc3_2_maxrad = sqrt(X*X + Y*Y);
 
-      // Tristan, Oct. 24/17
-      s3wc3x0 = trkC.x0;
-      s3wc3y0 = trkC.y0;
-      s3wc3tx = trkC.tx;
-      s3wc3ty = trkC.ty;
+        // Tristan, Oct. 24/17
+        s3wc3x0 = trkC.x0;
+        s3wc3y0 = trkC.y0;
+        s3wc3tx = trkC.tx;
+        s3wc3ty = trkC.ty;
 
-      /*
+        /*
         cout << " eventID = " << eventID << "ntracks = " << ntracks << "  tracknum = " << tracknum;
         cout << " X Y tx ty = " << X << "  " << Y << "  " << trkC.tx << "  " << trkC.ty << endl;
-      */
+        */
       }
     
     // Tristan July 20/17    
