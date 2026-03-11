@@ -42,7 +42,7 @@ MCtree::MCtree(const char* tname1, const char* tname2)
   ConfigFile Conf(ConfFilename.c_str());
   TrReco.Init(Conf);
 
-    TFile *f1=new TFile("/project/6000314/mischke/omb/NewBinaCsI2.root");
+  TFile *f1=new TFile("/project/6000314/mischke/omb/NewBinaCsI2.root");
   hh1=(TH1F*)gDirectory->Get("bina");
   hh1->SetDirectory(0);
   hh2=(TH1F*)gDirectory->Get("csi");
@@ -836,8 +836,8 @@ void MCtree::Loop()
   
   
   Long64_t hit = 0;
-   for (Long64_t entry=0; entry<MCTree2->GetEntries();entry++) {
-     //      for (Long64_t entry=0; entry<100000;entry++) {
+  for (Long64_t entry=0; entry<MCTree2->GetEntries();entry++) {
+    //      for (Long64_t entry=0; entry<100000;entry++) {
     
     MCTree1->GetEntry(hit);
     MCTree2->GetEntry(entry);
@@ -845,7 +845,7 @@ void MCtree::Loop()
     //Clear the variables
     this->Clear();
     
-  int HIT = 0;
+    int HIT = 0;
 
     double v[4]={0,0,0,0};
     while (eventID2==eventID){
@@ -853,21 +853,21 @@ void MCtree::Loop()
       if (energyDeposit>0){
 	
 	
-	if (volumeID0==5 && volumeID1==175 && volumeID2==175)
-	  {
-	    efront[0]+=energyDeposit;
-	    if(PID == 211) efront[1] += energyDeposit;
-	    if(PID == -13) efront[2] += energyDeposit;
-	    if(PID == -11) efront[3] += energyDeposit;	 
-	  }
-	
-	//Bina
-	if (volumeID0==5 && volumeID2==100) 
-	  { 
-	    ebina[0] += energyDeposit;
-	    eBbina[0] += Ebirk;
+        if (volumeID0==5 && volumeID1==175 && volumeID2==175)
+        {
+          efront[0]+=energyDeposit;
+          if(PID == 211) efront[1] += energyDeposit;
+          if(PID == -13) efront[2] += energyDeposit;
+          if(PID == -11) efront[3] += energyDeposit;	 
+        }
+        
+        //Bina
+        if (volumeID0==5 && volumeID2==100) 
+          { 
+            ebina[0] += energyDeposit;
+            eBbina[0] += Ebirk;
 
-	                HIT++;
+            HIT++;
 
             //Try to sum hits only if they are close in time and build an array of bina summed hits
             if (HIT==1) {
@@ -882,717 +882,717 @@ void MCtree::Loop()
                 if (fabs(StartT-binatimes[i])<2 && binatimes[i]!=-10000) break;
                 if (fabs(StartT-binatimes[i])>2 && binatimes[i]==-10000)  {binatimes[i]=StartT;break;}
 
-              }
-                
+              }       
 
               for (int i=0;i<100;i++){
                 if (fabs(StartT-binatimes[i])<2 && binahits[i]!=-10000)   {binahits[i]+=energyDeposit; birkshits[i]+=Ebirk; break;}
                 if (fabs(StartT-binatimes[i])<2 && binahits[i]==-10000)  { binahits[i]=energyDeposit; birkshits[i]=Ebirk;}
 
               }
-	    }
-
-	    xbina[0] = StartX;
-	    xbina[1] = StartY;
-	    xbina[2] = StartZ;
-	    xbina[3] = StartT;
-	    
-	    if(PID == 211){ 
-	      ebina[1] += energyDeposit;
-	      eBbina[1] += Ebirk;
-	    }
-	    
-	    if(PID == -13){
-	      ebina[2] += energyDeposit;
-	      eBbina[2] += Ebirk;
-	    }		
-	    
-	    if(PID == -11) {
-	      ebina[3] += energyDeposit;	    
-	      eBbina[3] += Ebirk;
-	    }
-
-	    	    if(PID == 22) {
-	      ebinag += energyDeposit;	    
-	    }
-
-	  }
-	
-	
-	
-	//CsI
-	if (volumeID0==5 && volumeID2<100 /*&& stopT<100*/) 
-	  {
-	    // Added by Tristan (Oct. 29/14) to test equivalence between this and sum of quadrants
-	    //csi  += energyDeposit;
-	   csi  += energyDeposit;
-	   // Bcsi  += Ebirk;
-	  }
-	  
-	if (volumeID0==5 && volumeID2<100){
-	  // Timing cut
-	  //USIn
-	  for (int i=0;i<21;i++)
-	    if (volumeID2==0 && volumeID1==i) { if(StartT - PoStartX[3] < 50.0) {csiall->USIn[i] += energyDeposit;v[0]++; usiZ+=StartZ; usiZn++;usit = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
-	  //USOut
-	  for (int i=0;i<28;i++)
-	    if (volumeID2==1 && volumeID1==i) {if(StartT - PoStartX[3] < 50.0) {csiall->USOut[i] += energyDeposit;v[1]++; usot = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
-	  //DSIn
-	  for (int i=0;i<21;i++)
-	    if (volumeID2==2 && volumeID1==i) {if(StartT - PoStartX[3] < 50.0) {csiall->DSIn[i] += energyDeposit;v[2]++; dsit = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
-	  //DSOut
-	  for (int i=0;i<27;i++)
-	    if (volumeID2==3 && volumeID1==i) {if(StartT - PoStartX[3] < 50.0) {csiall->DSOut[i] += energyDeposit;v[3]++; dsot = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
-
-	  // No timing cut
-	  //USIn
-	  /*for (int i=0;i<21;i++)
-	    if (volumeID2==0 && volumeID1==i) { if(energyDeposit>2.0) {csiall->USIn[i] = energyDeposit;v[0]++;  usi += energyDeposit; usiB += Ebirk; usiZ+=StartZ; usiZn++;}}
-	  //USOut
-	  for (int i=0;i<28;i++)
-	    if (volumeID2==1 && volumeID1==i) {if(energyDeposit>2.0) {csiall->USOut[i] = energyDeposit;v[1]++; uso += energyDeposit; usoB += Ebirk;}}
-	  //DSIn
-	  for (int i=0;i<21;i++)
-	    if (volumeID2==2 && volumeID1==i) {if(energyDeposit>2.0) {csiall->DSIn[i] = energyDeposit;v[2]++;  dsi += energyDeposit; dsiB += Ebirk;}}
-	  //DSOut
-	  for (int i=0;i<27;i++)
-	    if (volumeID2==3 && volumeID1==i) {if(energyDeposit>2.0) {csiall->DSOut[i] = energyDeposit;v[3]++; dso += energyDeposit; dsoB += Ebirk;}}
-
-	  for (int i = 0; i < 21; i++) eCsIUSIch[i] = csiall->USIn[i];
-	  for (int i = 0; i < 28; i++) eCsIUSOch[i] = csiall->USOut[i];
-	  for (int i = 0; i < 21; i++) eCsIDSIch[i] = csiall->DSIn[i];
-	  for (int i = 0; i < 27; i++) eCsIDSOch[i] = csiall->DSOut[i];*/
-	}
-	
-	
-	//B1
-	if (volumeID0==1 && volumeID1==1 && StartT>-8000) 
-	  {
-	    if (StartT < 35)
-	      {
-	    	eb1[0] += energyDeposit;
-	    	eBb1[0] += Ebirk;
-	      }
-	    
-	    xb1[0] = StartX;
-	    xb1[1] = StartY;
-	    xb1[2] = StartZ;
-	    xb1[3] = StartT;
-	    
-	    
-	    b1_e[hitb1] = energyDeposit;
-	    //Bb1_e[hitb1]=Ebirk;
-	    
-            b1_t[hitb1] = StartT;
-	    if(PID>1000) b1_pid[hitb1] = 0; else   b1_pid[hitb1] = (PID);
-	    
-	    //Approximate time variable (for quick studies)
-	      if ((StartT-3.965)<0.2 && (StartT-3.965)>-0.2) pitime = StartT;
-	      //  pitime = StartT; // remove cut for mue version
-	    if (PID == 211)
-	      {
-		eb1[1] +=energyDeposit;
-		eBb1[1] +=Ebirk;
-	      }
-	    else if (PID == -13)
-	      {
-		eb1[2] +=energyDeposit;
-		eBb1[2] +=Ebirk;
-	      }
-	    else if (PID == -11)
-	      {		
-		eb1[3] +=energyDeposit;
-		eBb1[3] +=Ebirk;
-	      }	    
-	    hitb1++;
-	  }
-	
-	//B2
-	if (volumeID0==1 && volumeID1==2 && StartT>-8000)
-	  {
-	    if (StartT < 35)
-	      {
-	    	eb2[0]  += energyDeposit;
-	    	eBb2[0] += Ebirk;
-	      }
-	    
-	    xb2[0] = StartX;
-	    xb2[1] = StartY;
-	    xb2[2] = StartZ;
-	    xb2[3] = StartT;
-	    
-	    b2_e[hitb2] = energyDeposit;
-            b2_t[hitb2] = StartT;
-	    if(PID>1000) b2_pid[hitb2] = 0; else b2_pid[hitb2] = PID;
-	    hitb2++;
-	    
-	    
-	    if (PID == 211)
-	      {
-		eb2[1]  += energyDeposit;
-		eBb2[1] += Ebirk;
-	      }
-	    else if (PID == -13)
-	      {
-		eb2[2]  += energyDeposit;
-		eBb2[2]  += Ebirk;
-	      }
-	    else if (PID == -11)
-	      {
-		eb2[3]  += energyDeposit;
-		eBb2[3]  += Ebirk;
-	      }
-	  }
-	
-	//TG
-	if (volumeID0==1 && volumeID1==3 && StartT>-8000) 
-	  {
-	    etg[0] += energyDeposit;
-	    eBtg[0] += Ebirk;
-	    
-	    xtg[0] = StartX;
-	    xtg[1] = StartY;
-	    xtg[2] = StartZ;
-	    xtg[3] = StartT;
-
-	    tg_e[hittg] = energyDeposit;
-            tg_t[hittg] = StartT;
-
-	    if(PID>1000) tg_pid[hittg] = 0; else tg_pid[hittg] = PID;
-	    hittg++;
-	    if (PID == 211) 
-	      {
-		etg[1] += energyDeposit;
-		eBtg[1] += Ebirk;
-		
-		tgstartzp = StartZ;
-		tgstopzp =  StopZ;
-	      }
-	    else if (PID == -13) 
-	      {
-		etg[2] += energyDeposit;
-		eBtg[2] += Ebirk;
-		
-		tgstartzm = StartZ;
-		tgstopzm =  StopZ;
-	      }
-	    else if (PID == -11)
-	      {
-		etg[3] += energyDeposit;
-		eBtg[3] += Ebirk;
-	
-		tgstartze = StartZ;
-		tgstopze =  StopZ;	
-	      }
-	  }
-	
-	//T1
-	if (volumeID0==1 && volumeID1==4 && StartT>-8000){
-	  
-	  et1[0]  +=energyDeposit;
-	  eBt1[0] += Ebirk;
-	  
-	  xt1[0] = StartX;
-	  xt1[1] = StartY;
-	  xt1[2] = StartZ;
-	  xt1[3] = StartT;
-	  
-	  // Approximate time variable (for quick studies)
-	   if(StartT>0 && StartT<postime) postime = StartT;
-	   // postime = StartT; // fix for mue files
- 	  //shintaro
- 	  if(posmin>StartT){
- 	    posmin=StartT;
- 	  }
-	  if (PID==-11)
-	    //4.29 is the prompt in T1
-	    t1_e[hitt1] = energyDeposit;
-	  
-	  t1_t[hitt1] = StartT;
-	  
-	  if(PID>1000) t1_pid[hitt1] = 0; else t1_pid[hitt1] = PID;
-	  hitt1++;
-	  if (PID == 211)
-	    {
-	      et1[1] += energyDeposit;
-	      eBt1[1] += Ebirk;
-	    }
-	  else if (PID == -13)
-	    {
-	      et1[2] += energyDeposit;
-	      eBt1[2] += Ebirk;
-	    }
-	  else if (PID == -11)
-	    {
-	      et1[3] += energyDeposit;
-	      eBt1[3] += Ebirk;	      
-	    }
-	  
-	}
-	
-	//T2
-	if (volumeID0==1 && volumeID1==5) 
-	  {
-	    et2[0] +=energyDeposit;
-	    eBt2[0] += Ebirk;
-	  
-	    xt2[0] = StartX;
-	    xt2[1] = StartY;
-	    xt2[2] = StartZ;
-	    xt2[3] = StartT;
-
-	    startX = StartX;
-	    startY = StartY;
-	    R = sqrt(startX*startX + startY*startY);
-	    startT = StartT;
-	    stopT  = StopT;
-
-	    t2_e[hitt2] = energyDeposit;
-            t2_t[hitt2] = StartT;
-
-	    if(PID>1000) t2_pid[hitt2] = 0; else t2_pid[hitt2] = PID;
-	    hitt2++;
-	    
-	    if (PID == 211)
-	      {
-		et2[1] +=energyDeposit;
-		eBt2[1] += Ebirk;
-	      }
-	    else if (PID == -13)
-	      {
-		et2[2] +=energyDeposit;
-		eBt2[2] += Ebirk;
-		 }
-	    else if (PID == -11) 
-	      {
-		et2[3] +=energyDeposit;
-		eBt2[3] += Ebirk;
-	      }
-      else if (PID == 11) //electrons
-	      {
-		et2[4] +=energyDeposit;
-		eBt2[4] += Ebirk;
-	      }
-	  }
-
-
-
-	//V2
-	if (volumeID0==1 && volumeID1==6) 
-	  {
-	    ev2[0] +=energyDeposit;
-	    eBv2[0] += Ebirk;
-	  
-	    xv2[0] = StartX;
-	    xv2[1] = StartY;
-	    xv2[2] = StartZ;
-	    xv2[3] = StartT;
-
-	    startT = StartT;
-	    stopT  = StopT;
-
-	    v2_e[hitv2] = energyDeposit;
-            v2_t[hitv2] = StartT;
-
-	    if(PID>1000) v2_pid[hitv2] = 0; else v2_pid[hitv2] = PID;
-	    hitv2++;
-	    
-	    if (PID == 211)
-	      {
-		ev2[1] +=energyDeposit;
-		eBv2[1] += Ebirk;
-	      }
-	    else if (PID == -13)
-	      {
-		ev2[2] +=energyDeposit;
-		eBv2[2] += Ebirk;
-		 }
-	    else if (PID == -11) 
-	      {
-		ev2[3] +=energyDeposit;
-		eBv2[3] += Ebirk;
-	      }
-	  }
-
-
-	//V3
-	if (volumeID0==1 && volumeID1==7) 
-	  {
-	    ev3[0] +=energyDeposit;
-	    eBv3[0] += Ebirk;
-	  
-	    xv3[0] = StartX;
-	    xv3[1] = StartY;
-	    xv3[2] = StartZ;
-	    xv3[3] = StartT;
-
-	    startT = StartT;
-	    stopT  = StopT;
-
-	    v3_e[hitv3] = energyDeposit;
-            v3_t[hitv3] = StartT;
-
-	    if(PID>1000) v3_pid[hitv3] = 0; else v3_pid[hitv3] = PID;
-	    hitv3++;
-	    
-	    if (PID == 211)
-	      {
-		ev3[1] +=energyDeposit;
-		eBv3[1] += Ebirk;
-	      }
-	    else if (PID == -13)
-	      {
-		ev3[2] +=energyDeposit;
-		eBv3[2] += Ebirk;
-		 }
-	    else if (PID == -11) 
-	      {
-		ev3[3] +=energyDeposit;
-		eBv3[3] += Ebirk;
-	      }
-	  }
-
-
-	//Beam Wire Chamber 1
-	if (volumeID0 ==2 && volumeID2>300 && volumeID2<400)
-	  {
-	    if(volumeID2==301)
-	      {
-		xwc1_1[0] = StartX;
-		xwc1_1[1] = StartY;
-		xwc1_1[2] = StartZ;
-		xwc1_1[3] = StartT;
-
-		wc1_1w[hitwc1_1] = (Int_t)volumeID1;
-		wc1_1t[hitwc1_1] = StartT;
-		if(PID < 10000) wc1_1pid[hitwc1_1] = PID; else wc1_1pid[hitwc1_1] =0;
-		hitwc1_1++;
-	      }
-	    else if (volumeID2 == 302)
-	      {
-		xwc1_2[0] = StartX;
-		xwc1_2[1] = StartY;
-		xwc1_2[2] = StartZ;
-		xwc1_2[3] = StartT;
-
-		wc1_2w[hitwc1_2] = (Int_t)volumeID1;
-		wc1_2t[hitwc1_2] = StartT;
-		if(PID < 10000) wc1_2pid[hitwc1_2] = PID; else wc1_2pid[hitwc1_2] =0;
-		hitwc1_2++;
-	      }
-	    else if (volumeID2 == 303)
-	      {
-		xwc1_3[0] = StartX;
-		xwc1_3[1] = StartY;
-		xwc1_3[2] = StartZ;
-		xwc1_3[3] = StartT;
-
-		wc1_3w[hitwc1_3] = (Int_t)volumeID1;
-		wc1_3t[hitwc1_3] = StartT;
-		if(PID < 10000) wc1_3pid[hitwc1_3] = PID; else wc1_3pid[hitwc1_3] =0;
-		hitwc1_3++;
-	      }
             }
 
-        //Beam Wire Chamber 2
-	if (volumeID0 ==2 && volumeID2<400 && volumeID2>300)
-	  {
-	    if(volumeID2==304)
-	      {
-		xwc2_1[0] = StartX;
-		xwc2_1[1] = StartY;
-		xwc2_1[2] = StartZ;
-		xwc2_1[3] = StartT;
+            xbina[0] = StartX;
+            xbina[1] = StartY;
+            xbina[2] = StartZ;
+            xbina[3] = StartT;
+            
+            if(PID == 211){ 
+              ebina[1] += energyDeposit;
+              eBbina[1] += Ebirk;
+            }
+            
+            if(PID == -13){
+              ebina[2] += energyDeposit;
+              eBbina[2] += Ebirk;
+            }		
+            
+            if(PID == -11) {
+              ebina[3] += energyDeposit;	    
+              eBbina[3] += Ebirk;
+            }
 
-		wc2_1w[hitwc2_1] = (Int_t)volumeID1;
-		wc2_1t[hitwc2_1] = StartT;
-		if(PID < 10000) wc2_1pid[hitwc2_1] = PID; else wc2_1pid[hitwc2_1] =0;
-		hitwc2_1++;
-	      }
-	    else if (volumeID2 == 305)
-	      {
-		xwc2_2[0] = StartX;
-		xwc2_2[1] = StartY;
-		xwc2_2[2] = StartZ;
-		xwc2_2[3] = StartT;
+            if(PID == 22) {
+              ebinag += energyDeposit;	    
+            }
 
-		wc2_2w[hitwc2_2] = (Int_t)volumeID1;
-		wc2_2t[hitwc2_2] = StartT;
-		if(PID < 10000) wc2_2pid[hitwc2_2] = PID; else wc2_2pid[hitwc2_2] =0;
-		hitwc2_2++;
-	      }
-	    else if (volumeID2 == 306)
-	      {
-		xwc2_3[0] = StartX;
-		xwc2_3[1] = StartY;
-		xwc2_3[2] = StartZ;
-		xwc2_3[3] = StartT;
-
-		wc2_3w[hitwc2_3] = (Int_t)volumeID1;
-		wc2_3t[hitwc2_3] = StartT;
-		if(PID < 10000) wc2_3pid[hitwc2_3] = PID; else wc2_3pid[hitwc2_3] =0;
-		hitwc2_3++;
-	      }
           }
-	
-	
-	//Wire Chamber 3
-	//if (volumeID0 ==2 && volumeID2>400)
-	// Tristan Sep. 22/17
-	if (volumeID0 ==2 && volumeID2>400 && energyDeposit > 0.0005)
-	  {
-	    if(volumeID2==401)
-	      {
-		// Tristan Sep. 22/17
-		ewc3_1 += energyDeposit;
+        
+        
+        
+        //CsI
+        if (volumeID0==5 && volumeID2<100 /*&& stopT<100*/) 
+          {
+            // Added by Tristan (Oct. 29/14) to test equivalence between this and sum of quadrants
+            //csi  += energyDeposit;
+            csi  += energyDeposit;
+            // Bcsi  += Ebirk;
+          }
+          
+        if (volumeID0==5 && volumeID2<100){
+          // Timing cut
+          //USIn
+          for (int i=0;i<21;i++)
+            if (volumeID2==0 && volumeID1==i) { if(StartT - PoStartX[3] < 50.0) {csiall->USIn[i] += energyDeposit;v[0]++; usiZ+=StartZ; usiZn++;usit = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
+          //USOut
+          for (int i=0;i<28;i++)
+            if (volumeID2==1 && volumeID1==i) {if(StartT - PoStartX[3] < 50.0) {csiall->USOut[i] += energyDeposit;v[1]++; usot = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
+          //DSIn
+          for (int i=0;i<21;i++)
+            if (volumeID2==2 && volumeID1==i) {if(StartT - PoStartX[3] < 50.0) {csiall->DSIn[i] += energyDeposit;v[2]++; dsit = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
+          //DSOut
+          for (int i=0;i<27;i++)
+            if (volumeID2==3 && volumeID1==i) {if(StartT - PoStartX[3] < 50.0) {csiall->DSOut[i] += energyDeposit;v[3]++; dsot = StartT;csitimes[csinumhits] = StopT; csinumhits++;}} //REM
 
-		bool channelhit = false;
-		for (int i = 0; i < hitwc3_1; i++) if (int(volumeID1) == wc3_1w[i]) channelhit = true;
-		if (!channelhit)
-		{
-			xwc3_1[0] = StartX;
-			xwc3_1[1] = StartY;
-			xwc3_1[2] = StartZ;
-			xwc3_1[3] = StartT;
-			wc3_1w[hitwc3_1]=int(volumeID1);
-			wc3_1t[hitwc3_1]=StartT;
-			if(PID < 10000) wc3_1pid[hitwc3_1] = PID; else wc3_1pid[hitwc3_1] =0;
-			hitwc3_1++;
-		}
-	      }
-	    else if (volumeID2 == 402)
-	      {
-		// Tristan Sep. 22/17
-		ewc3_2 += energyDeposit;
+          // No timing cut
+          //USIn
+          /*for (int i=0;i<21;i++)
+            if (volumeID2==0 && volumeID1==i) { if(energyDeposit>2.0) {csiall->USIn[i] = energyDeposit;v[0]++;  usi += energyDeposit; usiB += Ebirk; usiZ+=StartZ; usiZn++;}}
+          //USOut
+          for (int i=0;i<28;i++)
+            if (volumeID2==1 && volumeID1==i) {if(energyDeposit>2.0) {csiall->USOut[i] = energyDeposit;v[1]++; uso += energyDeposit; usoB += Ebirk;}}
+          //DSIn
+          for (int i=0;i<21;i++)
+            if (volumeID2==2 && volumeID1==i) {if(energyDeposit>2.0) {csiall->DSIn[i] = energyDeposit;v[2]++;  dsi += energyDeposit; dsiB += Ebirk;}}
+          //DSOut
+          for (int i=0;i<27;i++)
+            if (volumeID2==3 && volumeID1==i) {if(energyDeposit>2.0) {csiall->DSOut[i] = energyDeposit;v[3]++; dso += energyDeposit; dsoB += Ebirk;}}
 
-		bool channelhit = false;
-		for (int i = 0; i < hitwc3_2; i++) if (int(volumeID1) == wc3_2w[i]) channelhit = true;
-		if (!channelhit)
-		{
-			xwc3_2[0] = StartX;
-			xwc3_2[1] = StartY;
-			xwc3_2[2] = StartZ;
-			xwc3_2[3] = StartT;
-			wc3_2w[hitwc3_2]=int(volumeID1);
-			wc3_2t[hitwc3_2]=StartT;
-			if(PID < 10000) wc3_2pid[hitwc3_2] = PID; else wc3_2pid[hitwc3_2] =0;
-			hitwc3_2++;
-		}
+          for (int i = 0; i < 21; i++) eCsIUSIch[i] = csiall->USIn[i];
+          for (int i = 0; i < 28; i++) eCsIUSOch[i] = csiall->USOut[i];
+          for (int i = 0; i < 21; i++) eCsIDSIch[i] = csiall->DSIn[i];
+          for (int i = 0; i < 27; i++) eCsIDSOch[i] = csiall->DSOut[i];*/
+        }
+        
+        
+        //B1
+        if (volumeID0==1 && volumeID1==1 && StartT>-8000) 
+          {
+            if (StartT < 25)
+            {
+              eb1[0] += energyDeposit;
+              eBb1[0] += Ebirk;
+            }
+            
+            xb1[0] = StartX;
+            xb1[1] = StartY;
+            xb1[2] = StartZ;
+            xb1[3] = StartT;
+            
+            
+            b1_e[hitb1] = energyDeposit;
+            //Bb1_e[hitb1]=Ebirk;
+            
+                  b1_t[hitb1] = StartT;
+            if(PID>1000) b1_pid[hitb1] = 0; else   b1_pid[hitb1] = (PID);
+            
+            //Approximate time variable (for quick studies)
+            if ((StartT-3.965)<0.2 && (StartT-3.965)>-0.2) pitime = StartT;
+            //  pitime = StartT; // remove cut for mue version
+            if (PID == 211)
+            {
+              eb1[1] +=energyDeposit;
+              eBb1[1] +=Ebirk;
+            }
+            else if (PID == -13)
+            {
+              eb1[2] +=energyDeposit;
+              eBb1[2] +=Ebirk;
+            }
+            else if (PID == -11)
+            {		
+              eb1[3] +=energyDeposit;
+              eBb1[3] +=Ebirk;
+            }	    
+            hitb1++;
+          }
+        
+        //B2
+        if (volumeID0==1 && volumeID1==2 && StartT>-8000)
+          {
+            if (StartT < 25)
+            {
+              eb2[0]  += energyDeposit;
+              eBb2[0] += Ebirk;
+            }
+            
+            xb2[0] = StartX;
+            xb2[1] = StartY;
+            xb2[2] = StartZ;
+            xb2[3] = StartT;
+            
+            b2_e[hitb2] = energyDeposit;
+            b2_t[hitb2] = StartT;
+            if(PID>1000) b2_pid[hitb2] = 0; else b2_pid[hitb2] = PID;
+            hitb2++;
+            
+            
+            if (PID == 211)
+            {
+              eb2[1]  += energyDeposit;
+              eBb2[1] += Ebirk;
+            }
+            else if (PID == -13)
+            {
+              eb2[2]  += energyDeposit;
+              eBb2[2]  += Ebirk;
+            }
+            else if (PID == -11)
+            {
+              eb2[3]  += energyDeposit;
+              eBb2[3]  += Ebirk;
+            }
+          }
+        
+        //TG
+        if (volumeID0==1 && volumeID1==3 && StartT>-8000) 
+          {
+            etg[0] += energyDeposit;
+            eBtg[0] += Ebirk;
+            
+            xtg[0] = StartX;
+            xtg[1] = StartY;
+            xtg[2] = StartZ;
+            xtg[3] = StartT;
 
-	      }
-	    else if (volumeID2 == 403)
-	      {
-		// Tristan Sep. 22/17
-		ewc3_3 += energyDeposit;
+            tg_e[hittg] = energyDeposit;
+            tg_t[hittg] = StartT;
 
-		bool channelhit = false;
-		for (int i = 0; i < hitwc3_3; i++) if (int(volumeID1) == wc3_3w[i]) channelhit = true;
-		if (!channelhit)
-		{
-			xwc3_3[0] = StartX;
-			xwc3_3[1] = StartY;
-			xwc3_3[2] = StartZ;
-			xwc3_3[3] = StartT;
-			wc3_3w[hitwc3_3]=int(volumeID1);
-			wc3_3t[hitwc3_3]=StartT;
-			if(PID < 10000) wc3_3pid[hitwc3_3] = PID; else wc3_3pid[hitwc3_3] =0;
-			hitwc3_3++;
-		}
-	      }
-	  }
+            if(PID>1000) tg_pid[hittg] = 0; else tg_pid[hittg] = PID;
+            hittg++;
+            if (PID == 211) 
+            {
+              etg[1] += energyDeposit;
+              eBtg[1] += Ebirk;
+              
+              tgstartzp = StartZ;
+              tgstopzp =  StopZ;
+            }
+            else if (PID == -13) 
+            {
+              etg[2] += energyDeposit;
+              eBtg[2] += Ebirk;
+              
+              tgstartzm = StartZ;
+              tgstopzm =  StopZ;
+            }
+            else if (PID == -11)
+            {
+              etg[3] += energyDeposit;
+              eBtg[3] += Ebirk;
+            
+              tgstartze = StartZ;
+              tgstopze =  StopZ;	
+            }
+          }
+        
+        //T1
+        if (volumeID0==1 && volumeID1==4 && StartT>-8000){
+          
+          et1[0]  +=energyDeposit;
+          eBt1[0] += Ebirk;
+          
+          xt1[0] = StartX;
+          xt1[1] = StartY;
+          xt1[2] = StartZ;
+          xt1[3] = StartT;
+          
+          // Approximate time variable (for quick studies)
+          if(StartT>0 && StartT<postime) postime = StartT;
+          // postime = StartT; // fix for mue files
+          //shintaro
+          if(posmin>StartT){
+            posmin=StartT;
+          }
+          if (PID==-11) //what is going on here? this if does nothing?
+          //4.29 is the prompt in T1
+          t1_e[hitt1] = energyDeposit;
+          
+          t1_t[hitt1] = StartT;
+          
+          if(PID>1000) t1_pid[hitt1] = 0; else t1_pid[hitt1] = PID;
+          hitt1++;
+          if (PID == 211)
+            {
+              et1[1] += energyDeposit;
+              eBt1[1] += Ebirk;
+            }
+          else if (PID == -13)
+            {
+              et1[2] += energyDeposit;
+              eBt1[2] += Ebirk;
+            }
+          else if (PID == -11)
+            {
+              et1[3] += energyDeposit;
+              eBt1[3] += Ebirk;	      
+            }
+          
+        }
+        
+        //T2
+        if (volumeID0==1 && volumeID1==5) 
+          {
+            et2[0] +=energyDeposit;
+            eBt2[0] += Ebirk;
+          
+            xt2[0] = StartX;
+            xt2[1] = StartY;
+            xt2[2] = StartZ;
+            xt2[3] = StartT;
+
+            startX = StartX;
+            startY = StartY;
+            R = sqrt(startX*startX + startY*startY);
+            startT = StartT;
+            stopT  = StopT;
+
+            t2_e[hitt2] = energyDeposit;
+            t2_t[hitt2] = StartT;
+
+            if(PID>1000) t2_pid[hitt2] = 0; else t2_pid[hitt2] = PID;
+            hitt2++;
+            
+            if (PID == 211)
+            {
+              et2[1] +=energyDeposit;
+              eBt2[1] += Ebirk;
+            }
+            else if (PID == -13)
+            {
+              et2[2] +=energyDeposit;
+              eBt2[2] += Ebirk;
+            }
+            else if (PID == -11) 
+            {
+              et2[3] +=energyDeposit;
+              eBt2[3] += Ebirk;
+            }
+            else if (PID == 11) //electrons
+            {
+              et2[4] +=energyDeposit;
+              eBt2[4] += Ebirk;
+            }
+          }
 
 
-	// Silicon Detectors
 
-	// Silicon Detector 1
-	if (volumeID0 == 2 && (volumeID2 == 11 || volumeID2 == 12))
-	  {
-	    if(volumeID2 == 11) 
-	      {
-		ess1_1[0] +=energyDeposit;
-		xss1_1[0] = StartX;
-		xss1_1[1] = StartY;
-		xss1_1[2] = StartZ;
-		xss1_1[3] = StartT;
-	        ss1_1e[hitss1_1] = energyDeposit;
-		ss1_1w[hitss1_1] = volumeID1;
-		ss1_1t[hitss1_1] = StartT;
-		ss1_1x[hitss1_1] = StartX;
-		if (PID <10000) ss1_1pid[hitss1_1] = PID; else ss1_1pid[hitss1_1] = 0;
-		hitss1_1++;
+        //V2
+        if (volumeID0==1 && volumeID1==6) 
+          {
+            ev2[0] +=energyDeposit;
+            eBv2[0] += Ebirk;
+          
+            xv2[0] = StartX;
+            xv2[1] = StartY;
+            xv2[2] = StartZ;
+            xv2[3] = StartT;
 
-		if(PID == 211)
-		  {
-		    ess1_1[1] +=energyDeposit;
-		  }
-		else if (PID == -13) 
-		  {
-		    ess1_1[2] +=energyDeposit;
-		  }
-		else if (PID == -11)
-		  {
-		    ess1_1[3] +=energyDeposit;
-		  }
-	      } else {
-	      ess1_2[0] +=energyDeposit;
-	      xss1_2[0] = StartX;
-	      xss1_2[1] = StartY;
-	      xss1_2[2] = StartZ;
-	      xss1_2[3] = StartT;
-	      
-	      ss1_2e[hitss1_2] = energyDeposit;
-	      ss1_2w[hitss1_2] = volumeID1;
-	      ss1_2t[hitss1_2] = StartT;
-	      ss1_2y[hitss1_2] = StartY;
-	      if (PID <10000) ss1_2pid[hitss1_2] = PID;
-	      else ss1_2pid[hitss1_2] = 0;
-	      hitss1_2++;
-	      
-	      if(PID == 211)
-		{
-		  ess1_2[1] +=energyDeposit;
-		}
-	      else if (PID == -13) 
-		{
-		  ess1_2[2] +=energyDeposit;
-		}
-	      else if (PID == -11)
-		{
-		  ess1_2[3] +=energyDeposit;
-		}
-	    }
-	  }
-	
-	// Silicon Detector 2
-	if (volumeID0 == 2 && (volumeID2 == 21 || volumeID2 ==22))
-	  {
-	    if(volumeID2 == 21)
-	      {
-		ess2_1[0] +=energyDeposit;
-		xss2_1[0] = StartX;
-		xss2_1[1] = StartY;
-		xss2_1[2] = StartZ;
-		xss2_1[3] = StartT;
+            startT = StartT;
+            stopT  = StopT;
 
-	        ss2_1e[hitss2_1] = energyDeposit;
-		ss2_1w[hitss2_1] = volumeID1;
-		ss2_1t[hitss2_1] = StartT;
-		ss2_1x[hitss2_1] = StartX;
-		if (PID <10000) ss2_1pid[hitss2_1] = PID; else ss2_1pid[hitss2_1] = 0;
-		hitss2_1++;
-		
-		if(PID == 211)
-		  {
-		    ess2_1[1] +=energyDeposit;
-		  }
-		else if (PID == -13) 
-		  {
-		    ess2_1[2] +=energyDeposit;
-		  }
-		else if (PID == -11)
-		  {
-		    ess2_1[3] +=energyDeposit;
-		  }
-	      } else {
-	      ess2_2[0] +=energyDeposit;
-	      xss2_2[0] = StartX;
-	      xss2_2[1] = StartY;
-	      xss2_2[2] = StartZ;
-	      xss2_2[3] = StartT;
-	      
-	      
-	      ss2_2e[hitss2_2] = energyDeposit;
-	      ss2_2w[hitss2_2] = volumeID1;
-	      ss2_2t[hitss2_2] = StartT;
-	      ss2_2y[hitss2_2] = StartY;
-	      if (PID <10000) ss2_2pid[hitss2_2] = PID; else ss2_2pid[hitss2_2] = 0;
-	      hitss2_2++;
-	      
-	      if(PID == 211)
-		{
-		  ess2_2[1] +=energyDeposit;
-		}
-	      else if (PID == -13) 
-		{
-		  ess2_2[2] +=energyDeposit;
-		}
-	      else if (PID == -11)
-		{
-		  ess2_2[3] +=energyDeposit;
-		}
-	    }
-	  }
-	
-	// Silicon Detector 3
-	//if (volumeID0 == 2 && (volumeID2 == 31 || volumeID2 == 32))
-	//Tracking threshold study, Tristan, August 16/17
-	if (volumeID0 == 2 && (volumeID2 == 31 || volumeID2 == 32) && energyDeposit > 0.02)
-	  {
-	    if(volumeID2 == 31 && hitss3_1 < MAX_NUM_HITS)
-	      {
-		bool channelhit = false;
-		for (int i = 0; i < hitss3_1; i++) if (volumeID1 == ss3_1w[i]) channelhit = true;
-		if (!channelhit)
-		{
-			ess3_1[0] +=energyDeposit;
-			xss3_1[0] = StartX;
-			xss3_1[1] = StartY;
-			xss3_1[2] = StartZ;
-			xss3_1[3] = StartT;
-			//		cout << " ID1  " << volumeID1 << "  hits3_1 " << hitss3_1 << " X  " << StartX << "  T  " << StartT << "  E  " << energyDeposit << endl;
-			ss3_1e[hitss3_1] = energyDeposit;
-			ss3_1w[hitss3_1] = volumeID1;
-			ss3_1t[hitss3_1] = StartT;
-			ss3_1x[hitss3_1] = StartX;
-			if (PID <10000) ss3_1pid[hitss3_1] = PID; else ss3_1pid[hitss3_1] = 0;
-			hitss3_1++;
-			if(PID == 211)
-			  {
-			    ess3_1[1] +=energyDeposit;
-			  }
-			else if (PID == -13)
-			  {
-			    ess3_1[2] +=energyDeposit;
-			  }
-			else if(PID == -11)
-			  {
-			    ess3_1[3] +=energyDeposit;
-			  }
-		}
-	      } else if (hitss3_2 < MAX_NUM_HITS){
+            v2_e[hitv2] = energyDeposit;
+            v2_t[hitv2] = StartT;
 
-	      bool channelhit = false;
-	      for (int i = 0; i < hitss3_2; i++) if (volumeID1 == ss3_2w[i]) channelhit = true;
-	      if (!channelhit)
-	      {
-		      ess3_2[0] +=energyDeposit;
-		      xss3_2[0] = StartX;
-		      xss3_2[1] = StartY;
-		      xss3_2[2] = StartZ;
-		      xss3_2[3] = StartT;
-		      //			cout << " ID1  " << volumeID1 << "  hits3_2 " << hitss3_2 << " Y  " << StartY << "  T  " << StartT << "  E  " << energyDeposit << endl;
-		      
-		      ss3_2e[hitss3_2] = energyDeposit;
-		      ss3_2w[hitss3_2] = volumeID1;
-		      ss3_2t[hitss3_2] = StartT;
-		      ss3_2y[hitss3_2] = StartY;
-		      if (PID <10000) ss3_2pid[hitss3_2] = PID; else ss3_2pid[hitss3_2] = 0;
-		      hitss3_2++;
-		      if(PID == 211)
-			{
-			  ess3_2[1] +=energyDeposit;
-			}
-		      else if (PID == -13) 
-			{
-			  ess3_2[2] +=energyDeposit;
-			}
-		      else if (PID == -11)
-			{
-			  ess3_2[3] +=energyDeposit;
-			}
-	      }
-	    }
-	  }
+            if(PID>1000) v2_pid[hitv2] = 0; else v2_pid[hitv2] = PID;
+            hitv2++;
+            
+            if (PID == 211)
+            {
+              ev2[1] +=energyDeposit;
+              eBv2[1] += Ebirk;
+            }
+            else if (PID == -13)
+            {
+              ev2[2] +=energyDeposit;
+              eBv2[2] += Ebirk;
+            }
+            else if (PID == -11) 
+            {
+              ev2[3] +=energyDeposit;
+              eBv2[3] += Ebirk;
+            }
+          }
+
+
+        //V3
+        if (volumeID0==1 && volumeID1==7) 
+          {
+            ev3[0] +=energyDeposit;
+            eBv3[0] += Ebirk;
+          
+            xv3[0] = StartX;
+            xv3[1] = StartY;
+            xv3[2] = StartZ;
+            xv3[3] = StartT;
+
+            startT = StartT;
+            stopT  = StopT;
+
+            v3_e[hitv3] = energyDeposit;
+            v3_t[hitv3] = StartT;
+
+            if(PID>1000) v3_pid[hitv3] = 0; else v3_pid[hitv3] = PID;
+            hitv3++;
+            
+            if (PID == 211)
+            {
+              ev3[1] +=energyDeposit;
+              eBv3[1] += Ebirk;
+            }
+            else if (PID == -13)
+            {
+              ev3[2] +=energyDeposit;
+              eBv3[2] += Ebirk;
+            }
+            else if (PID == -11) 
+            {
+              ev3[3] +=energyDeposit;
+              eBv3[3] += Ebirk;
+            }
+          }
+
+
+        //Beam Wire Chamber 1
+        if (volumeID0 ==2 && volumeID2>300 && volumeID2<400)
+        {
+          if(volumeID2==301)
+          {
+            xwc1_1[0] = StartX;
+            xwc1_1[1] = StartY;
+            xwc1_1[2] = StartZ;
+            xwc1_1[3] = StartT;
+
+            wc1_1w[hitwc1_1] = (Int_t)volumeID1;
+            wc1_1t[hitwc1_1] = StartT;
+            if(PID < 10000) wc1_1pid[hitwc1_1] = PID; else wc1_1pid[hitwc1_1] =0;
+            hitwc1_1++;
+          }
+          else if (volumeID2 == 302)
+          {
+            xwc1_2[0] = StartX;
+            xwc1_2[1] = StartY;
+            xwc1_2[2] = StartZ;
+            xwc1_2[3] = StartT;
+
+            wc1_2w[hitwc1_2] = (Int_t)volumeID1;
+            wc1_2t[hitwc1_2] = StartT;
+            if(PID < 10000) wc1_2pid[hitwc1_2] = PID; else wc1_2pid[hitwc1_2] =0;
+            hitwc1_2++;
+          }
+          else if (volumeID2 == 303)
+          {
+            xwc1_3[0] = StartX;
+            xwc1_3[1] = StartY;
+            xwc1_3[2] = StartZ;
+            xwc1_3[3] = StartT;
+
+            wc1_3w[hitwc1_3] = (Int_t)volumeID1;
+            wc1_3t[hitwc1_3] = StartT;
+            if(PID < 10000) wc1_3pid[hitwc1_3] = PID; else wc1_3pid[hitwc1_3] =0;
+            hitwc1_3++;
+          }
+        }
+
+        //Beam Wire Chamber 2
+        if (volumeID0 ==2 && volumeID2<400 && volumeID2>300)
+        {
+          if(volumeID2==304)
+          {
+            xwc2_1[0] = StartX;
+            xwc2_1[1] = StartY;
+            xwc2_1[2] = StartZ;
+            xwc2_1[3] = StartT;
+
+            wc2_1w[hitwc2_1] = (Int_t)volumeID1;
+            wc2_1t[hitwc2_1] = StartT;
+            if(PID < 10000) wc2_1pid[hitwc2_1] = PID; else wc2_1pid[hitwc2_1] =0;
+            hitwc2_1++;
+          }
+          else if (volumeID2 == 305)
+          {
+            xwc2_2[0] = StartX;
+            xwc2_2[1] = StartY;
+            xwc2_2[2] = StartZ;
+            xwc2_2[3] = StartT;
+
+            wc2_2w[hitwc2_2] = (Int_t)volumeID1;
+            wc2_2t[hitwc2_2] = StartT;
+            if(PID < 10000) wc2_2pid[hitwc2_2] = PID; else wc2_2pid[hitwc2_2] =0;
+            hitwc2_2++;
+          }
+          else if (volumeID2 == 306)
+          {
+            xwc2_3[0] = StartX;
+            xwc2_3[1] = StartY;
+            xwc2_3[2] = StartZ;
+            xwc2_3[3] = StartT;
+
+            wc2_3w[hitwc2_3] = (Int_t)volumeID1;
+            wc2_3t[hitwc2_3] = StartT;
+            if(PID < 10000) wc2_3pid[hitwc2_3] = PID; else wc2_3pid[hitwc2_3] =0;
+            hitwc2_3++;
+          }
+        }
+        
+        
+        //Wire Chamber 3
+        //if (volumeID0 ==2 && volumeID2>400)
+        // Tristan Sep. 22/17
+        if (volumeID0 ==2 && volumeID2>400 && energyDeposit > 0.0005)
+        {
+          if(volumeID2==401)
+            {
+              // Tristan Sep. 22/17
+              ewc3_1 += energyDeposit;
+
+              bool channelhit = false;
+              for (int i = 0; i < hitwc3_1; i++) if (int(volumeID1) == wc3_1w[i]) channelhit = true;
+              if (!channelhit)
+              {
+                xwc3_1[0] = StartX;
+                xwc3_1[1] = StartY;
+                xwc3_1[2] = StartZ;
+                xwc3_1[3] = StartT;
+                wc3_1w[hitwc3_1]=int(volumeID1);
+                wc3_1t[hitwc3_1]=StartT;
+                if(PID < 10000) wc3_1pid[hitwc3_1] = PID; else wc3_1pid[hitwc3_1] =0;
+                hitwc3_1++;
+              }
+            }
+          else if (volumeID2 == 402)
+          {
+            // Tristan Sep. 22/17
+            ewc3_2 += energyDeposit;
+
+            bool channelhit = false;
+            for (int i = 0; i < hitwc3_2; i++) if (int(volumeID1) == wc3_2w[i]) channelhit = true;
+            if (!channelhit)
+            {
+              xwc3_2[0] = StartX;
+              xwc3_2[1] = StartY;
+              xwc3_2[2] = StartZ;
+              xwc3_2[3] = StartT;
+              wc3_2w[hitwc3_2]=int(volumeID1);
+              wc3_2t[hitwc3_2]=StartT;
+              if(PID < 10000) wc3_2pid[hitwc3_2] = PID; else wc3_2pid[hitwc3_2] =0;
+              hitwc3_2++;
+            }
+
+          }
+          else if (volumeID2 == 403)
+          {
+            // Tristan Sep. 22/17
+            ewc3_3 += energyDeposit;
+
+            bool channelhit = false;
+            for (int i = 0; i < hitwc3_3; i++) if (int(volumeID1) == wc3_3w[i]) channelhit = true;
+            if (!channelhit)
+            {
+              xwc3_3[0] = StartX;
+              xwc3_3[1] = StartY;
+              xwc3_3[2] = StartZ;
+              xwc3_3[3] = StartT;
+              wc3_3w[hitwc3_3]=int(volumeID1);
+              wc3_3t[hitwc3_3]=StartT;
+              if(PID < 10000) wc3_3pid[hitwc3_3] = PID; else wc3_3pid[hitwc3_3] =0;
+                hitwc3_3++;
+            }
+          }
+        }
+
+
+        // Silicon Detectors
+
+        // Silicon Detector 1
+        if (volumeID0 == 2 && (volumeID2 == 11 || volumeID2 == 12))
+          {
+            if(volumeID2 == 11) 
+            {
+              ess1_1[0] +=energyDeposit;
+              xss1_1[0] = StartX;
+              xss1_1[1] = StartY;
+              xss1_1[2] = StartZ;
+              xss1_1[3] = StartT;
+              ss1_1e[hitss1_1] = energyDeposit;
+              ss1_1w[hitss1_1] = volumeID1;
+              ss1_1t[hitss1_1] = StartT;
+              ss1_1x[hitss1_1] = StartX;
+              if (PID <10000) ss1_1pid[hitss1_1] = PID; else ss1_1pid[hitss1_1] = 0;
+              hitss1_1++;
+
+              if(PID == 211)
+                {
+                  ess1_1[1] +=energyDeposit;
+                }
+              else if (PID == -13) 
+                {
+                  ess1_1[2] +=energyDeposit;
+                }
+              else if (PID == -11)
+                {
+                  ess1_1[3] +=energyDeposit;
+                }
+              } else {
+                ess1_2[0] +=energyDeposit;
+                xss1_2[0] = StartX;
+                xss1_2[1] = StartY;
+                xss1_2[2] = StartZ;
+                xss1_2[3] = StartT;
+                
+                ss1_2e[hitss1_2] = energyDeposit;
+                ss1_2w[hitss1_2] = volumeID1;
+                ss1_2t[hitss1_2] = StartT;
+                ss1_2y[hitss1_2] = StartY;
+                if (PID <10000) ss1_2pid[hitss1_2] = PID;
+                else ss1_2pid[hitss1_2] = 0;
+                hitss1_2++;
+                
+                if(PID == 211)
+                {
+                  ess1_2[1] +=energyDeposit;
+                }
+                else if (PID == -13) 
+                {
+                  ess1_2[2] +=energyDeposit;
+                }
+                else if (PID == -11)
+                {
+                  ess1_2[3] +=energyDeposit;
+                }
+              
+            }
+          }
+        
+        // Silicon Detector 2
+        if (volumeID0 == 2 && (volumeID2 == 21 || volumeID2 ==22))
+          {
+            if(volumeID2 == 21)
+            {
+              ess2_1[0] +=energyDeposit;
+              xss2_1[0] = StartX;
+              xss2_1[1] = StartY;
+              xss2_1[2] = StartZ;
+              xss2_1[3] = StartT;
+
+              ss2_1e[hitss2_1] = energyDeposit;
+              ss2_1w[hitss2_1] = volumeID1;
+              ss2_1t[hitss2_1] = StartT;
+              ss2_1x[hitss2_1] = StartX;
+              if (PID <10000) ss2_1pid[hitss2_1] = PID; else ss2_1pid[hitss2_1] = 0;
+              hitss2_1++;
+              
+              if(PID == 211)
+                {
+                  ess2_1[1] +=energyDeposit;
+                }
+              else if (PID == -13) 
+                {
+                  ess2_1[2] +=energyDeposit;
+                }
+              else if (PID == -11)
+                {
+                  ess2_1[3] +=energyDeposit;
+                }
+              } else {
+                ess2_2[0] +=energyDeposit;
+                xss2_2[0] = StartX;
+                xss2_2[1] = StartY;
+                xss2_2[2] = StartZ;
+                xss2_2[3] = StartT;
+                
+                
+                ss2_2e[hitss2_2] = energyDeposit;
+                ss2_2w[hitss2_2] = volumeID1;
+                ss2_2t[hitss2_2] = StartT;
+                ss2_2y[hitss2_2] = StartY;
+                if (PID <10000) ss2_2pid[hitss2_2] = PID; else ss2_2pid[hitss2_2] = 0;
+                hitss2_2++;
+                
+                if(PID == 211)
+                {
+                  ess2_2[1] +=energyDeposit;
+                }
+                else if (PID == -13) 
+                {
+                  ess2_2[2] +=energyDeposit;
+                }
+                else if (PID == -11)
+                {
+                  ess2_2[3] +=energyDeposit;
+                }
+              }
+          }
+        
+        // Silicon Detector 3
+        //if (volumeID0 == 2 && (volumeID2 == 31 || volumeID2 == 32))
+        //Tracking threshold study, Tristan, August 16/17
+        if (volumeID0 == 2 && (volumeID2 == 31 || volumeID2 == 32) && energyDeposit > 0.02)
+          {
+            if(volumeID2 == 31 && hitss3_1 < MAX_NUM_HITS)
+            {
+              bool channelhit = false;
+              for (int i = 0; i < hitss3_1; i++) if (volumeID1 == ss3_1w[i]) channelhit = true;
+              if (!channelhit)
+              {
+                ess3_1[0] +=energyDeposit;
+                xss3_1[0] = StartX;
+                xss3_1[1] = StartY;
+                xss3_1[2] = StartZ;
+                xss3_1[3] = StartT;
+                //		cout << " ID1  " << volumeID1 << "  hits3_1 " << hitss3_1 << " X  " << StartX << "  T  " << StartT << "  E  " << energyDeposit << endl;
+                ss3_1e[hitss3_1] = energyDeposit;
+                ss3_1w[hitss3_1] = volumeID1;
+                ss3_1t[hitss3_1] = StartT;
+                ss3_1x[hitss3_1] = StartX;
+                if (PID <10000) ss3_1pid[hitss3_1] = PID; else ss3_1pid[hitss3_1] = 0;
+                hitss3_1++;
+                if(PID == 211)
+                  {
+                    ess3_1[1] +=energyDeposit;
+                  }
+                else if (PID == -13)
+                  {
+                    ess3_1[2] +=energyDeposit;
+                  }
+                else if(PID == -11)
+                  {
+                    ess3_1[3] +=energyDeposit;
+                  }
+              }
+            } else if (hitss3_2 < MAX_NUM_HITS){
+
+            bool channelhit = false;
+            for (int i = 0; i < hitss3_2; i++) if (volumeID1 == ss3_2w[i]) channelhit = true;
+            if (!channelhit)
+            {
+              ess3_2[0] +=energyDeposit;
+              xss3_2[0] = StartX;
+              xss3_2[1] = StartY;
+              xss3_2[2] = StartZ;
+              xss3_2[3] = StartT;
+              //			cout << " ID1  " << volumeID1 << "  hits3_2 " << hitss3_2 << " Y  " << StartY << "  T  " << StartT << "  E  " << energyDeposit << endl;
+              
+              ss3_2e[hitss3_2] = energyDeposit;
+              ss3_2w[hitss3_2] = volumeID1;
+              ss3_2t[hitss3_2] = StartT;
+              ss3_2y[hitss3_2] = StartY;
+              if (PID <10000) ss3_2pid[hitss3_2] = PID; else ss3_2pid[hitss3_2] = 0;
+              hitss3_2++;
+              if(PID == 211)
+              {
+                ess3_2[1] +=energyDeposit;
+              }
+              else if (PID == -13) 
+              {
+                ess3_2[2] +=energyDeposit;
+              }
+              else if (PID == -11)
+              {
+                ess3_2[3] +=energyDeposit;
+              }
+            }
+            }
+          }
       }
       
       hit++;
@@ -1601,7 +1601,7 @@ void MCtree::Loop()
     }
     
     
-  //the number of hits in each detector for the current event
+    //the number of hits in each detector for the current event
 
     ss1_1n = hitss1_1;
     ss1_2n = hitss1_2;
@@ -1643,45 +1643,45 @@ void MCtree::Loop()
       if(csiall->USOut[i]<=2.0) csiall->USOut[i]=0;
       else uso += csiall->USOut[i];
     }
-      for (int i=0;i<21;i++) {
-	if(csiall->DSIn[i]<=2.0) csiall->DSIn[i]=0;
-	else dsi += csiall->DSIn[i];
+    for (int i=0;i<21;i++) {
+      if(csiall->DSIn[i]<=2.0) csiall->DSIn[i]=0;
+      else dsi += csiall->DSIn[i];
       }
-      for (int i=0;i<27;i++) {
-	if(csiall->DSOut[i]<=2.0) csiall->DSOut[i]=0;
-	else dso += csiall->DSOut[i];
-      }
+    for (int i=0;i<27;i++) {
+      if(csiall->DSOut[i]<=2.0) csiall->DSOut[i]=0;
+      else dso += csiall->DSOut[i];
+    }
 
     double minn;
     int P;
     double temp;
     for (int i = 0; i < 99; i++)
     {
-	minn = fabs(binatimes[i]);
-	P = i;
-	for (int j = i + 1; j < 100; j++)
-	{
-	    if (fabs(binatimes[j]) < minn)
-	    {
-		minn = fabs(binatimes[j]);
-		P = j;
-	    }
-	}
+      minn = fabs(binatimes[i]);
+      P = i;
+      for (int j = i + 1; j < 100; j++)
+      {
+        if (fabs(binatimes[j]) < minn)
+        {
+          minn = fabs(binatimes[j]);
+          P = j;
+        }
+      }
 
-        temp = binatimes[i];
-        binatimes[i] = binatimes[P];
-        binatimes[P] = temp;
+      temp = binatimes[i];
+      binatimes[i] = binatimes[P];
+      binatimes[P] = temp;
 
-        temp = binahits[i];
-        binahits[i] = binahits[P];
-        binahits[P] = temp;
-	
-        temp = birkshits[i];
-        birkshits[i] = birkshits[P];
-        birkshits[P] = temp;
+      temp = binahits[i];
+      binahits[i] = binahits[P];
+      binahits[P] = temp;
+
+      temp = birkshits[i];
+      birkshits[i] = birkshits[P];
+      birkshits[P] = temp;
 	
     }
-        float tnai, energy, energy2;
+    float tnai, energy, energy2;
 
     if(posmin<10000 && pitime<10000) Tpos = posmin-pitime;//shintaro
     if(Tpos != -10000){
@@ -1689,100 +1689,100 @@ void MCtree::Loop()
       sprintf(nname,"Sum%d",entry);
       SumWF=new TH1F(nname,nname,42,0,1400);
       sprintf(nname,"Sums%d",entry);
-     SumWF2=new TH1F(nname,nname,42,0,1400);
+      SumWF2=new TH1F(nname,nname,42,0,1400);
 
       numhits = 0;
-        for(int i=0;i<100;i++){
-	if(binahits[i] == -10000) break;
-	char name[100];
-	sprintf(name,"Entry%dWF",i);
-	WF=new TH1F(name,name,42,0,1400);
-	sprintf(name,"Entrys%dWF",i);
-	WF2=new TH1F(name,name,42,0,1400);
-	
-	tnai=binatimes[i] - binatimes[0];
-	energy=binahits[i];
-	energy2=birkshits[i];
-	for(int iii=3;iii<=40;iii++){
-	  if((tnai+1./30.*1000.*iii)<0. || hh1->GetBinContent(iii)<0)
-	    continue;
-	  if((tnai+1./30.*1000.*iii)>1400.)
-	    break;
-	  WF->SetBinContent(WF->FindBin(tnai+1./30.*1000.*iii),hh1->GetBinContent(iii)*energy);
-	  WF2->SetBinContent(WF2->FindBin(tnai+1./30.*1000.*iii),hh1->GetBinContent(iii)*energy2);
-	}
-	SumWF->Add(WF,1);
-	delete WF;
-	SumWF2->Add(WF2,1);
-	delete WF2;
-	numhits++;
-	}
+      for(int i=0;i<100;i++){
+        if(binahits[i] == -10000) break;
+        char name[100];
+        sprintf(name,"Entry%dWF",i);
+        WF=new TH1F(name,name,42,0,1400);
+        sprintf(name,"Entrys%dWF",i);
+        WF2=new TH1F(name,name,42,0,1400);
+        
+        tnai=binatimes[i] - binatimes[0];
+        energy=binahits[i];
+        energy2=birkshits[i];
+        for(int iii=3;iii<=40;iii++){
+          if((tnai+1./30.*1000.*iii)<0. || hh1->GetBinContent(iii)<0)
+            continue;
+          if((tnai+1./30.*1000.*iii)>1400.)
+            break;
+          WF->SetBinContent(WF->FindBin(tnai+1./30.*1000.*iii),hh1->GetBinContent(iii)*energy);
+          WF2->SetBinContent(WF2->FindBin(tnai+1./30.*1000.*iii),hh1->GetBinContent(iii)*energy2);
+        }
+        SumWF->Add(WF,1);
+        delete WF;
+        SumWF2->Add(WF2,1);
+        delete WF2;
+        numhits++;
+      }
 
-	if(numhits > 0) {
+      if(numhits > 0) {
 
-	  for(int pp = 6; pp <= 10; pp++){
-	    if(binaph < SumWF->GetBinContent(pp)) binaph = SumWF->GetBinContent(pp);
-	  }
-	  binaq = (SumWF->Integral(0,34))/(hh1->Integral(0,34));
-	  delete SumWF;
-      
-	  for(int pp = 6; pp <= 10; pp++){
-	        if(birksph < SumWF2->GetBinContent(pp)) birksph = SumWF2->GetBinContent(pp);
-	  }
-	  birksq = (SumWF2->Integral(0,34))/(hh1->Integral(0,34));
-	  delete SumWF2;
+      for(int pp = 6; pp <= 10; pp++){
+      if(binaph < SumWF->GetBinContent(pp)) binaph = SumWF->GetBinContent(pp);
+      }
+      binaq = (SumWF->Integral(0,34))/(hh1->Integral(0,34));
+      delete SumWF;
 
-          birksphr = resolution->BinaResolution(birksph,0.033);
-	  birksqr = resolution->BinaResolution(birksq,0.033);
+      for(int pp = 6; pp <= 10; pp++){
+      if(birksph < SumWF2->GetBinContent(pp)) birksph = SumWF2->GetBinContent(pp);
+      }
+      birksq = (SumWF2->Integral(0,34))/(hh1->Integral(0,34));
+      delete SumWF2;
 
-	}  
-    
-	//	if(birksph > 0 && birksph < 1 && PoStopX[2] > 84 && PoStopX[2] < 150 && PiDecayP[3] == 0 && et1[0] > 0.1 && et2[0] >0.4) cout << " birksph entry  " << entry << "  numhits  " << numhits << " Z " << PoStopX[2] << endl;
-	//	if(birksph > 0 && birksph < 1 && PoStopX[2] > 84 && PoStopX[2] < 150 && PiDecayP[3] == 0 && et1[0] > 0.1 && et2[0] >0.4) cout << " tnai  " << tnai << "  energy2  " << energy2 << "  birksphr  " << birksphr << endl;
-	//    if(birksph > 0 && birksph < 1 && PoStopX[2] > 84 && PoStopX[2] < 150 && PiDecayP[3] == 0 && et1[0] > 0.1 && et2[0] >0.4) {
-	/*	 for(int i = 0; i <= numhits; i++){
-	   cout << binahits[i] << "  " << binatimes[i] << endl;
-	   }
-	   } */
+      birksphr = resolution->BinaResolution(birksph,0.033);
+      birksqr = resolution->BinaResolution(birksq,0.033);
+
+      }  
+
+      //	if(birksph > 0 && birksph < 1 && PoStopX[2] > 84 && PoStopX[2] < 150 && PiDecayP[3] == 0 && et1[0] > 0.1 && et2[0] >0.4) cout << " birksph entry  " << entry << "  numhits  " << numhits << " Z " << PoStopX[2] << endl;
+      //	if(birksph > 0 && birksph < 1 && PoStopX[2] > 84 && PoStopX[2] < 150 && PiDecayP[3] == 0 && et1[0] > 0.1 && et2[0] >0.4) cout << " tnai  " << tnai << "  energy2  " << energy2 << "  birksphr  " << birksphr << endl;
+      //    if(birksph > 0 && birksph < 1 && PoStopX[2] > 84 && PoStopX[2] < 150 && PiDecayP[3] == 0 && et1[0] > 0.1 && et2[0] >0.4) {
+      /*	 for(int i = 0; i <= numhits; i++){
+      cout << binahits[i] << "  " << binatimes[i] << endl;
+      }
+      } */
     }
     //Add resolutions
     csiR  = resolution->CsIResolution(csi,0.25);
        
     for(int l=0;l<4;l++) 
       {  
-	// Tristan, Aug. 23/16 (caltest)
-	//ebinar[l] = resolution->BinaResolution(eBbina[l],0.05);
-	//ebinar[l] = resolution->BinaResolution(ebina[l],0.05);
-	// Tristan, Aug. 23/16 (caltest)
-	//ebinar[l] = resolution->BinaResolution(eBbina[l],0.075);
-	// Tristan Nov. 23/17
-	//ebinar[l] = resolution->BinaResolution(eBbina[l],0.075);
-	ebinar[l] = resolution->BinaResolution(eBbina[l],0.033);
-	// Tristan Oct. 20/17
-	//eb1r[l]   = resolution->T2Resolution(eBb1[l],0.072);
-	eb1r[l]   = resolution->T2Resolution(eBb1[l],0.036);
-	// Tristan Oct. 20/17
-	//eb2r[l]   = resolution->T2Resolution(eBb2[l],0.077);
-	eb2r[l]   = resolution->T2Resolution(eBb2[l],0.039);
-	//etgr[l]   = resolution->T2Resolution(eBtg[l],0.03);
-	// Tristan August 21/17
-	//etgr[l]   = resolution->T2Resolution(eBtg[l],0.01);
-	// Tristan Oct. 20/17
-	etgr[l]   = resolution->T2Resolution(eBtg[l],0.07);
-	et1r[l]   = resolution->T2Resolution(eBt1[l],0.018);
-		et2r[l]   = resolution->T2Resolution(eBt2[l],0.30);
-	//et2r[l]   = resolution->T2Resolution(eBt2[l],0.226);
-	ev2r[l]   = resolution->T2Resolution(eBv2[l],0.19);
-	ev3r[l]   = resolution->T2Resolution(eBv3[l],0.19);
-	// Tristan, Oct. 23/17. Happy 97th birthday!
-	//ess1_1r[l] = resolution->T2Resolution(ess1_1[l],0.15);
-	//ess1_2r[l] = resolution->T2Resolution(ess1_2[l],0.15);
-	ess1_1r[l] = resolution->T2Resolution(ess1_1[l],0.11);
-	ess1_2r[l] = resolution->T2Resolution(ess1_2[l],0.11);
-	ess2_1r[l] = resolution->T2Resolution(ess2_1[l],0.11);
-	ess2_2r[l] = resolution->T2Resolution(ess2_2[l],0.11);
-	ess3_1r[l] = resolution->T2Resolution(ess3_1[l],0.085);
-	ess3_2r[l] = resolution->T2Resolution(ess3_2[l],0.085);
+        // Tristan, Aug. 23/16 (caltest)
+        //ebinar[l] = resolution->BinaResolution(eBbina[l],0.05);
+        //ebinar[l] = resolution->BinaResolution(ebina[l],0.05);
+        // Tristan, Aug. 23/16 (caltest)
+        //ebinar[l] = resolution->BinaResolution(eBbina[l],0.075);
+        // Tristan Nov. 23/17
+        //ebinar[l] = resolution->BinaResolution(eBbina[l],0.075);
+        ebinar[l] = resolution->BinaResolution(eBbina[l],0.033);
+        // Tristan Oct. 20/17
+        //eb1r[l]   = resolution->T2Resolution(eBb1[l],0.072);
+        eb1r[l]   = resolution->T2Resolution(eBb1[l],0.036);
+        // Tristan Oct. 20/17
+        //eb2r[l]   = resolution->T2Resolution(eBb2[l],0.077);
+        eb2r[l]   = resolution->T2Resolution(eBb2[l],0.039);
+        //etgr[l]   = resolution->T2Resolution(eBtg[l],0.03);
+        // Tristan August 21/17
+        //etgr[l]   = resolution->T2Resolution(eBtg[l],0.01);
+        // Tristan Oct. 20/17
+        etgr[l]   = resolution->T2Resolution(eBtg[l],0.07);
+        et1r[l]   = resolution->T2Resolution(eBt1[l],0.018);
+          et2r[l]   = resolution->T2Resolution(eBt2[l],0.30);
+        //et2r[l]   = resolution->T2Resolution(eBt2[l],0.226);
+        ev2r[l]   = resolution->T2Resolution(eBv2[l],0.19);
+        ev3r[l]   = resolution->T2Resolution(eBv3[l],0.19);
+        // Tristan, Oct. 23/17. Happy 97th birthday!
+        //ess1_1r[l] = resolution->T2Resolution(ess1_1[l],0.15);
+        //ess1_2r[l] = resolution->T2Resolution(ess1_2[l],0.15);
+        ess1_1r[l] = resolution->T2Resolution(ess1_1[l],0.11);
+        ess1_2r[l] = resolution->T2Resolution(ess1_2[l],0.11);
+        ess2_1r[l] = resolution->T2Resolution(ess2_1[l],0.11);
+        ess2_2r[l] = resolution->T2Resolution(ess2_2[l],0.11);
+        ess3_1r[l] = resolution->T2Resolution(ess3_1[l],0.085);
+        ess3_2r[l] = resolution->T2Resolution(ess3_2[l],0.085);
       }
 
     // Crude T2 threshold efficiency
@@ -1900,9 +1900,9 @@ void MCtree::Loop()
 
       
       if (i<3){ 
-	photonuclearx[i] = PhotonuclearX[i];
-	mupolarization[i] = MuPolarization[i];
-	emomentum[i] = EMomentum[i];
+        photonuclearx[i] = PhotonuclearX[i];
+        mupolarization[i] = MuPolarization[i];
+        emomentum[i] = EMomentum[i];
       }
     }
     
@@ -1938,122 +1938,122 @@ void MCtree::Loop()
         }
       */
 
-    for(int i=0;i<size;i++)
+      for(int i=0;i<size;i++)
       {
-	for(int j=i+1;j<size;j++)
-	  {
-	    if(ss3_1w[j] < ss3_1w[i])
+	      for(int j=i+1;j<size;j++)
 	      {
-		temp=ss3_1w[i];
-		ss3_1w[i] = ss3_1w[j];
-		ss3_1w[j] = temp;
-		
-		temp=ss3_1t[i];
-		ss3_1t[i] = ss3_1t[j];
-		ss3_1t[j] = temp;
+          if(ss3_1w[j] < ss3_1w[i])
+          {
+            temp=ss3_1w[i];
+            ss3_1w[i] = ss3_1w[j];
+            ss3_1w[j] = temp;
+            
+            temp=ss3_1t[i];
+            ss3_1t[i] = ss3_1t[j];
+            ss3_1t[j] = temp;
 
-		temp=ss3_1e[i];
-		ss3_1e[i] = ss3_1e[j];
-		ss3_1e[j] = temp;
+            temp=ss3_1e[i];
+            ss3_1e[i] = ss3_1e[j];
+            ss3_1e[j] = temp;
 
-		temp=ss3_1x[i];
-		ss3_1x[i] = ss3_1x[j];
-		ss3_1x[j] = temp;
+            temp=ss3_1x[i];
+            ss3_1x[i] = ss3_1x[j];
+            ss3_1x[j] = temp;
+            }
 	      }
-	  }
       }
-    /*
-      //debug after Sorting
-      cout << "After X: "<<size<<endl;
-      for (int i=0; i<size; i++)
-	{
-	  cout << "strip: " << ss3_1w[i]<< "   time: " << ss3_1t[i] << "     energy: " <<  ss3_1e[i] << endl;
-	}
-    */
-
-
-    // fill ampx array
-    //  cout << " size " << size << endl;
-    double r1, r2, r3;
-    //r1 = 0.75; r2 = 0.58; r3 = 0.4;
-     r1 = 0.75; r2 = 0.5; r3 = 0.25;
-    for(int i=0;i<size;i++) {
-      int j = ss3_1w[i]/4;
-      int k = ss3_1w[i] - j*4;
-      ampxt[j] = ss3_1t[i];
-      if(k == 0) {ampx[j] += ss3_1e[i];}
-      else if(k == 1) {ampx[j] += ss3_1e[i]*r1; ampx[j+1] += ss3_1e[i]*r3;}
-      else if(k == 2) {ampx[j] += ss3_1e[i]*r2;  ampx[j+1] += ss3_1e[i]*r2;}
-      else if(k == 3) {ampx[j] += ss3_1e[i]*r3;  ampx[j+1] += ss3_1e[i]*r1;}
-      else{
-	ampx[j+1] = +ss3_1e[i];
-	cout << "  ampx["<<j+1<<"] " << ampx[j+1] << endl;
-      }
-
-      //    cout << " i, j, k " << i << "  " << j << "  " << k << endl;
-      //cout << " i,  k " << i << " "<< k << " ampx["<<j<<"] " << ampx[j] << "  amp["<<j+1<<"]  " << ampx[j+1] << endl;
-    }
-    Nampx = 0;
-    for(int i=0; i<48;i++) {
-      if(ampx[i]>thresh) {ampxn[Nampx] = i; ampx[Nampx] = ampx[i]; ampxt[Nampx] = ampxt[i]; Nampx++;}
-    }
-
-
-    
-    //   cout << " Nampx " << Nampx << endl;
-    //   for(int i=0;i<Nampx;i++) cout << ampxn[i] << "   " << ampx[i] << endl;
-      
-    //define the vector to hold the indeces of the cluster hits
-    vector<int> ix[MAX_NUM_HITS];
-      
-    ix->clear();
-    int  N = -1;
-    int  last = -1;
-    int  fl   =  1; // 1 begin new cluster, 0 - continue old; 2 - bad state
-    //      cout << " size " << ss3_1n << endl;
-    for (int l=0; l<Nampx;l++)
+      /*
+        //debug after Sorting
+        cout << "After X: "<<size<<endl;
+        for (int i=0; i<size; i++)
       {
-	int iw = ampxn[l];
-	//	cout << "  l  "  << l << "  iw "  << iw  << "  last  " <<  last << endl;
-	if(last!= -1) {
-	  //	  cout << "  last " << last << endl;
-	  if (iw ==last +1) fl=0;
-	  else if(iw>last+1) fl =1;
-	  else if(iw==last) {fl=0;}
-	  else fl =2;
-	}
-	//		    cout << " Flag is: "<< fl << endl;
-	if (fl==2)  {
-	  cerr << "ERROR: channels not sorted!\n";
-	  //   exit(1);
-	}
-
-	if (fl==1) { // beginning new cluster
-	  if (N<MAX_NUM_HITS-1){
-	    N++;
-	    namp_x[N] = Nampx;
-	  }
-	}
-	//		cout << "  l  " << l  << "  N "  << N << endl;
-	ix[N].push_back(l);
-	last = iw;
+        cout << "strip: " << ss3_1w[i]<< "   time: " << ss3_1t[i] << "     energy: " <<  ss3_1e[i] << endl;
       }
-    N++;
+        */
+
+
+      // fill ampx array
+      //  cout << " size " << size << endl;
+      double r1, r2, r3;
+      //r1 = 0.75; r2 = 0.58; r3 = 0.4;
+      r1 = 0.75; r2 = 0.5; r3 = 0.25;
+      for(int i=0;i<size;i++) {
+        int j = ss3_1w[i]/4;
+        int k = ss3_1w[i] - j*4;
+        ampxt[j] = ss3_1t[i];
+        if(k == 0) {ampx[j] += ss3_1e[i];}
+        else if(k == 1) {ampx[j] += ss3_1e[i]*r1; ampx[j+1] += ss3_1e[i]*r3;}
+        else if(k == 2) {ampx[j] += ss3_1e[i]*r2;  ampx[j+1] += ss3_1e[i]*r2;}
+        else if(k == 3) {ampx[j] += ss3_1e[i]*r3;  ampx[j+1] += ss3_1e[i]*r1;}
+        else{
+          ampx[j+1] = +ss3_1e[i];
+          cout << "  ampx["<<j+1<<"] " << ampx[j+1] << endl;
+        }
+
+        //    cout << " i, j, k " << i << "  " << j << "  " << k << endl;
+        //cout << " i,  k " << i << " "<< k << " ampx["<<j<<"] " << ampx[j] << "  amp["<<j+1<<"]  " << ampx[j+1] << endl;
+      }
+      Nampx = 0;
+      for(int i=0; i<48;i++) {
+        if(ampx[i]>thresh) {ampxn[Nampx] = i; ampx[Nampx] = ampx[i]; ampxt[Nampx] = ampxt[i]; Nampx++;}
+      }
+
 
     
-    //   cout << "Number of clusters found:"<< N <<" number of hits was " <<Nampx<<" difference is "<< Nampx-N<< endl;
+      //   cout << " Nampx " << Nampx << endl;
+      //   for(int i=0;i<Nampx;i++) cout << ampxn[i] << "   " << ampx[i] << endl;
+        
+      //define the vector to hold the indeces of the cluster hits
+      vector<int> ix[MAX_NUM_HITS];
+        
+      ix->clear();
+      int  N = -1;
+      int  last = -1;
+      int  fl   =  1; // 1 begin new cluster, 0 - continue old; 2 - bad state
+      //      cout << " size " << ss3_1n << endl;
+        for (int l=0; l<Nampx;l++)
+        {
+          int iw = ampxn[l];
+          //	cout << "  l  "  << l << "  iw "  << iw  << "  last  " <<  last << endl;
+          if(last!= -1) {
+            //	  cout << "  last " << last << endl;
+            if (iw ==last +1) fl=0;
+            else if(iw>last+1) fl =1;
+            else if(iw==last) {fl=0;}
+            else fl =2;
+          }
+          //		    cout << " Flag is: "<< fl << endl;
+          if (fl==2)  {
+            cerr << "ERROR: channels not sorted!\n";
+            //   exit(1);
+          }
 
-    /*if(N>1){
+          if (fl==1) { // beginning new cluster
+            if (N<MAX_NUM_HITS-1){
+              N++;
+              namp_x[N] = Nampx;
+            }
+          }
+          //		cout << "  l  " << l  << "  N "  << N << endl;
+          ix[N].push_back(l);
+          last = iw;
+        }
+        N++;
+
+    
+      //   cout << "Number of clusters found:"<< N <<" number of hits was " <<Nampx<<" difference is "<< Nampx-N<< endl;
+
+      /*if(N>1){
 
       for(int hh=0; hh<Nampx; hh++)
-	cout << "ampxn["<<hh<<"]  " << ampxn[hh] << endl;
-      
-    for (int k=0; k<N ;k++)
-      {
-	cout << "Cluster="<<k<<" size of cluster: " << ix[k].size() << endl;
-	for(int j=0; j<ix[k].size(); j++)
-	  cout << "hit: "<<ix[k].at(j)<<" amp: " << ampxn[ix[k].at(j)] << endl;
-      }
+      cout << "ampxn["<<hh<<"]  " << ampxn[hh] << endl;
+          
+        for (int k=0; k<N ;k++)
+          {
+      cout << "Cluster="<<k<<" size of cluster: " << ix[k].size() << endl;
+      for(int j=0; j<ix[k].size(); j++)
+        cout << "hit: "<<ix[k].at(j)<<" amp: " << ampxn[ix[k].at(j)] << endl;
+          }
       }*/
                       // changing the number of hits to clusters!
 
@@ -2061,115 +2061,114 @@ void MCtree::Loop()
       
                 // now let's find the highest strip in each clusters
       //           cout <<" ****Starting the cycle of clusters with a Number of clusters : "  << N<< endl;
-                      for (int k=0; k<N; k++) {
+        for (int k=0; k<N; k++) {
 
-                        int ie[2]={-1,-1}; // highest/next strip
-			int ii;
+          int ie[2]={-1,-1}; // highest/next strip
+          int ii;
 
-                // Search for highest strip in each cluster
+          // Search for highest strip in each cluster
 
-                        int ch;
-                        double BIG = -1;
-                        for (uint j=0; j<ix[k].size(); j++)
-                          {
-                          int l = ix[k].at(j);
-                           if (ampx[l]>BIG)
-                            {
-                            BIG = ampx[l];
-                            ie[0] = j;
-			    //ie[0] = l;
-                            }
-                          }
+          int ch;
+          double BIG = -1;
+          for (uint j=0; j<ix[k].size(); j++)
+                    {
+                      int l = ix[k].at(j);
+                      if (ampx[l]>BIG)
+                      {
+                        BIG = ampx[l];
+                        ie[0] = j;
+                        //ie[0] = l;
+                      }
+                    }
+
+          // Search for next adjucent highest strip
+
+          //if(k>0) cout << "ix[k].size(),  ie[0]  " << ix[k].size() << "  " << ie[0] << endl;
+
+          //if(k>0) cout << "ampxn[" << ie[0] << "] " << ampxn[ie[0]] << endl;
 			
-                        // Search for next adjucent highest strip
+          //ie[0] = 0;
+          ie[1] = ie[0];
+          BIG = -1;
+          for (uint j=0; j<ix[k].size();j++)
+            {
+              int l = ix[k].at(j);
+              //cout << " l, ampxn[l], ampxn[ie[0]], ampx[l]  " << l << "  " << ampxn[l] << "  " <<  ampxn[ie[0]] << "  " << ampx[l] << endl;
+              if(abs(ampxn[l]-ampxn[ix[k].at(ie[0])])==1 && ampx[l]>BIG)   // ##### fixed error in array index
+                //if(abs(ampxn[l]-ampxn[ie[0]])==1 && ampx[l]>BIG)
+                {
+                  BIG = ampx[l]; ie[1]=j;
+                  //ie[1]=l;
+                  //	     cout << " BIG, ie[1]  "  << BIG << "   " << ie[1]  << endl;
+                  }
+              }
 
-		        //if(k>0) cout << "ix[k].size(),  ie[0]  " << ix[k].size() << "  " << ie[0] << endl;
+          //cout << "OK" << endl;
 
-			//if(k>0) cout << "ampxn[" << ie[0] << "] " << ampxn[ie[0]] << endl;
-			
-			//ie[0] = 0;
-                        ie[1] = ie[0];
-                        BIG = -1;
-                        for (uint j=0; j<ix[k].size();j++)
-                          {
-                            int l = ix[k].at(j);
-			    //cout << " l, ampxn[l], ampxn[ie[0]], ampx[l]  " << l << "  " << ampxn[l] << "  " <<  ampxn[ie[0]] << "  " << ampx[l] << endl;
-                            if(abs(ampxn[l]-ampxn[ix[k].at(ie[0])])==1 && ampx[l]>BIG)   // ##### fixed error in array index
-			    
-			      //if(abs(ampxn[l]-ampxn[ie[0]])==1 && ampx[l]>BIG)
-                              {
-				BIG = ampx[l]; ie[1]=j;
-				//ie[1]=l;
-			      //	     cout << " BIG, ie[1]  "  << BIG << "   " << ie[1]  << endl;
-                              }
-                          }
+          // if(ix[k].size()>1)
+          //   cout << "ie[0],  ie[1]  " << ie[0] << "  " << ie[1] << endl;
 
-			//cout << "OK" << endl;
+          
+          //           cout << "found the hits in the cluster, the highest w="<< ampxn[ix[k].at(ie[0])] << " and the next highest is" << ampxn[ix[k].at(ie[1])] << endl;  //  ##### fixed error in array index
 
-			// if(ix[k].size()>1)
-			//   cout << "ie[0],  ie[1]  " << ie[0] << "  " << ie[1] << endl;
+          int left = min(ie[0],ie[1]);
+          double gc0 = 1, gc1 = 1, gcleft = 1;
+          double aQ, aQ2;
+          double at;
+          //         cout <<" debug 1 (left):"<<left<< " and k="<<k << " and ix(k).size="<<ix[k].size() <<endl;
+          //            cout <<" debug 1.5 ie[0]="<<ie[0]<<" ie[1]="<<ie[1]<<endl;
+                            aQ = ampx[ix[k].at(left)];
+          at = ampxt[ix[k].at(ie[0])];
+          //aQ = ampx[left];
 
-			
-			//           cout << "found the hits in the cluster, the highest w="<< ampxn[ix[k].at(ie[0])] << " and the next highest is" << ampxn[ix[k].at(ie[1])] << endl;  //  ##### fixed error in array index
+          //            cout <<" debug 2" <<endl;
 
-                        int left = min(ie[0],ie[1]);
-                        double gc0 = 1, gc1 = 1, gcleft = 1;
-                        double aQ, aQ2;
-			double at;
-			//         cout <<" debug 1 (left):"<<left<< " and k="<<k << " and ix(k).size="<<ix[k].size() <<endl;
-			//            cout <<" debug 1.5 ie[0]="<<ie[0]<<" ie[1]="<<ie[1]<<endl;
-                        aQ = ampx[ix[k].at(left)];
-			at = ampxt[ix[k].at(ie[0])];
-			//aQ = ampx[left];
-
-			//            cout <<" debug 2" <<endl;
-
-		        aQ2 = ampx[ix[k].at(ie[0])];
-                        //aQ2 = ampx[ie[0]];
-			//          cout << "Energy is << "<< aQ << endl;  // ############ left energy only
-                        if( ie[1]!=ie[0])
-                          {
-			    aQ2 += ampx[ix[k].at(ie[1])];
-			    at = (ampxt[ix[k].at(ie[0])]*ampx[ix[k].at(ie[0])] + ampxt[ix[k].at(ie[1])]*ampx[ix[k].at(ie[1])])/aQ2;
-                            //aQ2 += ampx[ie[1]];
-			  /*
-                          cout<< " debug3 cluster with more then one hit****************************"<<endl;
-                          cout<< " ix[k].at(left)  "<< ix[k].at(left)<< endl;
-                          cout<< " ix[k].at(ie[1])  "<< ix[k].at(ie[1])<<endl;
-                          cout<< " aQw="<<ampxn[ix[k].at(left)]<<" aQ2w="<<ampxn[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
-                          cout<< " aQ="<<ampx[ix[k].at(left)]<<" aQ2="<<ampx[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
-			  */
-                          }
+          aQ2 = ampx[ix[k].at(ie[0])];
+                      //aQ2 = ampx[ie[0]];
+          //          cout << "Energy is << "<< aQ << endl;  // ############ left energy only
+          if( ie[1]!=ie[0])
+            {
+              aQ2 += ampx[ix[k].at(ie[1])];
+              at = (ampxt[ix[k].at(ie[0])]*ampx[ix[k].at(ie[0])] + ampxt[ix[k].at(ie[1])]*ampx[ix[k].at(ie[1])])/aQ2;
+                      //aQ2 += ampx[ie[1]];
+              /*
+                    cout<< " debug3 cluster with more then one hit****************************"<<endl;
+                    cout<< " ix[k].at(left)  "<< ix[k].at(left)<< endl;
+                    cout<< " ix[k].at(ie[1])  "<< ix[k].at(ie[1])<<endl;
+                    cout<< " aQw="<<ampxn[ix[k].at(left)]<<" aQ2w="<<ampxn[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
+                    cout<< " aQ="<<ampx[ix[k].at(left)]<<" aQ2="<<ampx[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
+              */
+            }
 			  
-                        double aPosi=ampxn[ix[k].at(left)]*1.28-30.08;
-			//double aPosi=ampxn[left]*1.28-30.08;
-                        double aQR=aQ/aQ2;
-			//   cout<< "Position before is " << aPosi << " and aQR="<<aQR<<endl;
+          double aPosi=ampxn[ix[k].at(left)]*1.28-30.08;
+          //double aPosi=ampxn[left]*1.28-30.08;
+          double aQR=aQ/aQ2;
+          //   cout<< "Position before is " << aPosi << " and aQR="<<aQR<<endl;
 
-                        double fPosi=0;
-                        if (aQR<=0.14)       {fPosi=1;} // 0.25
-                        else if (aQR<=0.34)  {fPosi=0.75;} // 0.40
-                        else if (aQR<=0.51) {fPosi=0.50;} // 0.60
-                        else if (aQR<=0.75) {fPosi=0.25;} // 0.80
-                        else if (aQR<=1)    {fPosi=0;} // 1.0
-                        aPosi=(ampxn[ix[k].at(left)]+fPosi)*1.28-30.08;
-			//aPosi=(ampxn[left]+fPosi)*1.28-30.08;
+          double fPosi=0;
+          if (aQR<=0.14)       {fPosi=1;} // 0.25
+          else if (aQR<=0.34)  {fPosi=0.75;} // 0.40
+          else if (aQR<=0.51) {fPosi=0.50;} // 0.60
+          else if (aQR<=0.75) {fPosi=0.25;} // 0.80
+          else if (aQR<=1)    {fPosi=0;} // 1.0
+          aPosi=(ampxn[ix[k].at(left)]+fPosi)*1.28-30.08;
+          //aPosi=(ampxn[left]+fPosi)*1.28-30.08;
 
-			//    cout<< "Position after is " << aPosi << endl;
+          //    cout<< "Position after is " << aPosi << endl;
 
 
-                // changing the position information
-                	      MC.S3_X_ch[k] = aPosi;
-			      s3_x_posi[k] = aPosi;
-			      aqr_x[k] = aQR;
-			      MC.S3_X_t[k] = at;
-			      ampn_x[k] = ampxn[ix[k].at(left)];
-			      tcl_x[k] = at;
+          // changing the position information
+          MC.S3_X_ch[k] = aPosi;
+          s3_x_posi[k] = aPosi;
+          aqr_x[k] = aQR;
+          MC.S3_X_t[k] = at;
+          ampn_x[k] = ampxn[ix[k].at(left)];
+          tcl_x[k] = at;
 			      
 
-		      }
+		    }
 
-		      MC.S3_X_N = Nclustx;
+		    MC.S3_X_N = Nclustx;
 		      
       
     }
@@ -2199,241 +2198,241 @@ void MCtree::Loop()
       cout << "Before X: "<<size<<endl;
       for (int i=0; i<size; i++)
         {
-   	  cout << "strip: " << ss3_2w[i]<< "   time: " << ss3_2t[i] << "     energy: " <<  ss3_2e[i] << endl;
+      cout << "strip: " << ss3_2w[i]<< "   time: " << ss3_2t[i] << "     energy: " <<  ss3_2e[i] << endl;
         }
       */
 
-    for(int i=0;i<size;i++)
-      {
-	for(int j=i+1;j<size;j++)
-	  {
-	    if(ss3_2w[j] < ss3_2w[i])
-	      {
-		temp=ss3_2w[i];
-		ss3_2w[i] = ss3_2w[j];
-		ss3_2w[j] = temp;
-		
-		temp=ss3_2t[i];
-		ss3_2t[i] = ss3_2t[j];
-		ss3_2t[j] = temp;
+      for(int i=0;i<size;i++)
+        {
+          for(int j=i+1;j<size;j++)
+            {
+              if(ss3_2w[j] < ss3_2w[i])
+                {
+                  temp=ss3_2w[i];
+                  ss3_2w[i] = ss3_2w[j];
+                  ss3_2w[j] = temp;
+                  
+                  temp=ss3_2t[i];
+                  ss3_2t[i] = ss3_2t[j];
+                  ss3_2t[j] = temp;
 
-		temp=ss3_2e[i];
-		ss3_2e[i] = ss3_2e[j];
-		ss3_2e[j] = temp;
+                  temp=ss3_2e[i];
+                  ss3_2e[i] = ss3_2e[j];
+                  ss3_2e[j] = temp;
 
-		temp=ss3_2y[i];
-		ss3_2y[i] = ss3_2y[j];
-		ss3_2y[j] = temp;
-	      }
-	  }
-      }
-  
-    /*
-      //debug after Sorting
-      cout << "After X: "<<size<<endl;
-      for (int i=0; i<size; i++)
-	{
-	  cout << "strip: " << ss3_2w[i]<< "   time: " << ss3_2t[i] << "     energy: " <<  ss3_2e[i] << endl;
-	}
-    */
-
-
-    // fill ampx array
-    //  cout << " size " << size << endl;
-    double r1, r2, r3;
-    //r1 = 0.75; r2 = 0.58; r3 = 0.4;
-     r1 = 0.75; r2 = 0.5; r3 = 0.25;
-    for(int i=0;i<size;i++) {
-      int j = ss3_2w[i]/4;
-      int k = ss3_2w[i] - j*4;
-      ampyt[j] = ss3_2t[i];
-      if(k == 0) {ampy[j] += ss3_2e[i];}
-      else if(k == 1) {ampy[j] += ss3_2e[i]*r1; ampy[j+1] += ss3_2e[i]*r3;}
-      else if(k == 2) {ampy[j] += ss3_2e[i]*r2;  ampy[j+1] += ss3_2e[i]*r2;}
-      else if(k == 3) {ampy[j] += ss3_2e[i]*r3;  ampy[j+1] += ss3_2e[i]*r1;}
-      else{
-	ampy[j+1] = +ss3_2e[i];
-	cout << "  ampy["<<j+1<<"] " << ampy[j+1] << endl;
-      }
-
-      //    cout << " i, j, k " << i << "  " << j << "  " << k << endl;
-      //cout << " i,  k " << i << " "<< k << " ampx["<<j<<"] " << ampx[j] << "  amp["<<j+1<<"]  " << ampx[j+1] << endl;
-    }
-    Nampy = 0;
-    for(int i=0; i<48;i++) {
-      if(ampy[i] >thresh) {ampyn[Nampy] = i; ampy[Nampy] = ampy[i]; ampyt[Nampy] = ampyt[i]; Nampy++;}
-    }
-
+                  temp=ss3_2y[i];
+                  ss3_2y[i] = ss3_2y[j];
+                  ss3_2y[j] = temp;
+                }
+            }
+        }
     
-    //   cout << " Nampx " << Nampx << endl;
-    //   for(int i=0;i<Nampx;i++) cout << ampxn[i] << "   " << ampx[i] << endl;
-      
-    //define the vector to hold the indeces of the cluster hits
-    vector<int> ix[MAX_NUM_HITS];
-      
-    // ix->clear();
-    int  N = -1;
-    int  last = -1;
-    int  fl   =  1; // 1 begin new cluster, 0 - continue old; 2 - bad state
-    //      cout << " size " << ss3_1n << endl;
-    for (int l=0; l<Nampy;l++)
+      /*
+        //debug after Sorting
+        cout << "After X: "<<size<<endl;
+        for (int i=0; i<size; i++)
       {
-	int iw = ampyn[l];
-	//	cout << "  l  "  << l << "  iw "  << iw  << "  last  " <<  last << endl;
-	if(last!= -1) {
-	  //	  cout << "  last " << last << endl;
-	  if (iw ==last +1) fl=0;
-	  else if(iw>last+1) fl =1;
-	  else if(iw==last) {fl=0;}
-	  else fl =2;
-	}
-	//		    cout << " Flag is: "<< fl << endl;
-	if (fl==2)  {
-	  cerr << "ERROR: channels not sorted!\n";
-	  //   exit(1);
-	}
-
-	if (fl==1) { // beginning new cluster
-	  if (N<MAX_NUM_HITS-1){
-	    N++;
-	    namp_y[N] = Nampx;
-	  }
-	}
-	//		cout << "  l  " << l  << "  N "  << N << endl;
-	ix[N].push_back(l);
-	last = iw;
+        cout << "strip: " << ss3_2w[i]<< "   time: " << ss3_2t[i] << "     energy: " <<  ss3_2e[i] << endl;
       }
-    N++;
-    
-    //   cout << "Number of clusters found:"<< N <<" number of hits was " <<Nampx<<" difference is "<< Nampx-N<< endl;
+        */
 
-    /*if(N>1){
 
-      for(int hh=0; hh<Nampx; hh++)
-	cout << "ampxn["<<hh<<"]  " << ampxn[hh] << endl;
-      
-    for (int k=0; k<N ;k++)
-      {
-	cout << "Cluster="<<k<<" size of cluster: " << ix[k].size() << endl;
-	for(int j=0; j<ix[k].size(); j++)
-	  cout << "hit: "<<ix[k].at(j)<<" amp: " << ampxn[ix[k].at(j)] << endl;
+      // fill ampx array
+      //  cout << " size " << size << endl;
+      double r1, r2, r3;
+      //r1 = 0.75; r2 = 0.58; r3 = 0.4;
+      r1 = 0.75; r2 = 0.5; r3 = 0.25;
+      for(int i=0;i<size;i++) {
+        int j = ss3_2w[i]/4;
+        int k = ss3_2w[i] - j*4;
+        ampyt[j] = ss3_2t[i];
+        if(k == 0) {ampy[j] += ss3_2e[i];}
+        else if(k == 1) {ampy[j] += ss3_2e[i]*r1; ampy[j+1] += ss3_2e[i]*r3;}
+        else if(k == 2) {ampy[j] += ss3_2e[i]*r2;  ampy[j+1] += ss3_2e[i]*r2;}
+        else if(k == 3) {ampy[j] += ss3_2e[i]*r3;  ampy[j+1] += ss3_2e[i]*r1;}
+        else{
+          ampy[j+1] = +ss3_2e[i];
+          cout << "  ampy["<<j+1<<"] " << ampy[j+1] << endl;
+        }
+
+        //    cout << " i, j, k " << i << "  " << j << "  " << k << endl;
+        //cout << " i,  k " << i << " "<< k << " ampx["<<j<<"] " << ampx[j] << "  amp["<<j+1<<"]  " << ampx[j+1] << endl;
       }
-      }*/
+        Nampy = 0;
+        for(int i=0; i<48;i++) {
+          if(ampy[i] >thresh) {ampyn[Nampy] = i; ampy[Nampy] = ampy[i]; ampyt[Nampy] = ampyt[i]; Nampy++;}
+      }
 
-                      // changing the number of hits to clusters!
-
-      Nclusty = N;   //  ############## fix MC.S3 code below
       
-                // now let's find the highest strip in each clusters
-      //           cout <<" ****Starting the cycle of clusters with a Number of clusters : "  << N<< endl;
-                      for (int k=0; k<N; k++) {
+      //   cout << " Nampx " << Nampx << endl;
+      //   for(int i=0;i<Nampx;i++) cout << ampxn[i] << "   " << ampx[i] << endl;
+        
+      //define the vector to hold the indeces of the cluster hits
+      vector<int> ix[MAX_NUM_HITS];
+        
+      // ix->clear();
+      int  N = -1;
+      int  last = -1;
+      int  fl   =  1; // 1 begin new cluster, 0 - continue old; 2 - bad state
+      //      cout << " size " << ss3_1n << endl;
+      for (int l=0; l<Nampy;l++)
+        {
+          int iw = ampyn[l];
+          //	cout << "  l  "  << l << "  iw "  << iw  << "  last  " <<  last << endl;
+          if(last!= -1) {
+            //	  cout << "  last " << last << endl;
+            if (iw ==last +1) fl=0;
+            else if(iw>last+1) fl =1;
+            else if(iw==last) {fl=0;}
+            else fl =2;
+          }
+          //		    cout << " Flag is: "<< fl << endl;
+          if (fl==2)  {
+            cerr << "ERROR: channels not sorted!\n";
+            //   exit(1);
+          }
 
-                        int ie[2]={-1,-1}; // highest/next strip
-			int ii;
+          if (fl==1) { // beginning new cluster
+            if (N<MAX_NUM_HITS-1){
+              N++;
+              namp_y[N] = Nampx;
+            }
+          }
+          //		cout << "  l  " << l  << "  N "  << N << endl;
+          ix[N].push_back(l);
+          last = iw;
+        }
+        N++;
+      
+      //   cout << "Number of clusters found:"<< N <<" number of hits was " <<Nampx<<" difference is "<< Nampx-N<< endl;
 
-                // Search for highest strip in each cluster
+      /*if(N>1){
 
-                        int ch;
-                        double BIG = -1;
-                        for (uint j=0; j<ix[k].size(); j++)
-                          {
-                          int l = ix[k].at(j);
-                           if (ampy[l]>BIG)
-                            {
-                            BIG = ampy[l];
-                            ie[0] = j;
-			    //ie[0] = l;
-                            }
-                          }
-			
-                        // Search for next adjucent highest strip
+        for(int hh=0; hh<Nampx; hh++)
+      cout << "ampxn["<<hh<<"]  " << ampxn[hh] << endl;
+          
+        for (int k=0; k<N ;k++)
+          {
+      cout << "Cluster="<<k<<" size of cluster: " << ix[k].size() << endl;
+      for(int j=0; j<ix[k].size(); j++)
+        cout << "hit: "<<ix[k].at(j)<<" amp: " << ampxn[ix[k].at(j)] << endl;
+          }
+          }*/
 
-		        //if(k>0) cout << "ix[k].size(),  ie[0]  " << ix[k].size() << "  " << ie[0] << endl;
+                          // changing the number of hits to clusters!
 
-			//if(k>0) cout << "ampxn[" << ie[0] << "] " << ampxn[ie[0]] << endl;
-			
-			//ie[0] = 0;
-                        ie[1] = ie[0];
-                        BIG = -1;
-                        for (uint j=0; j<ix[k].size();j++)
-                          {
-                            int l = ix[k].at(j);
-			    //cout << " l, ampxn[l], ampxn[ie[0]], ampx[l]  " << l << "  " << ampxn[l] << "  " <<  ampxn[ie[0]] << "  " << ampx[l] << endl;
-                            if(abs(ampyn[l]-ampyn[ix[k].at(ie[0])])==1 && ampy[l]>BIG)   // ##### fixed error in array index
-			    
-			    //if(abs(ampxn[l]-ampxn[ie[0]])==1 && ampx[l]>BIG)
+          Nclusty = N;   //  ############## fix MC.S3 code below
+          
+                    // now let's find the highest strip in each clusters
+          //           cout <<" ****Starting the cycle of clusters with a Number of clusters : "  << N<< endl;
+                          for (int k=0; k<N; k++) {
+
+                            int ie[2]={-1,-1}; // highest/next strip
+          int ii;
+
+                    // Search for highest strip in each cluster
+
+                            int ch;
+                            double BIG = -1;
+                            for (uint j=0; j<ix[k].size(); j++)
                               {
-				BIG = ampy[l]; ie[1]=j;
-				//ie[1]=l;
-			      //	     cout << " BIG, ie[1]  "  << BIG << "   " << ie[1]  << endl;
+                              int l = ix[k].at(j);
+                              if (ampy[l]>BIG)
+                                {
+                                BIG = ampy[l];
+                                ie[0] = j;
+              //ie[0] = l;
+                                }
                               }
-                          }
+          
+                            // Search for next adjucent highest strip
 
-			//cout << "OK" << endl;
+                //if(k>0) cout << "ix[k].size(),  ie[0]  " << ix[k].size() << "  " << ie[0] << endl;
 
-			// if(ix[k].size()>1)
-			//   cout << "ie[0],  ie[1]  " << ie[0] << "  " << ie[1] << endl;
+          //if(k>0) cout << "ampxn[" << ie[0] << "] " << ampxn[ie[0]] << endl;
+          
+          //ie[0] = 0;
+                            ie[1] = ie[0];
+                            BIG = -1;
+                            for (uint j=0; j<ix[k].size();j++)
+                              {
+                                int l = ix[k].at(j);
+              //cout << " l, ampxn[l], ampxn[ie[0]], ampx[l]  " << l << "  " << ampxn[l] << "  " <<  ampxn[ie[0]] << "  " << ampx[l] << endl;
+                                if(abs(ampyn[l]-ampyn[ix[k].at(ie[0])])==1 && ampy[l]>BIG)   // ##### fixed error in array index
+              
+              //if(abs(ampxn[l]-ampxn[ie[0]])==1 && ampx[l]>BIG)
+                                  {
+            BIG = ampy[l]; ie[1]=j;
+            //ie[1]=l;
+                //	     cout << " BIG, ie[1]  "  << BIG << "   " << ie[1]  << endl;
+                                  }
+                              }
 
-			
-			//           cout << "found the hits in the cluster, the highest w="<< ampxn[ix[k].at(ie[0])] << " and the next highest is" << ampxn[ix[k].at(ie[1])] << endl;  //  ##### fixed error in array index
+          //cout << "OK" << endl;
 
-                        int left = min(ie[0],ie[1]);
-                        double gc0 = 1, gc1 = 1, gcleft = 1;
-                        double aQ, aQ2, at;
-			//         cout <<" debug 1 (left):"<<left<< " and k="<<k << " and ix(k).size="<<ix[k].size() <<endl;
-			//            cout <<" debug 1.5 ie[0]="<<ie[0]<<" ie[1]="<<ie[1]<<endl;
-                        aQ = ampy[ix[k].at(left)];
-			at = ampyt[ix[k].at(ie[0])];
-			// aQ = ampx[left];
+          // if(ix[k].size()>1)
+          //   cout << "ie[0],  ie[1]  " << ie[0] << "  " << ie[1] << endl;
 
-			//            cout <<" debug 2" <<endl;
+          
+          //           cout << "found the hits in the cluster, the highest w="<< ampxn[ix[k].at(ie[0])] << " and the next highest is" << ampxn[ix[k].at(ie[1])] << endl;  //  ##### fixed error in array index
 
-		        aQ2 = ampy[ix[k].at(ie[0])];
-                        // aQ2 = ampx[ie[0]];
-			//          cout << "Energy is << "<< aQ << endl;  // ############ left energy only
-                        if( ie[1]!=ie[0])
-                          {
-			    aQ2 += ampy[ix[k].at(ie[1])];
-			    at = (ampyt[ix[k].at(ie[0])]*ampy[ix[k].at(ie[0])] + ampyt[ix[k].at(ie[1])]*ampy[ix[k].at(ie[1])])/aQ2;
-                            // aQ2 += ampx[ie[1]];
-			  /*
-                          cout<< " debug3 cluster with more then one hit****************************"<<endl;
-                          cout<< " ix[k].at(left)  "<< ix[k].at(left)<< endl;
-                          cout<< " ix[k].at(ie[1])  "<< ix[k].at(ie[1])<<endl;
-                          cout<< " aQw="<<ampxn[ix[k].at(left)]<<" aQ2w="<<ampxn[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
-                          cout<< " aQ="<<ampx[ix[k].at(left)]<<" aQ2="<<ampx[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
-			  */
-                          }
-			  
-                        double aPosi=ampyn[ix[k].at(left)]*1.28-30.08;
-			// double aPosi=ampxn[left]*1.28-30.08;
-                        double aQR=aQ/aQ2;
-			//   cout<< "Position before is " << aPosi << " and aQR="<<aQR<<endl;
+                            int left = min(ie[0],ie[1]);
+                            double gc0 = 1, gc1 = 1, gcleft = 1;
+                            double aQ, aQ2, at;
+          //         cout <<" debug 1 (left):"<<left<< " and k="<<k << " and ix(k).size="<<ix[k].size() <<endl;
+          //            cout <<" debug 1.5 ie[0]="<<ie[0]<<" ie[1]="<<ie[1]<<endl;
+                            aQ = ampy[ix[k].at(left)];
+          at = ampyt[ix[k].at(ie[0])];
+          // aQ = ampx[left];
 
-                        double fPosi=0;
-                        if (aQR<=0.14)       {fPosi=1;} // 0.25
-                        else if (aQR<=0.34)  {fPosi=0.75;} // 0.40
-                        else if (aQR<=0.51) {fPosi=0.50;} // 0.60
-                        else if (aQR<=0.75) {fPosi=0.25;} // 0.80
-                        else if (aQR<=1)    {fPosi=0;} // 1.0
-                        aPosi=(ampyn[ix[k].at(left)]+fPosi)*1.28-30.08;
-			// aPosi=(ampxn[left]+fPosi)*1.28-30.08;
- 
+          //            cout <<" debug 2" <<endl;
 
-			//    cout<< "Position after is " << aPosi << endl;
+                aQ2 = ampy[ix[k].at(ie[0])];
+                            // aQ2 = ampx[ie[0]];
+          //          cout << "Energy is << "<< aQ << endl;  // ############ left energy only
+                            if( ie[1]!=ie[0])
+                              {
+              aQ2 += ampy[ix[k].at(ie[1])];
+              at = (ampyt[ix[k].at(ie[0])]*ampy[ix[k].at(ie[0])] + ampyt[ix[k].at(ie[1])]*ampy[ix[k].at(ie[1])])/aQ2;
+                                // aQ2 += ampx[ie[1]];
+            /*
+                              cout<< " debug3 cluster with more then one hit****************************"<<endl;
+                              cout<< " ix[k].at(left)  "<< ix[k].at(left)<< endl;
+                              cout<< " ix[k].at(ie[1])  "<< ix[k].at(ie[1])<<endl;
+                              cout<< " aQw="<<ampxn[ix[k].at(left)]<<" aQ2w="<<ampxn[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
+                              cout<< " aQ="<<ampx[ix[k].at(left)]<<" aQ2="<<ampx[ix[k].at(ie[1])]<< " aQR="<<aQ/aQ2<< endl;
+            */
+                              }
+            
+                            double aPosi=ampyn[ix[k].at(left)]*1.28-30.08;
+          // double aPosi=ampxn[left]*1.28-30.08;
+                            double aQR=aQ/aQ2;
+          //   cout<< "Position before is " << aPosi << " and aQR="<<aQR<<endl;
+
+                            double fPosi=0;
+                            if (aQR<=0.14)       {fPosi=1;} // 0.25
+                            else if (aQR<=0.34)  {fPosi=0.75;} // 0.40
+                            else if (aQR<=0.51) {fPosi=0.50;} // 0.60
+                            else if (aQR<=0.75) {fPosi=0.25;} // 0.80
+                            else if (aQR<=1)    {fPosi=0;} // 1.0
+                            aPosi=(ampyn[ix[k].at(left)]+fPosi)*1.28-30.08;
+          // aPosi=(ampxn[left]+fPosi)*1.28-30.08;
+    
+
+          //    cout<< "Position after is " << aPosi << endl;
 
 
-                // changing the position information
-                	      MC.S3_Y_ch[k] = aPosi;
-			      s3_y_posi[k] = aPosi;
-			      aqr_y[k] = aQR;
-			      MC.S3_Y_t[k] = at;
-			      ampn_y[k] = ampyn[ix[k].at(left)];
-			      tcl_y[k] = at;
+              // changing the position information
+                MC.S3_Y_ch[k] = aPosi;
+                s3_y_posi[k] = aPosi;
+                aqr_y[k] = aQR;
+                MC.S3_Y_t[k] = at;
+                ampn_y[k] = ampyn[ix[k].at(left)];
+                tcl_y[k] = at;
 
-		      }
+              }
 
-		      MC.S3_Y_N = Nclusty;
+              MC.S3_Y_N = Nclusty;
     
     }
 
@@ -2452,117 +2451,117 @@ void MCtree::Loop()
     for (int i=0;i<MAX_NUM_HITS;i++)
       {
 
-	MC.wc1_1n = wc1_1n;
-	MC.wc1_1w[i] = wc1_1w[i];
-	MC.wc1_1t[i] = wc1_1t[i];
-	MC.wc1_2n = wc1_2n;
-	MC.wc1_2w[i] = wc1_2w[i];
-	MC.wc1_2t[i] = wc1_2t[i];
-	MC.wc1_3n = wc1_3n;
-	MC.wc1_3w[i] = wc1_3w[i];
-	MC.wc1_3t[i] = wc1_3t[i];
+        MC.wc1_1n = wc1_1n;
+        MC.wc1_1w[i] = wc1_1w[i];
+        MC.wc1_1t[i] = wc1_1t[i];
+        MC.wc1_2n = wc1_2n;
+        MC.wc1_2w[i] = wc1_2w[i];
+        MC.wc1_2t[i] = wc1_2t[i];
+        MC.wc1_3n = wc1_3n;
+        MC.wc1_3w[i] = wc1_3w[i];
+        MC.wc1_3t[i] = wc1_3t[i];
 
-	MC.wc2_1n = wc2_1n;
-	MC.wc2_1w[i] = wc2_1w[i];
-	MC.wc2_1t[i] = wc2_1t[i];
-	MC.wc2_2n = wc2_2n;
-	MC.wc2_2w[i] = wc2_2w[i];
-	MC.wc2_2t[i] = wc2_2t[i];
-	MC.wc2_3n = wc2_3n;
-	MC.wc2_3w[i] = wc2_3w[i];
-	MC.wc2_3t[i] = wc2_3t[i];
+        MC.wc2_1n = wc2_1n;
+        MC.wc2_1w[i] = wc2_1w[i];
+        MC.wc2_1t[i] = wc2_1t[i];
+        MC.wc2_2n = wc2_2n;
+        MC.wc2_2w[i] = wc2_2w[i];
+        MC.wc2_2t[i] = wc2_2t[i];
+        MC.wc2_3n = wc2_3n;
+        MC.wc2_3w[i] = wc2_3w[i];
+        MC.wc2_3t[i] = wc2_3t[i];
 
 
-	MC.wc3_1n = wc3_1n;
-	MC.wc3_1w[i] = wc3_1w[i];
-	MC.wc3_1t[i] = wc3_1t[i];
-	MC.wc3_2n  = wc3_2n;
-	MC.wc3_2w[i] = wc3_2w[i];
-	MC.wc3_2t[i] = wc3_2t[i];
-	MC.wc3_3n = wc3_3n;
-	MC.wc3_3w[i] = wc3_3w[i];
-	MC.wc3_3t[i] = wc3_3t[i];
-	
-	MC.S1_X_N = ss1_1n;
-	MC.S1_X_ch[i] = (ss1_1w[i]-24)*1.28;
-	MC.S1_X_ch[i] = ss1_1x[i];
-	MC.S1_X_t[i] = ss1_1t[i];
-       	MC.S1_Y_N = ss1_2n;
-	MC.S1_Y_ch[i] = (ss1_2w[i]-24)*1.28;
-	MC.S1_Y_ch[i] = ss1_2y[i];
-	MC.S1_Y_t[i] = ss1_2t[i];
-	
-	
-	MC.S2_X_N = ss2_1n;
-	MC.S2_X_ch[i] = (ss2_1w[i]-24)*1.28;
-	MC.S2_X_ch[i] = ss2_1x[i];
-	MC.S2_X_t[i] = ss2_1t[i];
-       	MC.S2_Y_N = ss2_2n;
-	MC.S2_Y_ch[i] = (ss2_2w[i]-24)*1.28;
-	MC.S2_Y_ch[i] = ss2_2y[i];
-	MC.S2_Y_t[i] = ss2_2t[i];
-	
-	//     MC.S3_X_N = Nclustx;
-	//	MC.S3_X_ch[i] = (ss3_1w[i]-24)*1.28;
-        //      MC.S3_X_t[i] = ss3_1t[i];
-	
-       	// MC.S3_Y_N = Nclusty;
-	// MC.S3_Y_ch[i] = (ss3_2w[i]-24)*1.28;
-	// MC.S3_Y_t[i] = ss3_2t[i];
-	
+        MC.wc3_1n = wc3_1n;
+        MC.wc3_1w[i] = wc3_1w[i];
+        MC.wc3_1t[i] = wc3_1t[i];
+        MC.wc3_2n  = wc3_2n;
+        MC.wc3_2w[i] = wc3_2w[i];
+        MC.wc3_2t[i] = wc3_2t[i];
+        MC.wc3_3n = wc3_3n;
+        MC.wc3_3w[i] = wc3_3w[i];
+        MC.wc3_3t[i] = wc3_3t[i];
+        
+        MC.S1_X_N = ss1_1n;
+        MC.S1_X_ch[i] = (ss1_1w[i]-24)*1.28;
+        MC.S1_X_ch[i] = ss1_1x[i];
+        MC.S1_X_t[i] = ss1_1t[i];
+              MC.S1_Y_N = ss1_2n;
+        MC.S1_Y_ch[i] = (ss1_2w[i]-24)*1.28;
+        MC.S1_Y_ch[i] = ss1_2y[i];
+        MC.S1_Y_t[i] = ss1_2t[i];
+        
+        
+        MC.S2_X_N = ss2_1n;
+        MC.S2_X_ch[i] = (ss2_1w[i]-24)*1.28;
+        MC.S2_X_ch[i] = ss2_1x[i];
+        MC.S2_X_t[i] = ss2_1t[i];
+              MC.S2_Y_N = ss2_2n;
+        MC.S2_Y_ch[i] = (ss2_2w[i]-24)*1.28;
+        MC.S2_Y_ch[i] = ss2_2y[i];
+        MC.S2_Y_t[i] = ss2_2t[i];
+        
+        //     MC.S3_X_N = Nclustx;
+        //	MC.S3_X_ch[i] = (ss3_1w[i]-24)*1.28;
+              //      MC.S3_X_t[i] = ss3_1t[i];
+        
+              // MC.S3_Y_N = Nclusty;
+        // MC.S3_Y_ch[i] = (ss3_2w[i]-24)*1.28;
+        // MC.S3_Y_t[i] = ss3_2t[i];
+        
       }
 
 
 
 
     TrReco.Process(MC);
-  ntracks=0;
-  ntracks = MC.trks[2].GetN();
-  // Original position (commented Apr. 16/19)
-  //Float_t Z = 55.85; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  //Float_t Z_1 = 51.85; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  // Aleksey's new position (Apr. 2019) Commented June 5/19
-  //Float_t Z = 56.235; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  //Float_t Z_1 = 52.235; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  // Aleksey's new position (May 2019) 
-  Float_t Z = 56.755; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  // WC3 reco shift test (June 17 2019) 
-  //Float_t Z = 46.755; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  Float_t Z_1 = 52.581; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  // Tristan, Oct. 3/17, WC3 Z shift test
-  //Float_t Z = 57.35; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  //Float_t Z_1 = 53.35; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
-  Float_t minr = 10000000;
-  Float_t X = 10000000;
-  Float_t X_1 = 10000000;
-  Float_t Y = 10000000;
-  Int_t tracknum = 0; 
-  Int_t tracknum_max = 0; 
-  Float_t maxr = -1000000;
-  // Added by Tristan, Sept. 20/13, for acceptance definition thingy
-  if (ntracks > 0) 
-  {
-    for (int u = 0; u < ntracks; u++) 
-    {    
-      X = MC.trks[2].GetTrk(u).tx*Z + MC.trks[2].GetTrk(u).x0;
-      Y = MC.trks[2].GetTrk(u).ty*Z + MC.trks[2].GetTrk(u).y0;
-      R = sqrt(X * X + Y * Y);  
-      if(u == 0) Old_Rwc3_2 = R;
-      if (R < minr) {tracknum = u; minr = R;}
-      if (R > minr) {tracknum_max = u; maxr = R;}
+    ntracks=0;
+    ntracks = MC.trks[2].GetN();
+    // Original position (commented Apr. 16/19)
+    //Float_t Z = 55.85; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    //Float_t Z_1 = 51.85; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    // Aleksey's new position (Apr. 2019) Commented June 5/19
+    //Float_t Z = 56.235; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    //Float_t Z_1 = 52.235; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    // Aleksey's new position (May 2019) 
+    Float_t Z = 56.755; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    // WC3 reco shift test (June 17 2019) 
+    //Float_t Z = 46.755; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    Float_t Z_1 = 52.581; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    // Tristan, Oct. 3/17, WC3 Z shift test
+    //Float_t Z = 57.35; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    //Float_t Z_1 = 53.35; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+    Float_t minr = 10000000;
+    Float_t X = 10000000;
+    Float_t X_1 = 10000000;
+    Float_t Y = 10000000;
+    Int_t tracknum = 0; 
+    Int_t tracknum_max = 0; 
+    Float_t maxr = -1000000;
+    // Added by Tristan, Sept. 20/13, for acceptance definition thingy
+    if (ntracks > 0) 
+    {
+      for (int u = 0; u < ntracks; u++) 
+      {    
+        X = MC.trks[2].GetTrk(u).tx*Z + MC.trks[2].GetTrk(u).x0;
+        Y = MC.trks[2].GetTrk(u).ty*Z + MC.trks[2].GetTrk(u).y0;
+        R = sqrt(X * X + Y * Y);  
+        if(u == 0) Old_Rwc3_2 = R;
+        if (R < minr) {tracknum = u; minr = R;}
+        if (R > minr) {tracknum_max = u; maxr = R;}
 
-      // Tristan, June 26/17
-      PTrack& trkD = MC.trks[2].GetTrk(0);
-      X = (trkD.tx*Z+trkD.x0); //X at WC3_2
-      Y = (trkD.ty*Z+trkD.y0); //Y at WC3_2
-      Rwc3_2_besttrack = sqrt(X*X+Y*Y); // R at WC3_2
+        // Tristan, June 26/17
+        PTrack& trkD = MC.trks[2].GetTrk(0);
+        X = (trkD.tx*Z+trkD.x0); //X at WC3_2
+        Y = (trkD.ty*Z+trkD.y0); //Y at WC3_2
+        Rwc3_2_besttrack = sqrt(X*X+Y*Y); // R at WC3_2
 
-      //if (ntracks > 1 && u == 0) cout << "ntracks: " << ntracks << endl << "R1: " << R << endl;
-      //if (ntracks > 1 && u == 1) cout << "R2: " << R << endl;
-      //if (ntracks > 2 && u == 2) cout << "R3: " << R << endl;
-    }    
-    //if (ntracks > 1) cout << "tracknum: " << tracknum << endl;
-  }
+        //if (ntracks > 1 && u == 0) cout << "ntracks: " << ntracks << endl << "R1: " << R << endl;
+        //if (ntracks > 1 && u == 1) cout << "R2: " << R << endl;
+        //if (ntracks > 2 && u == 2) cout << "R3: " << R << endl;
+      }    
+      //if (ntracks > 1) cout << "tracknum: " << tracknum << endl;
+    }
 
     PTrack& trkA = MC.trks[0].GetTrk(0);
     PTrack& trkB = MC.trks[1].GetTrk(0);
@@ -2574,45 +2573,45 @@ void MCtree::Loop()
     //Float_t Z = 55.855; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
     if(MC.trks[2].GetN()>0)
       {
-	//Float_t X = (trkC.tx*Z+trkC.x0); //X at WC3_2
-	//Float_t Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
-	//Float_t R = sqrt(X*X+Y*Y); // R at WC3_2
-        X = (trkC.tx*Z+trkC.x0); //X at WC3_2
-        X_1 = (trkC.tx*Z_1+trkC.x0); //X at WC3_2
-        Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
-        R = sqrt(X*X+Y*Y); // R at WC3_2
-	Xwc3_1 =X_1;
-	Xwc3_2 =X;
-	Ywc3_2 =Y;
-	Zwc3_2 =Z;
-	Rwc3_2= R;
-        // Tristan, June 26/17
-        X = (trkE.tx*Z+trkE.x0); //X at WC3_2
-        Y = (trkE.ty*Z+trkE.y0); //Y at WC3_2
-	Rwc3_2_maxrad = sqrt(X*X + Y*Y);
+      //Float_t X = (trkC.tx*Z+trkC.x0); //X at WC3_2
+      //Float_t Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
+      //Float_t R = sqrt(X*X+Y*Y); // R at WC3_2
+            X = (trkC.tx*Z+trkC.x0); //X at WC3_2
+            X_1 = (trkC.tx*Z_1+trkC.x0); //X at WC3_2
+            Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
+            R = sqrt(X*X+Y*Y); // R at WC3_2
+      Xwc3_1 =X_1;
+      Xwc3_2 =X;
+      Ywc3_2 =Y;
+      Zwc3_2 =Z;
+      Rwc3_2= R;
+            // Tristan, June 26/17
+            X = (trkE.tx*Z+trkE.x0); //X at WC3_2
+            Y = (trkE.ty*Z+trkE.y0); //Y at WC3_2
+      Rwc3_2_maxrad = sqrt(X*X + Y*Y);
 
-	// Tristan, Oct. 24/17
-	s3wc3x0 = trkC.x0;
-	s3wc3y0 = trkC.y0;
-	s3wc3tx = trkC.tx;
-	s3wc3ty = trkC.ty;
+      // Tristan, Oct. 24/17
+      s3wc3x0 = trkC.x0;
+      s3wc3y0 = trkC.y0;
+      s3wc3tx = trkC.tx;
+      s3wc3ty = trkC.ty;
 
-	/*
-	  cout << " eventID = " << eventID << "ntracks = " << ntracks << "  tracknum = " << tracknum;
-	  cout << " X Y tx ty = " << X << "  " << Y << "  " << trkC.tx << "  " << trkC.ty << endl;
-	*/
+      /*
+        cout << " eventID = " << eventID << "ntracks = " << ntracks << "  tracknum = " << tracknum;
+        cout << " X Y tx ty = " << X << "  " << Y << "  " << trkC.tx << "  " << trkC.ty << endl;
+      */
       }
     
     // Tristan July 20/17    
     if(MC.trks[0].GetN()>0)
       {
-	//Float_t X = (trkC.tx*Z+trkC.x0); //X at WC3_2
-	//Float_t Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
-	//Float_t R = sqrt(X*X+Y*Y); // R at WC3_2
-	Xwc12 = trkA.x0; //X at WC3_2
-	Ywc12 = trkA.y0; //Y at WC3_2
-	txwc12 = trkA.tx;
-	tywc12 = trkA.ty;
+        //Float_t X = (trkC.tx*Z+trkC.x0); //X at WC3_2
+        //Float_t Y = (trkC.ty*Z+trkC.y0); //Y at WC3_2
+        //Float_t R = sqrt(X*X+Y*Y); // R at WC3_2
+        Xwc12 = trkA.x0; //X at WC3_2
+        Ywc12 = trkA.y0; //Y at WC3_2
+        txwc12 = trkA.tx;
+        tywc12 = trkA.ty;
       }
     
     // Tristan, July 20/17
@@ -2626,18 +2625,18 @@ void MCtree::Loop()
     //  Calculating the KINK variable
     if (MC.trks[0].GetN()>0 && MC.trks[1].GetN()>0)
       {
-	double cs = (trkA.tx*trkB.tx + trkA.ty*trkB.ty+1.0) /
-	  sqrt((trkA.tx*trkA.tx+trkA.ty*trkA.ty+1.0)*(trkB.tx*trkB.tx+trkB.ty*trkB.ty+1.0));
-	kv = acos(cs)*57.296;
+      double cs = (trkA.tx*trkB.tx + trkA.ty*trkB.ty+1.0) /
+        sqrt((trkA.tx*trkA.tx+trkA.ty*trkA.ty+1.0)*(trkB.tx*trkB.tx+trkB.ty*trkB.ty+1.0));
+      kv = acos(cs)*57.296;
       }
     
 
     //vertex Z 
     if(MC.trks[1].GetN() > 0 && MC.trks[2].GetN() > 0) {
       zv = -((trkB.x0-trkC.x0)*(trkB.tx-trkC.tx)+
-	     (trkB.y0-trkC.y0)*(trkB.ty-trkC.ty))/
-	((trkB.tx-trkC.tx)*(trkB.tx-trkC.tx)+
-	 (trkB.ty-trkC.ty)*(trkB.ty-trkC.ty));
+        (trkB.y0-trkC.y0)*(trkB.ty-trkC.ty))/
+        ((trkB.tx-trkC.tx)*(trkB.tx-trkC.tx)+
+        (trkB.ty-trkC.ty)*(trkB.ty-trkC.ty));
     }
     
     // Phi angle of the decay positron
@@ -2649,8 +2648,8 @@ void MCtree::Loop()
     csich = -999;dphi=-999;
     for (int i=0;i<21;i++ ){
       if (csiall->USIn[i] > etmp){
-	etmp = csiall->USIn[i];
-	csich = i;
+        etmp = csiall->USIn[i];
+        csich = i;
       }
     }
 
@@ -2693,7 +2692,7 @@ void MCtree::Loop()
     hitt2 = 0;
     hitv2 = 0;
     hitv3 = 0;
-		
+    
     Tpos = -10000;
     postime = 100000;
     pitime = 100000;
@@ -2738,7 +2737,7 @@ void MCtree::Loop()
     s3wc3ty = 999;
     
     if (entry%1000==0) cout << "Entries processed: " << entry << "\r" << flush;
-    
+      
   }
   
   cout << endl;
