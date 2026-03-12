@@ -575,6 +575,7 @@ class MCtree {
   Float_t R_proj;
   Float_t R_truth;
   Float_t x_proct, y_proct, wc3_2_Z;
+  Float_t Rwc3_2_front;
  
   Int_t eventnumber;
 

@@ -702,6 +702,8 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   //projected R value in WC3 of primary positron based on it's starting trajectory
   OutputTree->Branch("R_projected",&R_proj,"R_projected/F"); 
   OutputTree->Branch("R_truth",&R_truth,"R_truth/F"); 
+  OutputTree->Branch("Rwc3_2_front",&Rwc3_2_front,"Rwc3_2_front/F");
+
   
 
   //Location of the photonuclear reactions with neutron emission
@@ -1504,15 +1506,18 @@ void MCtree::Loop()
                 if (PID == -11){ //positrons - need to move this again
                   //also add R_truth info here, filling only if it hasn't been filled yet?
                   //pienu case - only primary positrons, so their parent is the pion
-                  if (R_truth == -1000){ //only look to fill if no R truth has been recorded yet
-                    if (ParentID==1){
+                  if (R_truth == 9999){ //only look to fill if no R truth has been recorded yet
+
+                    // if (ParentID==1){
+                    //   R_truth = sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
+                    //   // cout << "fill it: " << R_truth << endl;
+                    // }
+                    
+                    // pimue case - parent is the primary muon, grandparent is the pion
+                    if (GrandParentID==1){
                       R_truth = sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
                       // cout << "fill it: " << R_truth << endl;
                     }
-                    
-                    // // pimue case - parent is the primary muon, grandparent is the pion
-                    // if (GrandParentID==1){
-                    // }
                   }
                 }
 
@@ -2135,9 +2140,10 @@ void MCtree::Loop()
     }
 
     //Get Projected R value in WC3 from positron starting position
-    Float_t wc3_2_Z = 56.755; // z at WC3_2
-    x_proct = PoStartX[0] + PoStartP[0] * (wc3_2_Z - PoStartX[2])/PoStartP[2]; //is this the right momentum to use, prob not??
-    y_proct = PoStartX[1] + PoStartP[1] * (wc3_2_Z - PoStartX[2])/PoStartP[2];
+    // Float_t wc3_2_Z = 56.755; // z at WC3_2
+    Float_t Z_2front = 54.7;  //Z value of the front of WC3 2nd plane, for compairing with truth hits
+    x_proct = PoStartX[0] + PoStartP[0] * (Z_2front - PoStartX[2])/PoStartP[2]; //is this the right momentum to use, prob not??
+    y_proct = PoStartX[1] + PoStartP[1] * (Z_2front - PoStartX[2])/PoStartP[2];
     R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
     
     ebh=EBh;
@@ -2760,6 +2766,7 @@ void MCtree::Loop()
     Float_t Z = 56.755; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
     // WC3 reco shift test (June 17 2019) 
     //Float_t Z = 46.755; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
+
     Float_t Z_1 = 52.581; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
     // Tristan, Oct. 3/17, WC3 Z shift test
     //Float_t Z = 57.35; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
@@ -2768,6 +2775,7 @@ void MCtree::Loop()
     Float_t X = 10000000;
     Float_t X_1 = 10000000;
     Float_t Y = 10000000;
+    Float_t X_2front, Y_2front, R_2front = 10000000;
     Int_t tracknum = 0; 
     Int_t tracknum_max = 0; 
     Float_t maxr = -1000000;
@@ -2780,10 +2788,11 @@ void MCtree::Loop()
         Y = MC.trks[2].GetTrk(u).ty*Z + MC.trks[2].GetTrk(u).y0;
         R = sqrt(X * X + Y * Y);  
         if(u == 0) Old_Rwc3_2 = R;
+        //looking for the track with the smallest radius
         if (R < minr) {tracknum = u; minr = R;}
         if (R > minr) {tracknum_max = u; maxr = R;}
 
-        // Tristan, June 26/17
+        // Tristan, June 26/17 - why is this inside the loop?
         PTrack& trkD = MC.trks[2].GetTrk(0);
         X = (trkD.tx*Z+trkD.x0); //X at WC3_2
         Y = (trkD.ty*Z+trkD.y0); //Y at WC3_2
@@ -2799,9 +2808,9 @@ void MCtree::Loop()
     PTrack& trkA = MC.trks[0].GetTrk(0);
     PTrack& trkB = MC.trks[1].GetTrk(0);
     //PTrack& trkC = MC.trks[2].GetTrk(0);
-    PTrack& trkC = MC.trks[2].GetTrk(tracknum);
+    PTrack& trkC = MC.trks[2].GetTrk(tracknum); //track with smallest radius
     // Tristan, June 26/17
-    PTrack& trkE = MC.trks[2].GetTrk(tracknum_max);
+    PTrack& trkE = MC.trks[2].GetTrk(tracknum_max); //track with max radius
     
     //Float_t Z = 55.855; // z at WC3_2 : eventually read this variable from the geometry file!!!!!
     if(MC.trks[2].GetN()>0)
@@ -2828,6 +2837,13 @@ void MCtree::Loop()
         s3wc3y0 = trkC.y0;
         s3wc3tx = trkC.tx;
         s3wc3ty = trkC.ty;
+
+        //Emma March 2026
+        // Z_2front is set way up where R_projected is calculated
+        X_2front = (trkC.tx*Z_2front+trkC.x0); //X at WC3_2
+        Y_2front = (trkC.ty*Z_2front+trkC.y0); //Y at WC3_2
+        R_2front = sqrt(X_2front*X_2front+Y_2front*Y_2front); // R at WC3_2
+        Rwc3_2_front = R_2front;
 
         /*
         cout << " eventID = " << eventID << "ntracks = " << ntracks << "  tracknum = " << tracknum;
@@ -2949,7 +2965,8 @@ void MCtree::Loop()
     for (int i=0;i<MAX_NUM_HITS;i++) s3_y_posi[i] = 0;
 
     //Emma Feb 2026
-    R_truth = R_proj = -1000;
+    R_truth = R_proj = 9999;
+    Rwc3_2_front = 999;
     
     // Tristan, Sep. 29/17
     Xwc3_1 = 999;
