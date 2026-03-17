@@ -1505,18 +1505,12 @@ void MCtree::Loop()
 
                 if (PID == -11){ //positrons - need to move this again
                   //also add R_truth info here, filling only if it hasn't been filled yet?
-                  //pienu case - only primary positrons, so their parent is the pion
                   if (R_truth == 9999){ //only look to fill if no R truth has been recorded yet
-
-                    // if (ParentID==1){
-                    //   R_truth = sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
-                    //   // cout << "fill it: " << R_truth << endl;
-                    // }
-                    
-                    // pimue case - parent is the primary muon, grandparent is the pion
-                    if (GrandParentID==1){
+                 
+                    //can this be used to avoid swapping the code for pienu vs pimue?
+                    if (ParentID==1 || GrandParentID==1) {
+                      // cout << "Found primary e+: " << ParentID <<" or GP: " << GrandParentID << endl;
                       R_truth = sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
-                      // cout << "fill it: " << R_truth << endl;
                     }
                   }
                 }
@@ -1561,7 +1555,7 @@ void MCtree::Loop()
             if (BINAflag == 1) //for backscatter
             // if (BINAflag == 0) 
             {
-                cout << "backscatter found in WC3 " << TrackID << endl;
+                // cout << "backscatter found in WC3 " << TrackID << endl;
 
               if (PID == -11){ //positrons
                   bool found = setOfTracks.find(TrackID) == setOfTracks.end();
@@ -1569,26 +1563,17 @@ void MCtree::Loop()
 
                   //now check if this track has already been saved
                   if (setOfTracks.find(TrackID) == setOfTracks.end()){ //track is not saved yet
-                    cout << "backwards positron saved, parentID " << ParentID << ", track: "<< TrackID << endl;
+                    // cout << "backwards positron saved, parentID " << ParentID << ", track: "<< TrackID << endl;
 
                     setOfTracks.insert(TrackID); //add the trackID to the set
                     backscatter_WC3[0] += 1; //and save the particle
                     backscatter_WC3_E[0] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
 
-                    //pienu case - only primary positrons, so their parent is the pion
-                    if (ParentID==1){
-                      cout << "primary positron found" << endl;
+                    if (ParentID==1 || GrandParentID==1) {
+                      // cout << "Found primary e+: " << ParentID <<" or GP: " << GrandParentID << endl;
                       backscatter_WC3[5] += 1;
                       backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
                     }
-                    
-                    // // pimue case - parent is the primary muon, grandparent is the pion
-                    // if (GrandParentID==1){
-                    //   cout << "primary positron found" << endl;
-                    //   backscatter_WC3[5] += 1;
-                    //   backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
-                      
-                    // }
 
                   }
                 }
@@ -2919,6 +2904,12 @@ void MCtree::Loop()
     trks[0]=(MC.trks[0]);
     trks[1]=(MC.trks[1]);
     trks[2]=(MC.trks[2]);
+
+    // get the mean energy for backscatter
+    for(int i=0; i<6; i++){
+      backscatter_WC3_E[i] = backscatter_WC3_E[i] / backscatter_WC3[i];
+    }
+
     
     eventnumber = entry; 
 
@@ -2990,11 +2981,6 @@ void MCtree::Loop()
     
     if (entry%1000==0) cout << "Entries processed: " << entry << "\r" << flush;
       
-  }
-
-  // get the mean energy
-  for(int i=0; i<6; i++){
-    backscatter_WC3_E[i] = backscatter_WC3_E[i] / backscatter_WC3[i];
   }
   
   cout << endl;
