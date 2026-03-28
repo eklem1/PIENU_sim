@@ -552,38 +552,38 @@ void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prep
 
 void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
-    //G4cout << "MaxBhabhaEpos: " << MaxBhabhaEpos << G4endl;
-    //G4cout << "preE - postE: " << preE - postE << G4endl;
 
-    if ((preE - postE > MaxBhabhaEpos) || (pretime == -10000)) //saves step with biggest energy dep
-    {    
-        PosBhabhaPreX[0] = prepos.x();
-        PosBhabhaPreX[1] = prepos.y();
-        PosBhabhaPreX[2] = prepos.z();
-        PosBhabhaPreX[3] = pretime;
-        PosBhabhaPreP[0] = premom.x();
-        PosBhabhaPreP[1] = premom.y();
-        PosBhabhaPreP[2] = premom.z();
-        PosBhabhaPreP[3] = preE;
+    if ((preE - postE) > 0.001){ //only count steps with more than 1 eV loss from the positron
+      if ((preE - postE) > MaxBhabhaEpos){ //|| (pretime == -10000)) //saves step with biggest energy dep
+          PosBhabhaPreX[0] = prepos.x();
+          PosBhabhaPreX[1] = prepos.y();
+          PosBhabhaPreX[2] = prepos.z();
+          PosBhabhaPreX[3] = pretime;
+          PosBhabhaPreP[0] = premom.x();
+          PosBhabhaPreP[1] = premom.y();
+          PosBhabhaPreP[2] = premom.z();
+          PosBhabhaPreP[3] = preE;
 
-        PosBhabhaPostX[0] = postpos.x();
-        PosBhabhaPostX[1] = postpos.y();
-        PosBhabhaPostX[2] = postpos.z();
-        PosBhabhaPostX[3] = posttime;
-        PosBhabhaPostP[0] = postmom.x();
-        PosBhabhaPostP[1] = postmom.y();
-        PosBhabhaPostP[2] = postmom.z();
-        PosBhabhaPostP[3] = postE;
+          PosBhabhaPostX[0] = postpos.x();
+          PosBhabhaPostX[1] = postpos.y();
+          PosBhabhaPostX[2] = postpos.z();
+          PosBhabhaPostX[3] = posttime;
+          PosBhabhaPostP[0] = postmom.x();
+          PosBhabhaPostP[1] = postmom.y();
+          PosBhabhaPostP[2] = postmom.z();
+          PosBhabhaPostP[3] = postE;
 
-        MaxBhabhaEpos = preE - postE;
-    }
+          MaxBhabhaEpos = preE - postE;
+      }
 
-    //counts how many times this process happens in total for an event
-    if (pretime > -10000){ 
-        PosBhabhaCounter += 1;
-    }
+      //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
+      if (pretime > -10000){ 
+          PosBhabhaCounter += 1;
+      }
 
-    TotalBhabhaEpos += preE - postE;
+      TotalBhabhaEpos += preE - postE;
+  }
+
 }
                    
 void RunAction::SPosAnnihil(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)

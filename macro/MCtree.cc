@@ -119,6 +119,8 @@ void MCtree::Clear()
     {
       backscatter_WC3planes[i]=0;
     }
+
+  bhabhaCreatedE = 0;
    
    et2_trig = 0.;
   
@@ -242,7 +244,12 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree1->SetBranchAddress("startT",&StartT);
   MCTree1->SetBranchAddress("stopT",&StopT);
   MCTree1->SetBranchAddress("PID",&PID);
+
+  MCTree1->SetBranchAddress("CreatorProcess",&CreatorProcess);
+  MCTree1->SetBranchAddress("StepNumber",&StepNumber);
+
   MCTree2->SetBranchAddress("eventID",&eventID2);
+
 
   //adding for custom backscattering
   MCTree1->SetBranchAddress("TrackID",&TrackID);
@@ -542,7 +549,9 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("backscatter_WC3",&backscatter_WC3,"backscatter_WC3[6]/I");
   OutputTree->Branch("backscatter_WC3planes",&backscatter_WC3planes,"backscatter_WC3planes[3]/I");
   OutputTree->Branch("backscatter_WC3_E",&backscatter_WC3_E,"backscatter_WC3_E[6]/F");
-  
+
+  // OutputTree->Branch("bhabhaCreatedE",&bhabhaCreatedE,"bhabhaCreatedE/I");
+
 
   OutputTree->Branch("eV2",&ev2,"eV2[4]/F");
   OutputTree->Branch("eBV2",&eBv2,"eBV2[4]/F");
@@ -895,8 +904,17 @@ void MCtree::Loop()
     double v[4]={0,0,0,0};
     while (eventID2==eventID){
 
+      //trying to count number of e- created from bhabha scattering
+      // if (!(volumeID0==5)){ //don't look in BINA or CsI
+      //   // only counts e-s created from ionization from the primary e+ - aka from bhabha - pienu only
+      //   //and only count them once!
+      //   if ((PID == 11) && (CreatorProcess==2002) && (GrandParentID==1) && (StepNumber==1)) { 
+      //     bhabhaCreatedE += 1;
+      //   }
+      // }
+
+
       if (energyDeposit>0){
-	
 	
         if (volumeID0==5 && volumeID1==175 && volumeID2==175)
         {
