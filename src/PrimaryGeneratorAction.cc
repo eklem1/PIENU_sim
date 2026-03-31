@@ -14,7 +14,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 
-#include "TMath.h"
+#include "TMath.h"  
 
 #define min(X,Y) ((X) < (Y) ? (X) : (Y))
 // Note: revisions implemented for 2019 BVF format
@@ -52,7 +52,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   
   // Create a particle gun to shoot 1 particle per event
   G4int n_particle = 1;
-  particleGunPi = new G4ParticleGun(n_particle);
+  particleGunPi = new G4ParticleGun(n_particle); 
   particleGunMu = new G4ParticleGun(n_particle);
   particleGunE = new G4ParticleGun(n_particle);
 

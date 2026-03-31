@@ -34,7 +34,7 @@ private:
   G4UIcmdWithADouble* fTmax;
 
   G4UIcmdWithADouble* fDatabeam;
-  G4UIcmdWithADouble* fEnergy;
+  G4UIcmdWithADouble* fEnergy; 
   G4UIcmdWithADouble* fAngle;
 
 

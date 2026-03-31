@@ -170,7 +170,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
     if (theParticleName == "e+" && theProcessName == "eBrem" && thePostVolume != "NaI" && thePreVolume != "NaI")
     {
         // Check if primary positron
-        if (theTrack->GetParentID() == 0)// || theTrack->GetParentID() == mutracknumber)
+        if (theTrack->GetParentID() == 0)// || theTrack->GetParentID() == mutracknumber) 
         {
             // This excludes CsI
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 

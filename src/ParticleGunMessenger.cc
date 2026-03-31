@@ -44,7 +44,7 @@ ParticleGunMessenger::ParticleGunMessenger(PrimaryGeneratorAction* pga) : fPrima
   fDatabeam->SetDefaultValue(0.);
   fDatabeam->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fEnergy = new G4UIcmdWithADouble("/gun/energy", this);
+  fEnergy = new G4UIcmdWithADouble("/gun/energy", this); 
   fEnergy->SetGuidance("Set energy of primary particles.");
   fEnergy->SetDefaultValue(0.);
   fEnergy->AvailableForStates(G4State_PreInit, G4State_Idle);

@@ -36,7 +36,7 @@ public:
   G4double r[5];
   G4double L[5][5];
   G4double P0;
-  G4double eEnergy;
+  G4double eEnergy; 
   G4double eAngle;
 
   
