@@ -1,0 +1,36 @@
+#  To suppress the instantiation of vis manager (G4VisExecutive), by
+#  setting G4VIS_NONE, recompile pienu.cc and ensure drawing code is
+#  executed only if G4VVisManager::GetConcreteInstance() is non-zero.
+#
+
+# /process/em/verbose 2
+
+#/decay/external # Call external decay generator
+#/radiative/mu_or_e 2 # choose pi->e nu (g)
+
+
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/event/printModulo 1000 #printout counter
+/rndm/autoSeed true
+
+#Commands for the pileup
+/pileup/Active 0
+/pileup/Rate 80000
+/pileup/Tmin -20000
+/pileup/Tmax 5000
+
+# beam from Luca's approximation of the data
+#/beam/FromData 4
+
+#for positron gun
+/gun/energy 70.0 # in MeV units 
+/gun/angle 38.41 # in degree units -> R=45 mm ish
+
+# [ 0. 15. 30. 45. 60.]
+# [ 0. 14.80441826 27.8603834  38.41025461 46.59202564]
+
+#Number of events to simulate
+# /run/beamOn 600000 
+/run/beamOn 10000

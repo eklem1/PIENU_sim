@@ -1526,7 +1526,10 @@ void MCtree::Loop()
                   if (R_truth == 9999){ //only look to fill if no R truth has been recorded yet
                  
                     //can this be used to avoid swapping the code for pienu vs pimue?
-                    if (ParentID==1 || GrandParentID==1) {
+                    // if (ParentID==1 || GrandParentID==1) {
+                    //ID 0 for positron beam
+                    if (ParentID==0) {
+
                       // cout << "Found primary e+: " << ParentID <<" or GP: " << GrandParentID << endl;
                       R_truth = sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
                     }
@@ -1587,7 +1590,9 @@ void MCtree::Loop()
                     backscatter_WC3[0] += 1; //and save the particle
                     backscatter_WC3_E[0] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
 
-                    if (ParentID==1 || GrandParentID==1) {
+                    // if (ParentID==1 || GrandParentID==1) {
+                    //ID 0 for positron beam
+                    if (ParentID==0) {
                       // cout << "Found primary e+: " << ParentID <<" or GP: " << GrandParentID << endl;
                       backscatter_WC3[5] += 1;
                       backscatter_WC3_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies

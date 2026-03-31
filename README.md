@@ -1,6 +1,9 @@
 # PIENU MC simulation
 
-Code to run the PIENU full detector MC, as well as the conversion 'MC to data'.
+Code to run the PIENU full detector MC, as well as the conversion 'MC to data'. Specifically with a mono energetic positron pencil beam, starting at (0,0,0) (I think). This can be set in the macro using:
+    
+    /gun/energy 70.0 # in MeV units 
+    /gun/angle 14.80 # in degree units -> R=15 mm ish
 
 ## MC
 Run macros: pienu_2012.mac & pimue_2012.mac
