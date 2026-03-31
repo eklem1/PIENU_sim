@@ -11,7 +11,6 @@ class PrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcmdWithADouble;
 class G4UIcmdWithABool;
-//class G4UIcmdWithADoubleAndUnit;
 
 class ParticleGunMessenger : public G4UImessenger
 {

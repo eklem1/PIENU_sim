@@ -7,7 +7,6 @@
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
 
 ParticleGunMessenger::ParticleGunMessenger(PrimaryGeneratorAction* pga) : fPrimaryGeneratorAction(pga)
@@ -59,7 +58,6 @@ ParticleGunMessenger::ParticleGunMessenger(PrimaryGeneratorAction* pga) : fPrima
 ParticleGunMessenger::~ParticleGunMessenger()
 {
   delete fActive;
-  //delete fEnergy;
 }
 
 void ParticleGunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
@@ -83,9 +81,7 @@ void ParticleGunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == fDatabeam){
 	  G4cout<< "fDatabeam (command) was accessed in gunmessenger"<<G4endl;
 	G4cout<< " and the value is="<< newValue << G4endl;
-	//G4cout<< " DataBeam Before  = " << fPrimaryGeneratorAction->databeam << G4endl;
     fPrimaryGeneratorAction->databeam = fDatabeam->GetNewDoubleValue(newValue);
-    //G4cout<< " DataBeam After  = " << fPrimaryGeneratorAction->databeam << G4endl;
   }
 
   if (command == fEnergy){

@@ -1,0 +1,457 @@
+#include "PrimaryGeneratorAction.hh"
+#include "ParticleGunMessenger.hh"
+
+#include "Randomize.hh"
+
+#include "G4Event.hh"
+#include "G4PionPlus.hh"
+#include "G4MuonPlus.hh"
+#include "G4Positron.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "TRandom3.h"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
+
+#define min(X,Y) ((X) < (Y) ? (X) : (Y))
+// Note: revisions implemented for 2019 BVF format
+//
+// Primary events are generated from a tab delineated file of the
+// following format:
+// Momentum magnitude (GeV/c)
+// X position (cm)
+// theta (mr)
+// Y position (cm)
+// phi (mr)
+//
+// The values are given for particles at the location of the target.
+// For this simulation, they are propagated backward 60cm.
+
+// Default constructor
+//
+PrimaryGeneratorAction::PrimaryGeneratorAction()
+{
+  
+  //Beam Histograms
+  hE  = new TH1F("hE","",1000,0.06,0.08);
+  hx  = new TH1F("hx","",200,-3,3);
+  hy  = new TH1F("hy","",200,-3,3);
+  htx = new TH1F("htx","",200,-0.2,0.2);
+  hty = new TH1F("hty","",200,-0.2,0.2);
+  
+  //Messenger for the Particle Gun
+  fMessenger = new ParticleGunMessenger(this);
+  
+  // Create a particle gun to shoot 1 particle per event
+  G4int n_particle = 1;
+  particleGunPi = new G4ParticleGun(n_particle);
+  particleGunMu = new G4ParticleGun(n_particle);
+  particleGunE = new G4ParticleGun(n_particle);
+
+   // Find the definition of the particles
+  G4String particleName1 = "pi+";
+  G4String particleName2 = "mu+";
+  G4String particleName3 = "e+";
+
+  // Get the Geant4 particle table
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+
+  particleGunPi->SetParticleDefinition(particleTable->FindParticle(particleName1));
+  particleGunMu->SetParticleDefinition(particleTable->FindParticle(particleName2));
+  particleGunE->SetParticleDefinition(particleTable->FindParticle(particleName3));
+
+  const char filename1[] = "/home/mischke/project/mischke/data/alex_26sep.rays";
+  /*
+  // Dick's 2010 "November a" file (Tristan, Feb. 11/19)
+    const char filename2[] = "/home/mischke/project/mischke/data/PositronBeam_2010Na_20190209.dat";
+  //Definition of the Choleski Matrix
+  L[0][0] = 1.0;  L[1][0] = 0.431066; L[2][0] = -0.0988015;  L[3][0] = 0.0880358;  L[4][0] = -0.104842;
+  L[0][1] = 0.0;  L[1][1] = 0.90232; L[2][1] = 0.251167;   L[3][1] = 0.572268;   L[4][1] = 0.196671;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.962888;   L[3][2] = -0.0345555;  L[4][2] = 0.776777;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.814595;   L[4][3] = 0.08589;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.582726;
+
+  
+// Dick's 2010 "November b" file (Tristan, Feb. 11/19)
+  const char filename2[] = "/home/mischke/project/mischke/data/PositronBeam_2010Nb_20190209.dat";
+  //Definition of the Choleski Matrix
+  L[0][0] = 1.0;  L[1][0] = 0.481108; L[2][0] = -0.0821956;  L[3][0] = 0.0771963;   L[4][0] = -0.090912;
+  L[0][1] = 0.0;  L[1][1] = 0.876661; L[2][1] = 0.21852;     L[3][1] = 0.570247;    L[4][1] = 0.185329;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.972365;    L[3][2] = -0.0215788;  L[4][2] = 0.76651;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;         L[3][3] = 0.817553;    L[4][3] = 0.0973719;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;         L[3][4] = 0.0;         L[4][4] = 0.600308;
+  
+  
+  // Dick's 2011 file (Tristan, Feb. 11/19)
+  const char filename2[] = "/home/mischke/project/mischke/data/PositronBeam_2011_20190209.dat";
+  //Definition of the Choleski Matrix
+  L[0][0] = 1.0;  L[1][0] = 0.436834; L[2][0] = -0.106069;  L[3][0] = 0.122467;   L[4][0] = -0.0922844;
+  L[0][1] = 0.0;  L[1][1] = 0.899542; L[2][1] = 0.184912;   L[3][1] = 0.605648;   L[4][1] = 0.158519;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.977014;   L[3][2] = -0.0223199; L[4][2] = 0.779451;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.785936;   L[4][3] = 0.0273752;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.598383;
+  
+  // Dick's 2012 file (Tristan, Feb. 11/19)
+  const char filename2[] = "/home/mischke/project/mischke/data/PositronBeam_2012_20190209.dat";
+  //Definition of the Choleski Matrix
+  L[0][0] = 1.0;  L[1][0] = 0.435907; L[2][0] = -0.0911666; L[3][0] = 0.100416;   L[4][0] = -0.0809778;
+  L[0][1] = 0.0;  L[1][1] = 0.899992; L[2][1] = 0.205817;   L[3][1] = 0.602133;   L[4][1] = 0.167102;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.974335;   L[3][2] = -0.0367225; L[4][2] = 0.773156;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.791204;   L[4][3] = 0.0302397;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.605669;
+  
+  
+  // 2020 BVF files  
+   const char filename2[] = "/home/mischke/PlotBeam/BVF2012_20200307.dat";
+  L[0][0] = 1.0;  L[1][0] = 0.339875; L[2][0] = -0.0790976; L[3][0] = 0.0972862;  L[4][0] = -0.0696692;
+  L[0][1] = 0.0;  L[1][1] = 0.940471; L[2][1] = 0.189913;   L[3][1] = 0.587855;   L[4][1] = 0.135052;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.97861;    L[3][2] = 0.00026070; L[4][2] = 0.792662;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.803095;   L[4][3] = 0.025223;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.58988;
+  
+   const char filename2[] = "/home/mischke/PlotBeam/BVF2011_20200310.dat";
+  L[0][0] = 1.0;  L[1][0] = 0.361965; L[2][0] = -0.0800064; L[3][0] = 0.100291;   L[4][0] = -0.0688161;
+  L[0][1] = 0.0;  L[1][1] = 0.932192; L[2][1] = 0.171838;   L[3][1] = 0.597425;   L[4][1] = 0.139422;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.981871;   L[3][2] = -0.0193401; L[4][2] = 0.784093;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.795394;   L[4][3] = 0.0283619;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.600182;
+  
+  const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448b_20200310.dat";
+  L[0][0] = 1.0;  L[1][0] = 0.420641; L[2][0] = -0.0599466; L[3][0] = 0.0673797;  L[4][0] = -0.0683573;
+  L[0][1] = 0.0;  L[1][1] = 0.907227; L[2][1] = 0.102341;   L[3][1] = 0.625703;   L[4][1] = 0.00806048;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.992941;   L[3][2] = -0.105847;  L[4][2] = 0.806066;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.769904;   L[4][3] = -0.00289009;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.587802;
+  */
+    const char filename2[] = "/home/mischke/PlotBeam/BVF2010N448a_20200310.dat";
+  L[0][0] = 1.0;  L[1][0] = 0.394652; L[2][0] = -0.0649658; L[3][0] = 0.0763277;  L[4][0] = -0.0813857;
+  L[0][1] = 0.0;  L[1][1] = 0.918831; L[2][1] = 0.241564;   L[3][1] = 0.573501;   L[4][1] = 0.189598;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = 0.968208;   L[3][2] = -0.0186889; L[4][2] = 0.774841;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = 0.815427;   L[4][3] = 0.108282;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = 0.587645;
+  
+  /*
+// Cholesky matrix template
+  L[0][0] = 1.0;  L[1][0] = ; L[2][0] = ; L[3][0] = ;   L[4][0] = ;
+  L[0][1] = 0.0;  L[1][1] = ; L[2][1] = ;   L[3][1] = ;   L[4][1] = ;
+  L[0][2] = 0.0;  L[1][2] = 0.0;      L[2][2] = ;   L[3][2] = ; L[4][2] = ;
+  L[0][3] = 0.0;  L[1][3] = 0.0;      L[2][3] = 0.0;        L[3][3] = ;   L[4][3] = ;
+  L[0][4] = 0.0;  L[1][4] = 0.0;      L[2][4] = 0.0;        L[3][4] = 0.0;        L[4][4] = ;
+    */
+  // Momentum scaled (Feb. 27/19)
+  //const char filename2[] = "/home/mischke/project/mischke/data/PositronBeam_74p0_20190226.dat";
+
+  infile1 = new std::ifstream(filename1);
+  infile2 = new std::ifstream(filename2);
+
+  if(!(*infile1)) {
+     G4cerr << "Error opening input file " << filename1 << G4endl;
+     G4Exception("error","error",FatalException,"error");
+  }
+
+  if(!(*infile2)) {
+     G4cerr << "Error opening input file " << filename2 << G4endl;
+     G4Exception("error","error",FatalException,"error");
+  }
+
+ 
+  // An extra check - probably not needed
+  std::filebuf* inbuff = infile1->rdbuf();
+  if(!inbuff->is_open()) {
+    G4cerr << "Input file could not be opened " << filename1 << G4endl;
+    G4Exception("error","error",FatalException,"error");
+  }
+
+  //Fill the histogram to sample
+  FillBeamHistograms();
+
+}
+ 
+// Default destructor
+// 
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
+{
+    
+  delete particleGunPi;
+  delete particleGunMu;
+  delete particleGunE;
+
+  infile1->close();
+  infile2->close();
+}
+
+// This method is called at the beginning of each event in order
+// to generate a new primary vertex for tracking
+//
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+
+  // Variables to store the values read in from the file
+  G4double X,dX,Y,dY,P;
+
+  // Variables to store the final vertex position
+  G4double xv,yv,zv,mdX,mdY,mdZ,kinEnergyPi,kinEnergyMu,kinEnergyE;
+
+  // If we're at the end of the file, rewind.
+  if (infile1->eof()) {
+    infile1->clear();
+    infile1->seekg(0);
+  }
+
+  if (infile2->eof()) {
+    infile2->clear();
+    infile2->seekg(0);
+  }
+
+  // Read in a line from the file
+  if (!databeam){
+    //Revmoc file
+    *infile1 >> X >> dX >> Y >> dY >> P;
+    // Convert the angles to radians and find the x and y length of a
+    // vector if the total length is 1.
+    mdX = std::sin(dX/1000.0);
+    mdY = std::sin(dY/1000.0);
+    mdZ = std::sqrt(1-mdX*mdX-mdY*mdY);
+  } else {
+    //Data parameterization file
+ 
+    //Sample the histograms and construct the correlated variables
+    DoCorrelatedVariables();
+
+    //Conversion not needed for the data beam
+    P = r[0];
+    X = r[1];
+    Y = r[2];
+    mdX = r[3];
+    mdY = r[4];
+    if (mdX*mdX+mdY*mdY<=1) mdZ = std::sqrt(1-mdX*mdX-mdY*mdY);
+    else mdZ = 1.0;
+  }
+
+  // Scale and shift the vector.  Everything is in centimeters.
+  xv = -60*cm*(mdX/mdZ) + X*cm;
+  yv = -60*cm*(mdY/mdZ) + Y*cm;
+  zv = -60*cm;
+
+  //G4cout << xv << " " << yv << " " << mdX << " " << mdY << " " << mdZ << G4endl;
+  
+  //G4double momentumFactor = 1.0;// 2012; 2010N448b; all 2019 sets
+  //G4double momentumFactor = 1.0075;// 2011
+  G4double momentumFactor = 1.0005*0.9993;// 2010N448a
+
+  G4double PionMass = G4PionPlus::PionPlusDefinition()->GetPDGMass();
+  G4double EMass    = G4Positron::PositronDefinition()->GetPDGMass();
+  G4double MuMass   = G4MuonPlus::MuonPlusDefinition()->GetPDGMass();
+
+  G4double Momentum = momentumFactor * P * GeV;
+
+  kinEnergyPi = std::sqrt(Momentum*Momentum + PionMass*PionMass) - PionMass;
+  kinEnergyMu = std::sqrt(Momentum*Momentum + MuMass*MuMass) - MuMass;
+  kinEnergyE  = std::sqrt(Momentum*Momentum + EMass*EMass) - EMass;
+
+  // Set the particle position, energy, and momentum direction
+  particleGunPi->SetParticlePosition(G4ThreeVector(xv,yv,zv));
+  particleGunMu->SetParticlePosition(G4ThreeVector(xv,yv,zv));
+  particleGunE->SetParticlePosition(G4ThreeVector(xv,yv,zv));
+  
+  particleGunPi->SetParticleMomentumDirection(G4ThreeVector(mdX,mdY,mdZ));
+  particleGunMu->SetParticleMomentumDirection(G4ThreeVector(mdX,mdY,mdZ));
+  particleGunE->SetParticleMomentumDirection(G4ThreeVector(mdX,mdY,mdZ));
+    
+  particleGunPi->SetParticleEnergy(kinEnergyPi);
+  particleGunMu->SetParticleEnergy(kinEnergyMu);
+  particleGunE->SetParticleEnergy(kinEnergyE);
+
+  //POLARIZATION
+  //particleGunMu->SetParticlePolarization(G4ThreeVector(mdX,mdY,mdZ));
+
+  //NO-POLARIZATION
+  //double rdmpol = G4UniformRand();
+  //if (rdmpol>0.5) particleGunMu->SetParticlePolarization(G4ThreeVector(-mdX,-mdY,-mdZ));
+  //else particleGunMu->SetParticlePolarization(G4ThreeVector(mdX,mdY,mdZ));
+
+  //ANTI-POLARIZATION
+  //particleGunMu->SetParticlePolarization(G4ThreeVector(-mdX,-mdY,-mdZ));
+
+  //TRANSVERSE-POLARIZATION
+  //particleGunMu->SetParticlePolarization(G4ThreeVector(0,0,1));
+
+  //Begin Pileup code 
+  if (pileup){
+
+    G4double Rate = rate /s; //Beam rate (Hertz)
+    
+    G4int N = 0;
+    G4int MAX=5;
+    G4double tdecay;
+    G4double tau = 2197.03*ns;//26.033 * ns;
+    G4double t0[5]; //time
+    G4double td[5]; //decay time
+    
+    //Time window
+    G4double tmin = Tmin*ns;
+    G4double tmax = Tmax*ns;
+    
+    for (int i=0;i<5;i++){t0[i]=0;td[i]=0;}
+
+    //Generate the trigger particle
+    t0[0] = 0;
+    td[0] = -tau*log(G4UniformRand());
+
+    G4double t=0;
+    
+    //For now, removed from the original algorithm 
+    /*
+    while (t>=-ttrig) {
+      ttrig = -(1/Rate)*log(G4UniformRand());
+      t     =  (1/Rate)*log(G4UniformRand());
+    }
+    
+
+    //Try to place the first pileup particle before the trigger (->?)
+    t = (1/Rate)*log(G4UniformRand()); 
+    tdecay = (t - tau*log(G4UniformRand()))*ns;
+    if ((t>=tmin)||(tdecay>=tmin && tdecay<=tmax)){    
+      N=1;
+      t0[N] = t*ns;
+      td[N] = (-tau*log(G4UniformRand()))*ns;
+    }
+    */
+    
+    //Construct the other pileup particles before the trigger
+    while ((t>=tmin)||(tdecay>=tmin && tdecay<=tmax)) {
+      t = t - (-(1/Rate)*log(G4UniformRand()));
+      tdecay = t - tau*log(G4UniformRand());
+      
+      if ((t>=tmin)||(tdecay>=tmin && tdecay<=tmax)){
+	N++;
+	N = min(N,MAX);
+	t0[N] = t*ns;
+	td[N] = (-tau*log(G4UniformRand()))*ns;
+      }
+    }
+    
+    //Construct the other pileup particles after the trigger
+    t = 0.0 * ns;
+    while (t<=tmax) {
+      t = (t + (-(1/Rate)*log(G4UniformRand())))*ns;
+      
+      if (t<tmax){
+	N++;
+	N = min(N,MAX);      
+	t0[N] = t*ns;
+	td[N] = (-tau*log(G4UniformRand()))*ns;
+      }
+    }
+ 
+    //G4cout << "---" << G4endl;
+    //for (int i=0;i<5;i++) G4cout << "N = " << i << " " << t0[i] << "  " << td[i] << G4endl;
+    
+    G4double part;
+    for (int i=0;i<=N;i++) {
+      part = G4UniformRand();
+      if (part<0.85)                 {particleGunPi->SetParticleTime(t0[i]);  particleGunPi->GeneratePrimaryVertex(anEvent);} //pion+
+      if (part>=0.85 && part<0.99)   {particleGunMu->SetParticleTime(t0[i]);  particleGunMu->GeneratePrimaryVertex(anEvent);} //muon+
+      if (part>=0.99)                {particleGunE->SetParticleTime(t0[i]);   particleGunE->GeneratePrimaryVertex(anEvent);}  //positron
+    }
+    
+
+  } else { // No pileup
+
+    particleGunPi->GeneratePrimaryVertex(anEvent); //pion+
+    //G4cout << particleGunMu->GetParticlePolarization() << G4endl;
+    //particleGunMu->GeneratePrimaryVertex(anEvent); 
+    //particleGunE->GeneratePrimaryVertex(anEvent); 
+
+  }
+  
+}
+
+void PrimaryGeneratorAction::FillBeamHistograms()
+{
+ 
+  G4double P, X, Y, dX, dY;
+ 
+  while (1)
+  {
+    *infile2 >> P >> X >> Y >> dX >> dY;
+
+    if (!infile2->good()) break;
+
+    hE->Fill(P / 1000);
+    hx->Fill(X / 10);
+    hy->Fill(Y / 10);
+    htx->Fill(dX);
+    hty->Fill(dY); 
+
+  }
+
+  //Smooth the X and Y distributions
+  hx->Smooth(200);
+  hy->Smooth(200);
+
+  
+  //Fit the tx and ty distributions
+  htx->Fit("gaus");
+  hty->Fit("gaus");
+  /*
+  //Write out histograms
+  file = new TFile("/home/mischke/mc/2019_2012.root","RECREATE");
+  hE->Write();
+  hx->Write();
+  hy->Write();
+  htx->Write();
+  hty->Write();
+  file->Close();
+  */
+  tx_mean=htx->GetFunction("gaus")->GetParameter(1);
+  tx_sigma=htx->GetFunction("gaus")->GetParameter(2);
+  
+  ty_mean=hty->GetFunction("gaus")->GetParameter(1);
+  ty_sigma=hty->GetFunction("gaus")->GetParameter(2);
+  
+}
+
+void PrimaryGeneratorAction::DoCorrelatedVariables()
+{
+
+  TRandom3  *r3 = new TRandom3(0);
+  gRandom = r3;
+
+  //Sample the histograms
+  r[0] = hE->GetRandom();
+  r[1] = hx->GetRandom();
+  r[2] = hy->GetRandom();
+
+  //Generate tx and ty disributions using gaussian
+  r[3] = r3->Gaus(tx_mean,tx_sigma);
+  r[4] = r3->Gaus(ty_mean,ty_sigma);
+
+  delete r3;
+
+  //Normalize the variables
+  r[0] = (r[0] - hE->GetMean()) / hE->GetRMS();
+  r[1] = (r[1] - hx->GetMean()) / hx->GetRMS();
+  r[2] = (r[2] - hy->GetMean()) / hy->GetRMS();
+  r[3] = (r[3] - htx->GetMean()) / htx->GetRMS();
+  r[4] = (r[4] - hty->GetMean()) / hty->GetRMS();
+
+  //Apply the Choleski Matrix
+  G4double rt[5];
+  for (int i = 0; i < 5; i++)
+  {
+    rt[i] = 0;
+    for (int j = 0; j < 5; j++)
+    {
+      rt[i] += L[i][j] * r[j];
+    } 
+  }
+
+  //Transform back the (correlated) variables
+  r[0] = rt[0] * hE->GetRMS()  + hE->GetMean();
+  r[1] = rt[1] * hx->GetRMS()  + hx->GetMean();
+  r[2] = rt[2] * hy->GetRMS()  + hy->GetMean();
+  r[3] = rt[3] * htx->GetRMS() + htx->GetMean();
+  r[4] = rt[4] * hty->GetRMS() + hty->GetMean();
+}

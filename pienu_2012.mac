@@ -6,8 +6,8 @@
 # /process/em/verbose 2
 # /process/inactivate msc
 
-/decay/external # Call external decay generator
-/radiative/mu_or_e 2 # choose pi->e nu (g)
+# /decay/external # Call external decay generator
+# /radiative/mu_or_e 0 # choose pi->e nu (g)
 
 
 /run/verbose 0
@@ -23,12 +23,14 @@
 /pileup/Tmax 5000
 
 # beam from Luca's approximation of the data
-/beam/FromData 4
+# /beam/FromData 7 #-> 2012 data in new primary gen action
 
 #for positron gun
 /gun/energy 70.0 # in MeV units 
 /gun/angle 27.848 # in degree units -> R=30 mm
 
+# prints out all processes defined in the physics list
+# /run/particle/dumpOrderingParam
 
 #Number of events to simulate
 # /run/beamOn 600000 

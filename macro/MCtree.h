@@ -68,6 +68,22 @@ class MCtree {
 	
   Float_t StartT,StopT;
   Float_t PID;
+  Float_t ParentID;
+  Float_t GrandParentID;
+
+  Float_t TrackID;
+  Float_t MomX,MomY,MomZ;
+  Float_t BINAflag;
+  Float_t StepNumber,CreatorProcess;
+
+  
+  std::set<int> setOfTracks;
+  std::set<int> setOfTracksT2;
+
+  std::set<int> setOfTracksWC3_1;
+  std::set<int> setOfTracksWC3_2;
+  std::set<int> setOfTracksWC3_3;
+
 
   Double_t PiDecayP[4];
   Double_t PiDecayX[4];
@@ -179,7 +195,7 @@ class MCtree {
   Float_t eb2[4];
   Float_t etg[4];
   Float_t et1[4];
-  Float_t et2[4];
+  Float_t et2[5];
   Float_t ev2[4];
   Float_t ev3[4];
 
@@ -187,9 +203,16 @@ class MCtree {
   Float_t eBb2[4];
   Float_t eBtg[4];
   Float_t eBt1[4];
-  Float_t eBt2[4];
+  Float_t eBt2[5];
   Float_t eBv2[4];
   Float_t eBv3[4];
+
+  int backscatter_T2[5]; //holds number of each type of backscatter particle per event in T2
+  int backscatter_WC3[6]; //holds number of each type of backscatter particle per event in WC3
+  float backscatter_WC3_E[6]; //holds average energy of each type of backscatter particle per event in WC3
+  int backscatter_WC3planes[3]; //holds number of each type of backscatter particle per event in each plane of WC3
+
+  int bhabhaCreatedE;
 
   Float_t eCsIUSIch[21];
   Float_t eCsIUSOch[28];
@@ -551,6 +574,12 @@ class MCtree {
   Float_t Rwc3_2_besttrack;
   Float_t Rwc3_2_maxrad;
   Float_t Old_Rwc3_2;
+
+  // Emma, Feb 2026
+  Float_t R_proj;
+  Float_t R_truth;
+  Float_t x_proct, y_proct, wc3_2_Z;
+  Float_t Rwc3_2_front;
  
   Int_t eventnumber;
 

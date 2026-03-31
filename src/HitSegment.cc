@@ -35,7 +35,8 @@ HitSegment::HitSegment()
     fStopX(0),  fStopY(0),  fStopZ(0),  fStopT(0),
     fPDG(-1), fParticleName(""),fCreatorFlag(0),
     fCreatorProcessName(""), fEbirk(0), fProcessID(0),
-    fMerged(false) {}
+    fMerged(false), fMomX(0), fMomY(0), fMomZ(0), fBINAflag(false), fGParentID(-1),
+    fStepNumber(-1) {}
 
 HitSegment::HitSegment(const HitSegment &right)
     : G4VHit(),
@@ -54,7 +55,15 @@ HitSegment::HitSegment(const HitSegment &right)
     fCreatorProcessName(right.fCreatorProcessName),
     fProcessID(right.fProcessID),
     fEbirk(right.fEbirk),
-    fMerged(right.fMerged) {
+    fMerged(right.fMerged),
+    fMomX(right.fMomX),
+    fMomY(right.fMomY), 
+    fMomZ(right.fMomZ),
+    fBINAflag(right.fBINAflag),
+    fGParentID(right.fGParentID),
+    fStepNumber(right.fStepNumber)
+
+     {
 #ifdef G4VIS_USE
     fRotation = right.fRotation;
     fTranslation = right.fTranslation;
@@ -86,6 +95,14 @@ HitSegment HitSegment::operator=(const HitSegment& op2)
     fProcessID = op2.fProcessID;
     fEbirk  = op2.fEbirk;
     fMerged = op2.fMerged;
+    fMomX = op2.fMomX;
+    fMomY = op2.fMomY;
+    fMomZ = op2.fMomZ;
+    fBINAflag = op2.fBINAflag;
+    fGParentID = op2.fGParentID;
+    fStepNumber = op2.fStepNumber;
+
+
 #ifdef G4VIS_USE
     fRotation    = op2.fRotation;
     fTranslation = op2.fTranslation;
@@ -102,6 +119,9 @@ void HitSegment::Clear()
   fStopT  = 0;
   fPDG    = -1;
   fEbirk  = 0;
+  fGParentID = -1;
+  fStepNumber = -1;
+
 }
 
 HitSegment HitSegment::operator+=(const HitSegment& op2)
@@ -146,6 +166,8 @@ void HitSegment::AddStep(G4Step* theStep)
   G4ThreeVector prePos  = theStep->GetPreStepPoint()->GetPosition();
   G4ThreeVector postPos = theStep->GetPostStepPoint()->GetPosition();
 
+  G4ThreeVector momentum = theStep->GetPreStepPoint()->GetMomentum();
+
   G4StepStatus stepStatus = theStep->GetPostStepPoint()->GetStepStatus();
   G4ParticleDefinition* particle =  theStep->GetTrack()->GetDefinition();
 
@@ -173,10 +195,15 @@ void HitSegment::AddStep(G4Step* theStep)
 
      fTrackID = theStep->GetTrack()->GetTrackID();
      fParentID = theStep->GetTrack()->GetParentID();
+     fStepNumber = theStep->GetTrack()->GetCurrentStepNumber();
 
      fStartX = prePos.x();
      fStartY = prePos.y();
      fStartZ = prePos.z();
+     fMomX = momentum.x();
+     fMomY = momentum.y();
+     fMomZ = momentum.z();
+
      fStartT = theStep->GetPreStepPoint()->GetGlobalTime();
      fStopX = postPos.x();
      fStopY = postPos.y();
@@ -189,10 +216,42 @@ void HitSegment::AddStep(G4Step* theStep)
      const G4VProcess* CreatorProcess =
                                    theStep->GetTrack()->GetCreatorProcess();
 
+
      if (CreatorProcess) {
        fCreatorProcessName = CreatorProcess->GetProcessName();
        G4ProcessType CreatorProcessType = CreatorProcess->GetProcessType();
-       fCreatorFlag = CreatorProcessType + 1;
+       // fCreatorFlag = CreatorProcessType + 1; \\why?
+       fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType();
+
+      /* //for debugging specific HadInElastic processes
+      if (CreatorProcess->GetProcessType() == 4 && CreatorProcess->GetProcessSubType() == 121){
+           G4cout << "HadInElastic process detected" << G4endl;
+          //HadInElastic interactions
+          if (CreatorProcess->GetProcessName() == "pi+Inelastic"){
+           G4cout << "pi+Inelastic process detected" << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() +1;
+          } else if (CreatorProcess->GetProcessName() == "neutronInelastic"){
+           G4cout << "neutronInelastic process detected" << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() +2;
+          } else if (CreatorProcess->GetProcessName() == "photonNuclear"){
+            G4cout << "photonNuclear process detected" << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() +3;
+          } else {
+           G4cout << "other process detected: " << CreatorProcess->GetProcessName() << G4endl;
+
+            fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType();
+          }
+
+      } else {
+          fCreatorFlag = CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType();
+      
+      }
+      */
+
+      //  G4cout << "Creator process: " << CreatorProcess->GetProcessName() << ": #s f: "<< CreatorProcess->GetProcessType() << " s: "<< CreatorProcess->GetProcessSubType() << " t: " << CreatorProcess->GetProcessType()*1000 + CreatorProcess->GetProcessSubType() << G4endl;
      } else{
        fCreatorFlag = 0;
      }
@@ -210,11 +269,20 @@ void HitSegment::AddStep(G4Step* theStep)
      fTranslation = aTrans.NetTranslation();
 #endif
 
-  } else {
+  } else { //what things end up here??
 
      // Record the track that contributes to this hit.
      G4int trackId = theStep->GetTrack()->GetTrackID();
      G4int parentId = theStep->GetTrack()->GetParentID();
+
+    //  if ((fHitVolume.GetVolume())->GetName() == "NaI"){
+    //     //particle currently in BINA
+    //     fBINAflag = true;
+    //  } else {
+    //     //particle not currently in BINA, but could have been previously
+    //     fBINAflag = (fBINAflag or false); 
+    //  }
+
 
      if (trackId == fTrackID) {
         fStopX = postPos.x();
@@ -226,7 +294,7 @@ void HitSegment::AddStep(G4Step* theStep)
         fProcessID = process->GetProcessType() * 1000 + process->GetProcessSubType();
         // G4cout << "Step process: " << process->GetProcessName() << " #: "<< fProcessID <<G4endl;
 
-     } else {
+     } else { 
         fTrackID = trackId;
         fParentID = parentId;
      }

@@ -89,3 +89,8 @@ clean:
 # 	@echo installed ${EXE} to ${BINPREFIX}
 
 
+
+ROOT_VERSION := $(shell root-config --version)
+ifneq ($(ROOT_VERSION),6.20/04)
+$(error ROOT version must be 6.20.04, but found $(ROOT_VERSION))
+endif
