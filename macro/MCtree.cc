@@ -2145,10 +2145,12 @@ void MCtree::Loop()
     //Get Projected R value in WC3 from positron starting position
     // Float_t wc3_2_Z = 56.755; // z at WC3_2
     Float_t Z_2front = 54.7;  //Z value of the front of WC3 2nd plane, for compairing with truth hits
-    x_proct = PoStartX[0] + PoStartP[0] * (Z_2front - PoStartX[2])/PoStartP[2]; //is this the right momentum to use, prob not??
+    x_proct = PoStartX[0] + PoStartP[0] * (Z_2front - PoStartX[2])/PoStartP[2];
     y_proct = PoStartX[1] + PoStartP[1] * (Z_2front - PoStartX[2])/PoStartP[2];
-    R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
-    
+    if (PoStartP[2] >= 0){ //only calculate the projected R value if the positron is not going backwards
+    	R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
+    }
+
     ebh=EBh;
     eintobina = EIntoBina;
 
@@ -2974,7 +2976,8 @@ void MCtree::Loop()
     for (int i=0;i<MAX_NUM_HITS;i++) s3_y_posi[i] = 0;
 
     //Emma Feb 2026
-    R_truth = R_proj = 9999;
+    R_truth = 9999;
+    R_proj = -9999;
     Rwc3_2_front = 999;
     
     // Tristan, Sep. 29/17
