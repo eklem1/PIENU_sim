@@ -79,6 +79,8 @@ class MCtree {
   
   std::set<int> setOfTracks;
   std::set<int> setOfTracksT2;
+  std::set<int> setOfTracksAny;
+  std::set<int> setOfTracksV3;
 
   std::set<int> setOfTracksWC3_1;
   std::set<int> setOfTracksWC3_2;
@@ -211,6 +213,8 @@ class MCtree {
   int backscatter_WC3[6]; //holds number of each type of backscatter particle per event in WC3
   float backscatter_WC3_E[6]; //holds average energy of each type of backscatter particle per event in WC3
   int backscatter_WC3planes[3]; //holds number of each type of backscatter particle per event in each plane of WC3
+  int backscatter_any[11];
+  int backscatter_V3;
 
   int bhabhaCreatedE;
 

@@ -71,7 +71,6 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
         if (!info) {
             info = new MyTrackInformation();
             theTrack->SetUserInformation(info);
-
         }
 
         // Check if entering BINA

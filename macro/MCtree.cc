@@ -119,10 +119,17 @@ void MCtree::Clear()
     {
       backscatter_WC3planes[i]=0;
     }
+  
+  backscatter_V3=0;
+
+  for (int i=0;i<11;i++)
+    {
+      backscatter_any[i]=0;
+    }
 
   bhabhaCreatedE = 0;
    
-   et2_trig = 0.;
+  et2_trig = 0.;
   
   tgstartzp =-999;
   tgstartze =-999;
@@ -546,6 +553,10 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eT2",&et2,"eT2[5]/F");
   OutputTree->Branch("eBT2",&eBt2,"eBT2[5]/F");
   OutputTree->Branch("backscatter_T2",&backscatter_T2,"backscatter_T2[5]/I");
+  OutputTree->Branch("backscatter_any",&backscatter_any,"backscatter_any[11]/I");
+  OutputTree->Branch("backscatter_V3",&backscatter_V3,"backscatter_V3/I");
+
+
   OutputTree->Branch("backscatter_WC3",&backscatter_WC3,"backscatter_WC3[6]/I");
   OutputTree->Branch("backscatter_WC3planes",&backscatter_WC3planes,"backscatter_WC3planes[3]/I");
   OutputTree->Branch("backscatter_WC3_E",&backscatter_WC3_E,"backscatter_WC3_E[6]/F");
@@ -898,6 +909,9 @@ void MCtree::Loop()
     setOfTracksWC3_2.clear();
     setOfTracksWC3_3.clear();
 
+    setOfTracksAny.clear();
+    setOfTracksV3.clear();
+
     
     int HIT = 0;
 
@@ -915,7 +929,30 @@ void MCtree::Loop()
 
 
       if (energyDeposit>0){
+
+        // if (volumeID0 ==2 && volumeID2>400 && energyDeposit > 0.0005)
+        // if (volumeID0==1 && volumeID1==5) 
+
+
+        //testing for backscatter anywhere except bina, csi, Al oxide layer or front Al plate​
+        if ( volumeID0!=5 )
+        {
+          if (BINAflag == 1){ //for backscatter
+            // if (!(volumeID0==1 && volumeID1==5) && !(volumeID0==2 && volumeID2>400)  ){
+              //also obmit T2 and WC3, which are counted below
+              // backscatter_any[0] +=1;
+
+              //and one where I try not to double count tracks
+              //so this will only count a backscatter particle once, but it can be in any SD
+              if (setOfTracksAny.find(TrackID) == setOfTracksAny.end()){ //track is not saved yet
+
+                setOfTracksAny.insert(TrackID); //add the trackID to the set
+                backscatter_any[0] +=1;
+              }
+            }
+          }
 	
+        //Al plate
         if (volumeID0==5 && volumeID1==175 && volumeID2==175)
         {
           efront[0]+=energyDeposit;
@@ -1030,6 +1067,10 @@ void MCtree::Loop()
         //B1
         if (volumeID0==1 && volumeID1==1 && StartT>-8000) 
           {
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[1] +=1;
+            }
+
             if (StartT < 25)
             {
               eb1[0] += energyDeposit;
@@ -1072,6 +1113,10 @@ void MCtree::Loop()
         //B2
         if (volumeID0==1 && volumeID1==2 && StartT>-8000)
           {
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[2] +=1;
+            }
+
             if (StartT < 25)
             {
               eb2[0]  += energyDeposit;
@@ -1109,6 +1154,10 @@ void MCtree::Loop()
         //TG
         if (volumeID0==1 && volumeID1==3 && StartT>-8000) 
           {
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[3] +=1;
+            }
+
             etg[0] += energyDeposit;
             eBtg[0] += Ebirk;
             
@@ -1150,7 +1199,10 @@ void MCtree::Loop()
         
         //T1
         if (volumeID0==1 && volumeID1==4 && StartT>-8000){
-          
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[4] +=1;
+            }
+
           et1[0]  +=energyDeposit;
           eBt1[0] += Ebirk;
           
@@ -1241,7 +1293,6 @@ void MCtree::Loop()
             //added to look at backscattering, uses custom MC hit tree that includes momentum
             // if (MomZ > 0) 
             if (BINAflag == 1) //for backscatter
-            // if (BINAflag == 0) 
             {
                 cout << "backscatter found in T2 " << TrackID << endl;
 
@@ -1298,6 +1349,9 @@ void MCtree::Loop()
         //V2
         if (volumeID0==1 && volumeID1==6) 
           {
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[5] +=1;
+            }
             ev2[0] +=energyDeposit;
             eBv2[0] += Ebirk;
           
@@ -1368,12 +1422,28 @@ void MCtree::Loop()
               ev3[3] +=energyDeposit;
               eBv3[3] += Ebirk;
             }
+
+            // backscatter_V3
+            if (BINAflag == 1) //for backscatter
+              {
+                // cout << "backscatter found in WC3_1 " << TrackID << endl;
+                bool found = setOfTracksV3.find(TrackID) == setOfTracksV3.end();
+                //now check if this track has already been saved
+                if (setOfTracksV3.find(TrackID) == setOfTracksV3.end()){ //track is not saved yet
+                  // cout << "backwards positron saved in WC3_1, parentID " << ParentID << ", track: "<< TrackID << endl;
+                  setOfTracksV3.insert(TrackID); //add the trackID to the set
+                  backscatter_V3 += 1; //and save the particle
+                }
+              }
           }
 
 
         //Beam Wire Chamber 1
         if (volumeID0 ==2 && volumeID2>300 && volumeID2<400)
         {
+          if (BINAflag == 1){ //for backscatter
+              backscatter_any[6] +=1;
+            }
           if(volumeID2==301)
           {
             xwc1_1[0] = StartX;
@@ -1415,6 +1485,9 @@ void MCtree::Loop()
         //Beam Wire Chamber 2
         if (volumeID0 ==2 && volumeID2<400 && volumeID2>300)
         {
+          if (BINAflag == 1){ //for backscatter
+              backscatter_any[7] +=1;
+            }
           if(volumeID2==304)
           {
             xwc2_1[0] = StartX;
@@ -1643,6 +1716,10 @@ void MCtree::Loop()
         // Silicon Detector 1
         if (volumeID0 == 2 && (volumeID2 == 11 || volumeID2 == 12))
           {
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[8] +=1;
+            }
+
             if(volumeID2 == 11) 
             {
               ess1_1[0] +=energyDeposit;
@@ -1703,6 +1780,10 @@ void MCtree::Loop()
         // Silicon Detector 2
         if (volumeID0 == 2 && (volumeID2 == 21 || volumeID2 ==22))
           {
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[9] +=1;
+            }
+
             if(volumeID2 == 21)
             {
               ess2_1[0] +=energyDeposit;
@@ -1765,6 +1846,9 @@ void MCtree::Loop()
         //Tracking threshold study, Tristan, August 16/17
         if (volumeID0 == 2 && (volumeID2 == 31 || volumeID2 == 32) && energyDeposit > 0.02)
           {
+            if (BINAflag == 1){ //for backscatter
+              backscatter_any[10] +=1;
+            }
             if(volumeID2 == 31 && hitss3_1 < MAX_NUM_HITS)
             {
               bool channelhit = false;
