@@ -122,7 +122,7 @@ void MCtree::Clear()
   
   backscatter_V3=0;
 
-  for (int i=0;i<11;i++)
+  for (int i=0;i<13;i++)
     {
       backscatter_any[i]=0;
     }
@@ -553,7 +553,7 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eT2",&et2,"eT2[5]/F");
   OutputTree->Branch("eBT2",&eBt2,"eBT2[5]/F");
   OutputTree->Branch("backscatter_T2",&backscatter_T2,"backscatter_T2[5]/I");
-  OutputTree->Branch("backscatter_any",&backscatter_any,"backscatter_any[11]/I");
+  OutputTree->Branch("backscatter_any",&backscatter_any,"backscatter_any[13]/I");
   OutputTree->Branch("backscatter_V3",&backscatter_V3,"backscatter_V3/I");
 
 
@@ -930,24 +930,28 @@ void MCtree::Loop()
 
       if (energyDeposit>0){
 
-        // if (volumeID0 ==2 && volumeID2>400 && energyDeposit > 0.0005)
-        // if (volumeID0==1 && volumeID1==5) 
-
-
         //testing for backscatter anywhere except bina, csi, Al oxide layer or front Al plate​
         if ( volumeID0!=5 )
         {
           if (BINAflag == 1){ //for backscatter
-            // if (!(volumeID0==1 && volumeID1==5) && !(volumeID0==2 && volumeID2>400)  ){
-              //also obmit T2 and WC3, which are counted below
-              // backscatter_any[0] +=1;
-
+            
               //and one where I try not to double count tracks
               //so this will only count a backscatter particle once, but it can be in any SD
               if (setOfTracksAny.find(TrackID) == setOfTracksAny.end()){ //track is not saved yet
+                // cout << "All: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
 
                 setOfTracksAny.insert(TrackID); //add the trackID to the set
                 backscatter_any[0] +=1;
+              }
+
+              //adding in the T1 & Tg lightguides as they are also SD, but not used, cause like they aren't in reality
+              if (volumeID0==1 && volumeID1>29 && volumeID1<39 && volumeID2==200){ //Target lightguides
+                // cout << "Found Tg lightguide hit" << endl;
+                backscatter_any[11] +=1;
+              }
+              if (volumeID0==1 && volumeID1>39 && volumeID1<49 && volumeID2==200){ //T1 lightguides
+                // cout << "Found T1 lightguide hit" << endl;
+                backscatter_any[12] +=1;
               }
             }
           }
@@ -1069,6 +1073,8 @@ void MCtree::Loop()
           {
             if (BINAflag == 1){ //for backscatter
               backscatter_any[1] +=1;
+                // cout << "B1: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
 
             if (StartT < 25)
@@ -1115,6 +1121,8 @@ void MCtree::Loop()
           {
             if (BINAflag == 1){ //for backscatter
               backscatter_any[2] +=1;
+                // cout << "B2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
 
             if (StartT < 25)
@@ -1156,6 +1164,8 @@ void MCtree::Loop()
           {
             if (BINAflag == 1){ //for backscatter
               backscatter_any[3] +=1;
+                // cout << "TG: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
 
             etg[0] += energyDeposit;
@@ -1201,6 +1211,8 @@ void MCtree::Loop()
         if (volumeID0==1 && volumeID1==4 && StartT>-8000){
             if (BINAflag == 1){ //for backscatter
               backscatter_any[4] +=1;
+                // cout << "T1: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
 
           et1[0]  +=energyDeposit;
@@ -1294,7 +1306,9 @@ void MCtree::Loop()
             // if (MomZ > 0) 
             if (BINAflag == 1) //for backscatter
             {
-                cout << "backscatter found in T2 " << TrackID << endl;
+                // cout << "backscatter found in T2 " << TrackID << endl;
+                // cout << "T2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
 
               if (PID == -11) //positrons
                 {
@@ -1351,6 +1365,8 @@ void MCtree::Loop()
           {
             if (BINAflag == 1){ //for backscatter
               backscatter_any[5] +=1;
+                // cout << "V2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
             ev2[0] +=energyDeposit;
             eBv2[0] += Ebirk;
@@ -1426,11 +1442,15 @@ void MCtree::Loop()
             // backscatter_V3
             if (BINAflag == 1) //for backscatter
               {
+                // cout << "All: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
                 // cout << "backscatter found in WC3_1 " << TrackID << endl;
                 bool found = setOfTracksV3.find(TrackID) == setOfTracksV3.end();
                 //now check if this track has already been saved
                 if (setOfTracksV3.find(TrackID) == setOfTracksV3.end()){ //track is not saved yet
                   // cout << "backwards positron saved in WC3_1, parentID " << ParentID << ", track: "<< TrackID << endl;
+                  // cout << "V3: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+                  
                   setOfTracksV3.insert(TrackID); //add the trackID to the set
                   backscatter_V3 += 1; //and save the particle
                 }
@@ -1443,6 +1463,8 @@ void MCtree::Loop()
         {
           if (BINAflag == 1){ //for backscatter
               backscatter_any[6] +=1;
+                // cout << "WC1: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
           if(volumeID2==301)
           {
@@ -1487,6 +1509,8 @@ void MCtree::Loop()
         {
           if (BINAflag == 1){ //for backscatter
               backscatter_any[7] +=1;
+                // cout << "WC2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
           if(volumeID2==304)
           {
@@ -1646,6 +1670,7 @@ void MCtree::Loop()
             if (BINAflag == 1) //for backscatter
             // if (BINAflag == 0) 
             {
+                // cout << "WC3: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
                 // cout << "backscatter found in WC3 " << TrackID << endl;
 
               if (PID == -11){ //positrons
@@ -1718,6 +1743,8 @@ void MCtree::Loop()
           {
             if (BINAflag == 1){ //for backscatter
               backscatter_any[8] +=1;
+                // cout << "S1: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
 
             if(volumeID2 == 11) 
@@ -1782,6 +1809,8 @@ void MCtree::Loop()
           {
             if (BINAflag == 1){ //for backscatter
               backscatter_any[9] +=1;
+                // cout << "S2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
 
             if(volumeID2 == 21)
@@ -1848,6 +1877,8 @@ void MCtree::Loop()
           {
             if (BINAflag == 1){ //for backscatter
               backscatter_any[10] +=1;
+                // cout << "S3: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+
             }
             if(volumeID2 == 31 && hitss3_1 < MAX_NUM_HITS)
             {
