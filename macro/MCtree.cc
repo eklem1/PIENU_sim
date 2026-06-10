@@ -111,6 +111,8 @@ void MCtree::Clear()
       backscatter_T2[i]=0;
       backscatter_WC3[i]=0;
       backscatter_WC3_E[i]=0;
+      backscatter_T2_E[i]=0;
+
     }
    backscatter_WC3[5]=0;
    backscatter_WC3_E[5]=0;
@@ -122,7 +124,7 @@ void MCtree::Clear()
   
   backscatter_V3=0;
 
-  for (int i=0;i<13;i++)
+  for (int i=0;i<14;i++)
     {
       backscatter_any[i]=0;
     }
@@ -247,6 +249,8 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree1->SetBranchAddress("startX",&StartX);
   MCTree1->SetBranchAddress("startY",&StartY);
   MCTree1->SetBranchAddress("startZ",&StartZ);
+  MCTree1->SetBranchAddress("stopX",&StopX);
+  MCTree1->SetBranchAddress("stopY",&StopY);
   MCTree1->SetBranchAddress("stopZ",&StopZ);
   MCTree1->SetBranchAddress("startT",&StartT);
   MCTree1->SetBranchAddress("stopT",&StopT);
@@ -553,7 +557,9 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eT2",&et2,"eT2[5]/F");
   OutputTree->Branch("eBT2",&eBt2,"eBT2[5]/F");
   OutputTree->Branch("backscatter_T2",&backscatter_T2,"backscatter_T2[5]/I");
-  OutputTree->Branch("backscatter_any",&backscatter_any,"backscatter_any[13]/I");
+  OutputTree->Branch("backscatter_T2_E",&backscatter_T2_E,"backscatter_T2_E[5]/F");
+
+  OutputTree->Branch("backscatter_any",&backscatter_any,"backscatter_any[14]/I");
   OutputTree->Branch("backscatter_V3",&backscatter_V3,"backscatter_V3/I");
 
 
@@ -722,6 +728,7 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   //projected R value in WC3 of primary positron based on it's starting trajectory
   OutputTree->Branch("R_projected",&R_proj,"R_projected/F"); 
   OutputTree->Branch("R_truth",&R_truth,"R_truth/F"); 
+
   OutputTree->Branch("Rwc3_2_front",&Rwc3_2_front,"Rwc3_2_front/F");
 
   
@@ -952,6 +959,10 @@ void MCtree::Loop()
               if (volumeID0==1 && volumeID1>39 && volumeID1<49 && volumeID2==200){ //T1 lightguides
                 // cout << "Found T1 lightguide hit" << endl;
                 backscatter_any[12] +=1;
+              }
+              
+              if (volumeID0 == 2 && volumeID2>400){ //and wc3 without any energy dep requirement
+                backscatter_any[13] +=1;
               }
             }
           }
@@ -1321,6 +1332,8 @@ void MCtree::Loop()
 
                     setOfTracksT2.insert(TrackID); //add the trackID to the set
                     backscatter_T2[0] += 1; //and save the particle
+                    backscatter_T2_E[0] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
                   }
                 }
               else if (PID == 11) //electrons
@@ -1330,6 +1343,8 @@ void MCtree::Loop()
                   if (setOfTracksT2.find(TrackID) == setOfTracksT2.end()){ 
                     setOfTracksT2.insert(TrackID); 
                     backscatter_T2[1] += 1;
+                    backscatter_T2_E[1] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
                   }
                 }
                 else if (PID == 22) //gammas
@@ -1337,6 +1352,8 @@ void MCtree::Loop()
                   if (setOfTracksT2.find(TrackID) == setOfTracksT2.end()){ 
                     setOfTracksT2.insert(TrackID); 
                     backscatter_T2[2] += 1;
+                    backscatter_T2_E[2] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
                   }
                 }
                 else if (PID == 2112) //neutrons
@@ -1344,6 +1361,8 @@ void MCtree::Loop()
                   if (setOfTracksT2.find(TrackID) == setOfTracksT2.end()){ 
                     setOfTracksT2.insert(TrackID); 
                     backscatter_T2[3] += 1;
+                    backscatter_T2_E[3] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
                   }
                 }
                 else //other stuff
@@ -1351,6 +1370,8 @@ void MCtree::Loop()
                   if (setOfTracksT2.find(TrackID) == setOfTracksT2.end()){ 
                     setOfTracksT2.insert(TrackID); 
                     backscatter_T2[4] += 1;
+                    backscatter_T2_E[4] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
                   }
                 }
             }
@@ -1618,12 +1639,13 @@ void MCtree::Loop()
                   }
                 }
 
-                if (PID == -11){ //positrons - need to move this again
-                  //also add R_truth info here, filling only if it hasn't been filled yet?
+                if (PID == -11){ //positrons
+
                   if (R_truth == 9999){ //only look to fill if no R truth has been recorded yet
-                 
                     //can this be used to avoid swapping the code for pienu vs pimue?
                     if (ParentID==1 || GrandParentID==1) {
+                      // I think technically, GrandParentID==1 could let in secondary e+ from pienu, but this will only
+                      // happen if the primary e+ doesn't hit wc3 first
                       // cout << "Found primary e+: " << ParentID <<" or GP: " << GrandParentID << endl;
                       R_truth = sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
                     }
@@ -1945,6 +1967,27 @@ void MCtree::Loop()
             }
             }
           }
+      }
+
+      //check for positrons swinging wide, scattering out and not hitting wc3
+      if (PID == -11){ //positrons
+        if (R_truth == 9999){ //only look to fill if no R truth has been recorded yet
+          //can this be used to avoid swapping the code for pienu vs pimue?
+          if (ParentID==1 || GrandParentID==1) {
+            // WC3_2: 54.7-58 mm
+
+            // if during the step the particle travels by the z coord of wc3, save it as R
+            if (StartZ < 54.7 && StopZ > 58){ //front z coord of WC3_2
+              //negative to show this ones went wide, and this is not a real wc3 hit
+              // I won't get an exact R value this way, but that's okay
+              // R_truth = -1*sqrt(StartX*StartX+StartY*StartY); //need capital S for entry from MC
+              R_truth = -1*sqrt( (StartX+StopX)*(StartX+StopX)/4 + (StartY+StopY)*(StartY+StopY)/4); //need capital S for entry from MC
+              // cout << "e+ at "<< R_truth <<" vec = [" << StartX <<", " <<StartY <<", "<< StartZ << "] - [" << StopX <<", " <<StopY <<", " << StopZ  << endl;
+              // cout << "in vol: " << volumeID0 <<", " <<volumeID1 <<", "<< volumeID2 << " with edep: " << energyDeposit <<  endl;
+
+            }
+          }
+        }
       }
       
       hit++;
@@ -3040,9 +3083,18 @@ void MCtree::Loop()
     trks[1]=(MC.trks[1]);
     trks[2]=(MC.trks[2]);
 
-    // get the mean energy for backscatter
+    // get the mean energy for backscatter in WC3 and T2
     for(int i=0; i<6; i++){
-      backscatter_WC3_E[i] = backscatter_WC3_E[i] / backscatter_WC3[i];
+      //average energy = summed energy / N particles
+      if (backscatter_WC3[i] > 0) { //only divide if the denom is non-zero
+        backscatter_WC3_E[i] = backscatter_WC3_E[i] / backscatter_WC3[i];
+      }
+    }
+
+    for(int i=0; i<5; i++){
+      if (backscatter_T2[i] > 0) { //only divide if the denom is non-zero
+        backscatter_T2_E[i] = backscatter_T2_E[i] / backscatter_T2[i];
+      }
     }
 
     
