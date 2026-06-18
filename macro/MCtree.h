@@ -219,6 +219,9 @@ class MCtree {
   int backscatter_any[14];
   int backscatter_V3;
 
+  int backscatter_all[6];
+  float backscatter_all_E[6];
+
   int bhabhaCreatedE;
 
   Float_t eCsIUSIch[21];

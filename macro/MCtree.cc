@@ -109,13 +109,16 @@ void MCtree::Clear()
   for (int i=0;i<5;i++)
     {
       backscatter_T2[i]=0;
+      backscatter_T2_E[i]=0;
+    }
+
+  for (int i=0;i<6;i++)
+    {
       backscatter_WC3[i]=0;
       backscatter_WC3_E[i]=0;
-      backscatter_T2_E[i]=0;
-
+      backscatter_all[i]=0;
+      backscatter_all_E[i]=0;
     }
-   backscatter_WC3[5]=0;
-   backscatter_WC3_E[5]=0;
 
   for (int i=0;i<3;i++)
     {
@@ -567,6 +570,9 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("backscatter_WC3planes",&backscatter_WC3planes,"backscatter_WC3planes[3]/I");
   OutputTree->Branch("backscatter_WC3_E",&backscatter_WC3_E,"backscatter_WC3_E[6]/F");
 
+  OutputTree->Branch("backscatter_all",&backscatter_all,"backscatter_all[6]/I");
+  OutputTree->Branch("backscatter_all_E",&backscatter_all_E,"backscatter_all_E[6]/F");
+
   // OutputTree->Branch("bhabhaCreatedE",&bhabhaCreatedE,"bhabhaCreatedE/I");
 
 
@@ -949,6 +955,38 @@ void MCtree::Loop()
 
                 setOfTracksAny.insert(TrackID); //add the trackID to the set
                 backscatter_any[0] +=1;
+
+                //doing this now by particle type
+                if (PID == -11){ //positrons
+                    backscatter_all[0] += 1; //and save the particle
+                    backscatter_all_E[0] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+
+                    if (ParentID==1 || GrandParentID==1) {
+                      // cout << "Found primary e+: " << ParentID <<" or GP: " << GrandParentID << endl;
+                      backscatter_all[5] += 1;
+                      backscatter_all_E[5] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+                    }
+                }
+                else if (PID == 11) //electrons
+                {
+                    backscatter_all[1] += 1;
+                    backscatter_all_E[1] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ);; //add all backscatter energies
+                }
+                else if (PID == 22) //gammas
+                {
+                    backscatter_all[2] += 1;
+                    backscatter_all_E[2] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ);; //add all backscatter energies
+                }
+                else if (PID == 2112) //neutrons
+                {
+                    backscatter_all[3] += 1;
+                    backscatter_all_E[3] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+                }
+                else //other stuff
+                {
+                    backscatter_all[4] += 1;
+                    backscatter_all_E[4] += sqrt(MomX*MomX+MomY*MomY+MomZ*MomZ); //add all backscatter energies
+                }
               }
 
               //adding in the T1 & Tg lightguides as they are also SD, but not used, cause like they aren't in reality
@@ -3088,6 +3126,10 @@ void MCtree::Loop()
       //average energy = summed energy / N particles
       if (backscatter_WC3[i] > 0) { //only divide if the denom is non-zero
         backscatter_WC3_E[i] = backscatter_WC3_E[i] / backscatter_WC3[i];
+      }
+
+      if (backscatter_all[i] > 0) { //only divide if the denom is non-zero
+        backscatter_all_E[i] = backscatter_all_E[i] / backscatter_all[i];
       }
     }
 
