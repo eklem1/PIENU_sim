@@ -124,8 +124,6 @@ void MCtree::Clear()
     {
       backscatter_WC3planes[i]=0;
     }
-  
-  backscatter_V3=0;
 
   for (int i=0;i<14;i++)
     {
@@ -563,7 +561,19 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("backscatter_T2_E",&backscatter_T2_E,"backscatter_T2_E[5]/F");
 
   OutputTree->Branch("backscatter_any",&backscatter_any,"backscatter_any[14]/I");
+  OutputTree->Branch("backscatter_V2",&backscatter_V2,"backscatter_V2/I");
   OutputTree->Branch("backscatter_V3",&backscatter_V3,"backscatter_V3/I");
+
+  OutputTree->Branch("v3_BSx",&v3_BSx,"v3_BSx[backscatter_V3]/F");
+  OutputTree->Branch("v3_BSy",&v3_BSy,"v3_BSy[backscatter_V3]/F");
+  OutputTree->Branch("v3_BSz",&v3_BSz,"v3_BSz[backscatter_V3]/F");
+  OutputTree->Branch("v3_BSt",&v3_BSt,"v3_BSt[backscatter_V3]/F");
+
+  // some of this will be empty, if it's not a backscatter event
+  OutputTree->Branch("v2_BSx",&v2_BSx,"v2_BSx[backscatter_V2]/F");
+  OutputTree->Branch("v2_BSy",&v2_BSy,"v2_BSy[backscatter_V2]/F");
+  OutputTree->Branch("v2_BSz",&v2_BSz,"v2_BSz[backscatter_V2]/F");
+  OutputTree->Branch("v2_BSt",&v2_BSt,"v2_BSt[backscatter_V2]/F");
 
 
   OutputTree->Branch("backscatter_WC3",&backscatter_WC3,"backscatter_WC3[6]/I");
@@ -899,6 +909,9 @@ void MCtree::Loop()
   int hitt2 = 0;
   int hitv2 = 0;
   int hitv3 = 0;
+
+  int backscatter_V2Counter = 0;
+  int backscatter_V3Counter = 0;
   
   Tpos = -10000;
 
@@ -923,7 +936,9 @@ void MCtree::Loop()
     setOfTracksWC3_3.clear();
 
     setOfTracksAny.clear();
+    setOfTracksV2.clear();
     setOfTracksV3.clear();
+
 
     
     int HIT = 0;
@@ -1422,11 +1437,29 @@ void MCtree::Loop()
         //V2
         if (volumeID0==1 && volumeID1==6) 
           {
-            if (BINAflag == 1){ //for backscatter
-              backscatter_any[5] +=1;
-                // cout << "V2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
+            if (BINAflag == 1) //for backscatter
+              {
+                backscatter_any[5] +=1;
+              // cout << "V2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
 
-            }
+                // cout << "backscatter found in WC3_1 " << TrackID << endl;
+                bool found = setOfTracksV2.find(TrackID) == setOfTracksV2.end();
+                //now check if this track has already been saved
+                if (setOfTracksV2.find(TrackID) == setOfTracksV2.end()){ //track is not saved yet
+                  
+                  setOfTracksV2.insert(TrackID); //add the trackID to the set
+                    //save hit info about it too, and here now we will be only saving it once per particle per events, 
+                  // but can have multiple hits per event
+                  v2_BSx[backscatter_V2Counter] = StartX;
+                  v2_BSy[backscatter_V2Counter] = StartY;
+                  v2_BSz[backscatter_V2Counter] = StartZ;
+                  v2_BSt[backscatter_V2Counter] = StartT;
+                    
+                  backscatter_V2Counter += 1; //and save the particle
+
+                }
+              }
+
             ev2[0] +=energyDeposit;
             eBv2[0] += Ebirk;
           
@@ -1460,6 +1493,7 @@ void MCtree::Loop()
               eBv2[3] += Ebirk;
             }
           }
+
 
 
         //V3
@@ -1511,7 +1545,15 @@ void MCtree::Loop()
                   // cout << "V3: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
                   
                   setOfTracksV3.insert(TrackID); //add the trackID to the set
-                  backscatter_V3 += 1; //and save the particle
+                    //save hit info about it too, and here now we will be only saving it once per particle per events, 
+                  // but can have multiple hits per event
+                  v3_BSx[backscatter_V3Counter] = StartX;
+                  v3_BSy[backscatter_V3Counter] = StartY;
+                  v3_BSz[backscatter_V3Counter] = StartZ;
+                  v3_BSt[backscatter_V3Counter] = StartT;
+                    
+                  backscatter_V3Counter += 1; //and save the particle
+
                 }
               }
           }
@@ -2064,6 +2106,10 @@ void MCtree::Loop()
     t2_n = hitt2;
     v2_n = hitv2;
     v3_n = hitv3;
+
+    backscatter_V2 = backscatter_V2Counter;
+    backscatter_V3 = backscatter_V3Counter;
+
 
     // apply CsI energy threshold
     if(csi <= 2.0) csi = 0.;
@@ -2888,6 +2934,7 @@ void MCtree::Loop()
     else MC.S3_Y_N = 0;
  
 
+    //what if there aren't MAX_NUM_HITS for the given event??
     for (int i=0;i<MAX_NUM_HITS;i++)
       {
 
@@ -3161,6 +3208,10 @@ void MCtree::Loop()
     hitt2 = 0;
     hitv2 = 0;
     hitv3 = 0;
+
+    backscatter_V2Counter = 0;
+    backscatter_V3Counter = 0;
+
     
     Tpos = -10000;
     postime = 100000;
@@ -3208,7 +3259,50 @@ void MCtree::Loop()
     s3wc3y0 = 999;
     s3wc3tx = 999;
     s3wc3ty = 999;
-    
+
+    //adding reset for array type vars that I think are missing
+    for (int i=0;i<MAX_NUM_HITS;i++){
+
+      // b1_e[i] = -999;
+      // b1_t[i] = -999;
+      // b1_pid[i] = -999;
+
+      // b2_e[i] = -999;
+      // b2_t[i] = -999;
+      // b2_pid[i] = -999;
+
+      // tg_e[i] = -999;
+      // tg_t[i] = -999;
+      // tg_pid[i] = -999;
+
+      // t1_e[i] = -999;
+      // t1_t[i] = -999;
+      // t1_pid[i] = -999;
+
+      // t2_e[i] = -999;
+      // t2_t[i] = -999;
+      // t2_pid[i] = -999;
+      
+      // v2_e[i] = -999;
+      // v2_t[i] = -999;
+      // v2_pid[i] = -999;
+
+      // v3_e[i] = -999;
+      // v3_t[i] = -999;
+      // v3_pid[i] = -999;
+ 
+      //new ones to consider backscatter in V2 and 3
+      v2_BSx[i] = 999;
+      v2_BSy[i] = 999;
+      v2_BSz[i] = 999;
+      v3_BSt[i] = 999;
+
+      v3_BSx[i] = 999;
+      v3_BSy[i] = 999;
+      v3_BSz[i] = 999;
+      v3_BSt[i] = 999;
+    }
+
     if (entry%1000==0) cout << "Entries processed: " << entry << "\r" << flush;
       
   }

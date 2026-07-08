@@ -82,7 +82,9 @@ class MCtree {
   std::set<int> setOfTracks;
   std::set<int> setOfTracksT2;
   std::set<int> setOfTracksAny;
+  std::set<int> setOfTracksV2;
   std::set<int> setOfTracksV3;
+
 
   std::set<int> setOfTracksWC3_1;
   std::set<int> setOfTracksWC3_2;
@@ -217,7 +219,9 @@ class MCtree {
   float backscatter_WC3_E[6]; //holds average energy of each type of backscatter particle per event in WC3
   int backscatter_WC3planes[3]; //holds number of each type of backscatter particle per event in each plane of WC3
   int backscatter_any[14];
+  int backscatter_V2;
   int backscatter_V3;
+
 
   int backscatter_all[6];
   float backscatter_all_E[6];
@@ -419,7 +423,15 @@ class MCtree {
   Float_t v3_pid[MAX_NUM_HITS];
 
 
-  
+  Float_t v2_BSx[MAX_NUM_HITS];
+  Float_t v2_BSy[MAX_NUM_HITS];
+  Float_t v2_BSz[MAX_NUM_HITS];
+  Float_t v2_BSt[MAX_NUM_HITS];
+
+  Float_t v3_BSx[MAX_NUM_HITS];
+  Float_t v3_BSy[MAX_NUM_HITS];
+  Float_t v3_BSz[MAX_NUM_HITS];
+  Float_t v3_BSt[MAX_NUM_HITS];
 
 
   Float_t tgstartzp,tgstartze,tgstartzm,tgstopzp,tgstopze,tgstopzm;
