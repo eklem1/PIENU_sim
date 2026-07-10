@@ -589,31 +589,33 @@ void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector pr
 void RunAction::SPosAnnihil(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
     //should only happen once a track
-    if (pretime > -10000){ 
-      PosAnnihilPreX[0] = prepos.x();
-      PosAnnihilPreX[1] = prepos.y();
-      PosAnnihilPreX[2] = prepos.z();
-      PosAnnihilPreX[3] = pretime;
-      PosAnnihilPreP[0] = premom.x();
-      PosAnnihilPreP[1] = premom.y();
-      PosAnnihilPreP[2] = premom.z();
-      PosAnnihilPreP[3] = preE;
+    // G4cout << "Edep per step =" << preE - postE  <<G4endl;
+    PosAnnihilPreX[0] = prepos.x();
+    PosAnnihilPreX[1] = prepos.y();
+    PosAnnihilPreX[2] = prepos.z();
+    PosAnnihilPreX[3] = pretime;
+    PosAnnihilPreP[0] = premom.x();
+    PosAnnihilPreP[1] = premom.y();
+    PosAnnihilPreP[2] = premom.z();
+    PosAnnihilPreP[3] = preE;
 
-      PosAnnihilPostX[0] = postpos.x();
-      PosAnnihilPostX[1] = postpos.y();
-      PosAnnihilPostX[2] = postpos.z();
-      PosAnnihilPostX[3] = posttime;
-      PosAnnihilPostP[0] = postmom.x();
-      PosAnnihilPostP[1] = postmom.y();
-      PosAnnihilPostP[2] = postmom.z();
-      PosAnnihilPostP[3] = postE;
+    PosAnnihilPostX[0] = postpos.x();
+    PosAnnihilPostX[1] = postpos.y();
+    PosAnnihilPostX[2] = postpos.z();
+    PosAnnihilPostX[3] = posttime;
+    PosAnnihilPostP[0] = postmom.x();
+    PosAnnihilPostP[1] = postmom.y();
+    PosAnnihilPostP[2] = postmom.z();
+    PosAnnihilPostP[3] = postE;
+    // }
 
+    if (pretime > -10000){  //don't count it if we're clearing the event (aka pretime=-10000)
       //counts how many times this process happens in total for an event
       PosAnnihilCounter += 1;
-      G4cout << "counted" <<G4endl;
+      // G4cout << "counted" <<G4endl;
     }
     
-    G4cout << "Counter =" << PosAnnihilCounter <<G4endl;
+    // G4cout << "Counter =" << PosAnnihilCounter <<G4endl;
 
 }
                    

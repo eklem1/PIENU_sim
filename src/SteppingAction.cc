@@ -236,7 +236,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
             // This excludes CsI, here checking that Crystal is not in the pre/post vol name
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos && thePostVolume.find("CsI") == std::string::npos && thePreVolume.find("CsI") == std::string::npos) 
             {
-                G4cout << "annihilation, parentID: " << theTrack->GetParentID() << ", start: " << thePreVolume << " end: " << thePostVolume << ", z: "<< postPosition.z() << G4endl;
+                // G4cout << "annihilation, parentID: " << theTrack->GetParentID() << ", start: " << thePreVolume << " end: " << thePostVolume << ", z: "<< postPosition.z() << G4endl;
 
                 runAction->SPosAnnihil(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
             }

@@ -34,4 +34,4 @@
 
 #Number of events to simulate
 ##/run/beamOn 2000
- /run/beamOn 200000
+/run/beamOn 200000
