@@ -223,9 +223,43 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
             {
                 runAction->SPosBhabha(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+
+                //and only when a secondary e- is created
+                bool hasElectronSecondary = false;
+                const auto* secondaries = theStep->GetSecondaryInCurrentStep();
+                G4ThreeVector sec_Momentum(0,0,0);
+                float sec_E;
+                
+                if (secondaries) {
+                    for (const auto* sec : *secondaries) {
+                        if (sec->GetDefinition()->GetParticleName() == "e-") {
+                            G4double eKin = sec->GetKineticEnergy();
+
+                            // G4cout << "Electron secondary created with energy: "
+                            //     << eKin / CLHEP::MeV << " MeV" << G4endl;
+
+                            //  Minimum energy to traverse all layers: 2.382 MeV
+                            if (eKin > 2.3){ //MeV
+                                hasElectronSecondary = true;
+                                // G4StepPoint* pPrePoint = theStep->GetPreStepPoint();
+                                sec_Momentum = sec->GetMomentum();
+                                sec_E = sec->GetKineticEnergy();
+
+                                G4cout << "momentum: " << sec_Momentum << G4endl;
+
+                                break;  // no need to check further
+                            }
+                        }
+                    }
+                }
+                if (hasElectronSecondary){
+                    runAction->SPosBhabha_sec(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy, sec_Momentum, sec_E);
+                }
             }
         }
     }
+
+
 
     //checking for annihilation positrons - sometimes the annihil process can happen 
     if (theParticleName == "e+" && theProcessName == "annihil" && theTrack->GetTrackStatus() == fStopAndKill && thePostVolume != "NaI" && thePreVolume != "NaI" ) 
@@ -237,6 +271,24 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos && thePostVolume.find("CsI") == std::string::npos && thePreVolume.find("CsI") == std::string::npos) 
             {
                 // G4cout << "annihilation, parentID: " << theTrack->GetParentID() << ", start: " << thePreVolume << " end: " << thePostVolume << ", z: "<< postPosition.z() << G4endl;
+                
+                //get any secondary gammas
+                int NumberSecondayGamma = 0;
+                float TotalEnergyGamma = 0;
+
+                const auto* secondaries = theStep->GetSecondaryInCurrentStep();
+                if (secondaries) {
+                    for (const auto* sec : *secondaries) {
+                        if (sec->GetDefinition()->GetParticleName() == "gamma") {
+                            G4double eKin = sec->GetKineticEnergy();
+
+                            // G4cout << "Gamma secondary created with energy: "
+                            //     << eKin / CLHEP::MeV << " MeV" << G4endl;
+                            NumberSecondayGamma += 1;
+                            TotalEnergyGamma = eKin;
+                        }
+                    }
+                }
 
                 runAction->SPosAnnihil(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
             }

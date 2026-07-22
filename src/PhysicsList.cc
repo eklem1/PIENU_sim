@@ -35,7 +35,7 @@
 
 PhysicsList::PhysicsList(G4String physicsList) : G4VModularPhysicsList()
 {
-    G4LossTableManager::Instance();
+    G4LossTableManager::Instance();    
 
     defaultCutValue  = 1.*mm;
     fCutForGamma     = 1*mm;

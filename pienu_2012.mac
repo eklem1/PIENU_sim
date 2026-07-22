@@ -3,11 +3,26 @@
 #  executed only if G4VVisManager::GetConcreteInstance() is non-zero.
 #
 
-# /process/em/verbose 2
+# /process/em/verbose 1
 # /process/inactivate msc
 
 /decay/external # Call external decay generator
 /radiative/mu_or_e 0 # choose pi->e nu (g)
+
+
+# /process/em/AddEmRegion Region none #does this work at all?
+
+/process/list
+# /process/inactivate msc
+# /process/inactivate eIoni
+
+# /process/inactivate eBrem
+# /process/inactivate CoulombScat
+# /process/inactivate phot
+# /process/inactivate compt
+# /process/inactivate conv
+
+# /process/inactivate annihil 
 
 
 /run/verbose 0
@@ -33,5 +48,5 @@
 # /run/particle/dumpOrderingParam
 
 #Number of events to simulate
-##/run/beamOn 2000
+# /run/beamOn 200
 /run/beamOn 200000

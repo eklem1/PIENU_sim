@@ -194,6 +194,24 @@ void RunAction::OpenRoot() {
     aTree->Branch("PosBhabhaPostP",PosBhabhaPostP,"PosBhabhaPostP[4]/D");
     aTree->Branch("PosBhabhaCounter",&PosBhabhaCounter,"PosBhabhaCounter/I");
 
+    aTree->Branch("PosBhabhaPreX_H",PosBhabhaPreX,"PosBhabhaPreX[4]/D");
+    aTree->Branch("PosBhabhaPreP_H",PosBhabhaPreP_H,"PosBhabhaPreP_H[4]/D");
+    aTree->Branch("PosBhabhaPostX_H",PosBhabhaPostX_H,"PosBhabhaPostX_H[4]/D");
+    aTree->Branch("PosBhabhaPostP_H",PosBhabhaPostP_H,"PosBhabhaPostP_H[4]/D");
+    aTree->Branch("PosBhabhaCounter_H",&PosBhabhaCounter_H,"PosBhabhaCounter_H/I");
+
+    aTree->Branch("PosBhabhaPreX_S",PosBhabhaPreX_S,"PosBhabhaPreX_S[4]/D");
+    aTree->Branch("PosBhabhaPreP_S",PosBhabhaPreP_S,"PosBhabhaPreP_S[4]/D");
+    aTree->Branch("PosBhabhaPostX_S",PosBhabhaPostX_S,"PosBhabhaPostX_S[4]/D");
+    aTree->Branch("PosBhabhaPostP_S",PosBhabhaPostP_S,"PosBhabhaPostP_S[4]/D");
+    aTree->Branch("PosBhabhaCounter_S",&PosBhabhaCounter_S,"PosBhabhaCounter_S/I");
+
+    aTree->Branch("PosBhabhaPsec_S",PosBhabhaPsec_S,"PosBhabhaPsec_S[4]/D");
+    
+
+    aTree->Branch("PosBhabhaCounter_L",&PosBhabhaCounter_L,"PosBhabhaCounter_L/I");
+
+
     aTree->Branch("PosAnnihilPreX",PosAnnihilPreX,"PosAnnihilPreX[4]/D");
     aTree->Branch("PosAnnihilPreP",PosAnnihilPreP,"PosAnnihilPreP[4]/D");
     aTree->Branch("PosAnnihilPostX",PosAnnihilPostX,"PosAnnihilPostX[4]/D");
@@ -221,6 +239,11 @@ void RunAction::OpenRoot() {
     aTree->Branch("PosTotalBremE",&TotalBremEpos,"PosTotalBremE/D");
     aTree->Branch("ElecTotalBremE",&TotalBremEelec,"ElecTotalBremE[4]/D");
     aTree->Branch("PosTotalBhabhaE",&TotalBhabhaEpos,"PosTotalBhabhaE/D");
+
+    aTree->Branch("PosTotalBhabhaE_H",&TotalBhabhaEpos_H,"PosTotalBhabhaE_H/D");
+    aTree->Branch("PosTotalBhabhaE_S",&TotalBhabhaEpos_S,"PosTotalBhabhaE_S/D");
+
+
 
 
     // struct DataArray { double Emu, Pmu, Leaf3; }; DataArray MyDataArray;
@@ -553,8 +576,9 @@ void RunAction::SPosBrem(G4double pretime, G4double posttime, G4ThreeVector prep
 void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE)
 {
 
-    if ((preE - postE) > 0.001){ //only count steps with more than 1 eV loss from the positron
-      if ((preE - postE) > MaxBhabhaEpos){ //|| (pretime == -10000)) //saves step with biggest energy dep
+    // | (pretime == -10000) is so variables can be reset at start of new event
+    // if ((pretime == -10000)){ //only count steps with more than 1 eV loss from the positron
+      if ((preE - postE) > MaxBhabhaEpos || (pretime == -10000)){ //saves step with biggest energy dep
           PosBhabhaPreX[0] = prepos.x();
           PosBhabhaPreX[1] = prepos.y();
           PosBhabhaPreX[2] = prepos.z();
@@ -582,7 +606,115 @@ void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector pr
       }
 
       TotalBhabhaEpos += preE - postE;
-  }
+    // }
+
+     //only minimum E set
+    // if ((preE - postE) > 0.001 || (pretime == -10000)){ //only count steps with more than 1 eV loss from the positron
+    //   if ((preE - postE) > MaxBhabhaEpos_L || (pretime == -10000)){ //saves step with biggest energy dep
+    //       PosBhabhaPreX_L[0] = prepos.x();
+    //       PosBhabhaPreX_L[1] = prepos.y();
+    //       PosBhabhaPreX_L[2] = prepos.z();
+    //       PosBhabhaPreX_L[3] = pretime;
+    //       PosBhabhaPreP_L[0] = premom.x();
+    //       PosBhabhaPreP_L[1] = premom.y();
+    //       PosBhabhaPreP_L[2] = premom.z();
+    //       PosBhabhaPreP_L[3] = preE;
+
+    //       PosBhabhaPostX_L[0] = postpos.x();
+    //       PosBhabhaPostX_L[1] = postpos.y();
+    //       PosBhabhaPostX_L[2] = postpos.z();
+    //       PosBhabhaPostX_L[3] = posttime;
+    //       PosBhabhaPostP_L[0] = postmom.x();
+    //       PosBhabhaPostP_L[1] = postmom.y();
+    //       PosBhabhaPostP_L[2] = postmom.z();
+    //       PosBhabhaPostP_L[3] = postE;
+
+    //       MaxBhabhaEpos_L = preE - postE;
+      // TotalBhabhaEpos_L += preE - postE;
+
+    //   }
+
+      //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
+      if ((preE - postE) > 0.001 && pretime > -10000){ 
+          PosBhabhaCounter_L += 1;
+      }
+    // }
+
+    //max set to 100 MeV to not overlap with MSC
+    if ((preE - postE) > 0.001 &&  (preE - postE) < 100 || (pretime == -10000)){ //only count steps with more than 1 eV loss from the positron
+      if ((preE - postE) > MaxBhabhaEpos_H || (pretime == -10000)){ //saves step with biggest energy dep
+          PosBhabhaPreX_H[0] = prepos.x();
+          PosBhabhaPreX_H[1] = prepos.y();
+          PosBhabhaPreX_H[2] = prepos.z();
+          PosBhabhaPreX_H[3] = pretime;
+          PosBhabhaPreP_H[0] = premom.x();
+          PosBhabhaPreP_H[1] = premom.y();
+          PosBhabhaPreP_H[2] = premom.z();
+          PosBhabhaPreP_H[3] = preE;
+
+          PosBhabhaPostX_H[0] = postpos.x();
+          PosBhabhaPostX_H[1] = postpos.y();
+          PosBhabhaPostX_H[2] = postpos.z();
+          PosBhabhaPostX_H[3] = posttime;
+          PosBhabhaPostP_H[0] = postmom.x();
+          PosBhabhaPostP_H[1] = postmom.y();
+          PosBhabhaPostP_H[2] = postmom.z();
+          PosBhabhaPostP_H[3] = postE;
+
+          MaxBhabhaEpos_H = preE - postE;
+      }
+
+      //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
+      if (pretime > -10000){ 
+          PosBhabhaCounter_H += 1;
+      }
+      TotalBhabhaEpos_H += preE - postE;
+    }
+
+    //with secondary?
+
+}
+
+
+void RunAction::SPosBhabha_sec(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE, G4ThreeVector secMomentum, G4double secE)
+{
+    //max set to 100 MeV to not overlap with MSC
+    // if ((pretime == -10000)){ //only count steps with more than 1 eV loss from the positron
+      if ((preE - postE) > MaxBhabhaEpos_S || (pretime == -10000)){ //saves step with biggest energy dep
+          PosBhabhaPreX_S[0] = prepos.x();
+          PosBhabhaPreX_S[1] = prepos.y();
+          PosBhabhaPreX_S[2] = prepos.z();
+          PosBhabhaPreX_S[3] = pretime;
+          PosBhabhaPreP_S[0] = premom.x();
+          PosBhabhaPreP_S[1] = premom.y();
+          PosBhabhaPreP_S[2] = premom.z();
+          PosBhabhaPreP_S[3] = preE;
+
+          PosBhabhaPostX_S[0] = postpos.x();
+          PosBhabhaPostX_S[1] = postpos.y();
+          PosBhabhaPostX_S[2] = postpos.z();
+          PosBhabhaPostX_S[3] = posttime;
+          PosBhabhaPostP_S[0] = postmom.x();
+          PosBhabhaPostP_S[1] = postmom.y();
+          PosBhabhaPostP_S[2] = postmom.z();
+          PosBhabhaPostP_S[3] = postE;
+
+          PosBhabhaPsec_S[0] = secMomentum.x();
+          PosBhabhaPsec_S[1] = secMomentum.y();
+          PosBhabhaPsec_S[2] = secMomentum.z();
+          PosBhabhaPsec_S[3] = secE;
+
+          MaxBhabhaEpos_S = preE - postE;
+      }
+
+      //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
+      if (pretime > -10000){ 
+          PosBhabhaCounter_S += 1;
+      }
+      TotalBhabhaEpos_S += preE - postE;
+    // }
+
+    //with secondary?
 
 }
                    
@@ -682,6 +814,8 @@ void RunAction::SPosScatter(G4double pretime, G4double posttime, G4ThreeVector p
     //counts how many times this process happens in total for an event
     if (pretime > -10000){ 
         PosScatterCounter += 1;
+        // G4cout << "pos scatter edep =" << preE - postE <<G4endl;
+
     }
 } 
                     
@@ -834,6 +968,8 @@ void RunAction::ClearVariable(){
   RunAction::SElecBrem(temp, temp, tV, tV, tV, tV, temp, temp);
   RunAction::SPosScatter(temp, temp, tV, tV, tV, tV, temp, temp);
   RunAction::SElecScatter(temp, temp, tV, tV, tV, tV, temp, temp);
+  
+  RunAction::SPosBhabha_sec(temp, temp, tV, tV, tV, tV, temp, temp, tV, temp);
 
   // RunAction::SeinWC3(tV, temp, tV, temp);
   // RunAction::SprimposinWC3(tV, temp, tV, temp);
@@ -842,6 +978,10 @@ void RunAction::ClearVariable(){
   //Counters to get total # of that process per event
   PosBremCounter=0;
   PosBhabhaCounter=0;
+  PosBhabhaCounter_H=0;
+  PosBhabhaCounter_S=0;
+  PosBhabhaCounter_L=0;
+  
   PosAnnihilCounter=0;
   ElecBremCounter=0;
   PosScatterCounter=0;
@@ -856,7 +996,13 @@ void RunAction::ClearVariable(){
   MaxScatterEelec = 0;
 
   MaxBhabhaEpos = 0;
+  MaxBhabhaEpos_H = 0;
+  MaxBhabhaEpos_S = 0;
+
   TotalBhabhaEpos = 0;
+  TotalBhabhaEpos_H = 0;
+  TotalBhabhaEpos_S = 0;
+
 }
 
 void RunAction::SavePionStart(G4ThreeVector position, G4ThreeVector momentum)

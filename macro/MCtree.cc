@@ -131,6 +131,20 @@ void MCtree::Clear()
     }
 
   bhabhaCreatedE = 0;
+
+  posannihilRcounter = 0;
+  posannihilFcounter = 0;
+
+  for (int i=0;i<4;i++){
+    posannihilRprex[i] = -999;
+    posannihilRprep[i] = -999;
+    posannihilRpostx[i] = -999;
+    posannihilRpostp[i] = -999;
+    posannihilFprex[i] = -999;
+    posannihilFprep[i] = -999;
+    posannihilFpostx[i] = -999;
+    posannihilFpostp[i] = -999;
+  }
    
   et2_trig = 0.;
   
@@ -326,6 +340,12 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree2->SetBranchAddress("PosBhabhaPostX",&PosBhabhaPostX);
   MCTree2->SetBranchAddress("PosBhabhaPostP",&PosBhabhaPostP);
   MCTree2->SetBranchAddress("PosBhabhaCounter",&PosBhabhaCounter);
+
+  MCTree2->SetBranchAddress("PosBhabhaPreX_S",&PosBhabhaPreX_S);
+  MCTree2->SetBranchAddress("PosBhabhaPreP_S",&PosBhabhaPreP_S);
+  MCTree2->SetBranchAddress("PosBhabhaPostX_S",&PosBhabhaPostX_S);
+  MCTree2->SetBranchAddress("PosBhabhaPostP_S",&PosBhabhaPostP_S);
+  MCTree2->SetBranchAddress("PosBhabhaCounter_S",&PosBhabhaCounter_S);
 
   MCTree2->SetBranchAddress("PosAnnihilPreX",&PosAnnihilPreX);
   MCTree2->SetBranchAddress("PosAnnihilPreP",&PosAnnihilPreP);
@@ -786,11 +806,23 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("PosBhabhaPostP",&posbhabhapostp,"PosBhabhaPostP[4]/D");
   OutputTree->Branch("PosBhabhaCounter",&posbhabhacounter,"PosBhabhaCounter/I");
 
-  OutputTree->Branch("PosAnnihilPreX",&posannihilprex,"PosAnnihilPreX[4]/D");
-  OutputTree->Branch("PosAnnihilPreP",&posannihilprep,"PosAnnihilPreP[4]/D");
-  OutputTree->Branch("PosAnnihilPostX",&posannihilpostx,"PosAnnihilPostX[4]/D");
-  OutputTree->Branch("PosAnnihilPostP",&posannihilpostp,"PosAnnihilPostP[4]/D");
-  OutputTree->Branch("PosAnnihilCounter",&posannihilcounter,"PosAnnihilCounter/I");
+  OutputTree->Branch("PosBhabhaPreX_S",&posbhabhaprex_S,"PosBhabhaPreX_S[4]/D");
+  OutputTree->Branch("PosBhabhaPreP_S",&posbhabhaprep_S,"PosBhabhaPreP_S[4]/D");
+  OutputTree->Branch("PosBhabhaPostX_S",&posbhabhapostx_S,"PosBhabhaPostX_S[4]/D");
+  OutputTree->Branch("PosBhabhaPostP_S",&posbhabhapostp_S,"PosBhabhaPostP_S[4]/D");
+  OutputTree->Branch("PosBhabhaCounter_S",&posbhabhacounter_S,"PosBhabhaCounter_S/I");
+
+  OutputTree->Branch("PosAnnihilRPreX",&posannihilRprex,"PosAnnihilRPreX[4]/D");
+  OutputTree->Branch("PosAnnihilRPreP",&posannihilRprep,"PosAnnihilRPreP[4]/D");
+  OutputTree->Branch("PosAnnihilRPostX",&posannihilRpostx,"PosAnnihilRPostX[4]/D");
+  OutputTree->Branch("PosAnnihilRPostP",&posannihilRpostp,"PosAnnihilRPostP[4]/D");
+  OutputTree->Branch("PosAnnihilRCounter",&posannihilRcounter,"PosAnnihilRCounter/I");
+
+  OutputTree->Branch("PosAnnihilFPreX",&posannihilFprex,"PosAnnihilFPreX[4]/D");
+  OutputTree->Branch("PosAnnihilFPreP",&posannihilFprep,"PosAnnihilFPreP[4]/D");
+  OutputTree->Branch("PosAnnihilFPostX",&posannihilFpostx,"PosAnnihilFPostX[4]/D");
+  OutputTree->Branch("PosAnnihilFPostP",&posannihilFpostp,"PosAnnihilFPostP[4]/D");
+  OutputTree->Branch("PosAnnihilFCounter",&posannihilFcounter,"PosAnnihilFCounter/I");
 
   OutputTree->Branch("PosScatterPreX",&posscatterprex,"PosScatterPreX[4]/D");
   OutputTree->Branch("PosScatterPreP",&posscatterprep,"PosScatterPreP[4]/D");
@@ -2307,7 +2339,8 @@ void MCtree::Loop()
     posbremcounter = PosBremCounter;
     elecbremcounter = ElecBremCounter;
     posbhabhacounter = PosBhabhaCounter;
-    posannihilcounter = PosAnnihilCounter;
+    posbhabhacounter_S = PosBhabhaCounter_S;
+
     posscattercounter = PosScatterCounter;
     elecscattercounter = ElecScatterCounter;
 
@@ -2360,10 +2393,15 @@ void MCtree::Loop()
       posbhabhapostx[i] = PosBhabhaPostX[i];
       posbhabhapostp[i] = PosBhabhaPostP[i];
 
-      posannihilprex[i] = PosAnnihilPreX[i];
-      posannihilprep[i] = PosAnnihilPreP[i];
-      posannihilpostx[i] = PosAnnihilPostX[i];
-      posannihilpostp[i] = PosAnnihilPostP[i];
+      posbhabhaprex_S[i] = PosBhabhaPreX_S[i];
+      posbhabhaprep_S[i] = PosBhabhaPreP_S[i];
+      posbhabhapostx_S[i] = PosBhabhaPostX_S[i];
+      posbhabhapostp_S[i] = PosBhabhaPostP_S[i];
+
+      // posannihilprex[i] = PosAnnihilPreX[i];
+      // posannihilprep[i] = PosAnnihilPreP[i];
+      // posannihilpostx[i] = PosAnnihilPostX[i];
+      // posannihilpostp[i] = PosAnnihilPostP[i];
 
       posscatterprex[i] = PosScatterPreX[i];
       posscatterprep[i] = PosScatterPreP[i];
@@ -2381,6 +2419,27 @@ void MCtree::Loop()
         photonuclearx[i] = PhotonuclearX[i];
         mupolarization[i] = MuPolarization[i];
         emomentum[i] = EMomentum[i];
+      }
+    }
+
+    // seperate out annihilation  at rest, and in flight
+    // as these aren't filled every event, we need to set the unused one to defaults
+    if (PosAnnihilPreP[3] == 0 ){ //annihilation at rest
+        posannihilRcounter = PosAnnihilCounter; //this is redundant since it has to be one, but whatever
+      for (int i=0;i<4;i++){
+        posannihilRprex[i] = PosAnnihilPreX[i];
+        posannihilRprep[i] = PosAnnihilPreP[i];
+        posannihilRpostx[i] = PosAnnihilPostX[i];
+        posannihilRpostp[i] = PosAnnihilPostP[i];
+      } 
+    }
+    else { //annihilation in flight
+        posannihilFcounter = PosAnnihilCounter;
+      for (int i=0;i<4;i++){
+        posannihilFprex[i] = PosAnnihilPreX[i];
+        posannihilFprep[i] = PosAnnihilPreP[i];
+        posannihilFpostx[i] = PosAnnihilPostX[i];
+        posannihilFpostp[i] = PosAnnihilPostP[i];
       }
     }
 
