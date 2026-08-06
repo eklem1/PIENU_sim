@@ -335,7 +335,7 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree2->SetBranchAddress("ElecBremPostP",&ElecBremPostP);
   MCTree2->SetBranchAddress("ElecBremCounter",&ElecBremCounter);
 
-  MCTree2->SetBranchAddress("PosBhabhaPreX",&PosBhabhaPreX);
+  MCTree2->SetBranchAddress("PosBhabhaPreX",&PosBhabhaPreX); //old way to do bhabha counting
   MCTree2->SetBranchAddress("PosBhabhaPreP",&PosBhabhaPreP);
   MCTree2->SetBranchAddress("PosBhabhaPostX",&PosBhabhaPostX);
   MCTree2->SetBranchAddress("PosBhabhaPostP",&PosBhabhaPostP);
@@ -346,6 +346,9 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree2->SetBranchAddress("PosBhabhaPostX_S",&PosBhabhaPostX_S);
   MCTree2->SetBranchAddress("PosBhabhaPostP_S",&PosBhabhaPostP_S);
   MCTree2->SetBranchAddress("PosBhabhaCounter_S",&PosBhabhaCounter_S);
+  MCTree2->SetBranchAddress("PosBhabhaCounter_L",&PosBhabhaCounter_L); //prob not needed
+  MCTree2->SetBranchAddress("PosBhabha_secRmin",&PosBhabha_secRmin);
+  MCTree2->SetBranchAddress("PosBhabhaPsec_S",&PosBhabhaPsec_S);
 
   MCTree2->SetBranchAddress("PosAnnihilPreX",&PosAnnihilPreX);
   MCTree2->SetBranchAddress("PosAnnihilPreP",&PosAnnihilPreP);
@@ -811,6 +814,8 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("PosBhabhaPostX_S",&posbhabhapostx_S,"PosBhabhaPostX_S[4]/D");
   OutputTree->Branch("PosBhabhaPostP_S",&posbhabhapostp_S,"PosBhabhaPostP_S[4]/D");
   OutputTree->Branch("PosBhabhaCounter_S",&posbhabhacounter_S,"PosBhabhaCounter_S/I");
+  OutputTree->Branch("PosBhabha_secRmin",&posbhabha_secrmin,"PosBhabha_secRmin/I");
+  OutputTree->Branch("PosBhabhaPsec_S",&posbhabhapsec_S,"PosBhabhaPsec_S[4]/D");
 
   OutputTree->Branch("PosAnnihilRPreX",&posannihilRprex,"PosAnnihilRPreX[4]/D");
   OutputTree->Branch("PosAnnihilRPreP",&posannihilRprep,"PosAnnihilRPreP[4]/D");
@@ -2340,9 +2345,11 @@ void MCtree::Loop()
     elecbremcounter = ElecBremCounter;
     posbhabhacounter = PosBhabhaCounter;
     posbhabhacounter_S = PosBhabhaCounter_S;
+    posbhabha_secrmin = PosBhabha_secRmin;
 
     posscattercounter = PosScatterCounter;
     elecscattercounter = ElecScatterCounter;
+
 
     //Pion/Muon/Positron momentum-energy/position-time
     for (int i=0;i<4;i++){
@@ -2397,6 +2404,8 @@ void MCtree::Loop()
       posbhabhaprep_S[i] = PosBhabhaPreP_S[i];
       posbhabhapostx_S[i] = PosBhabhaPostX_S[i];
       posbhabhapostp_S[i] = PosBhabhaPostP_S[i];
+
+      posbhabhapsec_S[i] = PosBhabhaPsec_S[i];
 
       // posannihilprex[i] = PosAnnihilPreX[i];
       // posannihilprep[i] = PosAnnihilPreP[i];

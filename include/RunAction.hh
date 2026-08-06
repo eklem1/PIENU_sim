@@ -81,8 +81,8 @@ class RunAction : public G4UserRunAction {
     void SPosScatter(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
     void SElecScatter(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
     void SPosBhabha(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
-    void SPosBhabha_sec(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double, G4ThreeVector, G4double);
-
+    void SPosBhabha_sec(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double, G4ThreeVector, G4double, G4double);
+    void SPosBhabha_secAny(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double, G4ThreeVector, G4double);
     
     void SPosAnnihil(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
 
@@ -192,6 +192,7 @@ class RunAction : public G4UserRunAction {
     G4int PosBremCounter,PosBhabhaCounter,PosAnnihilCounter;
     G4int ElecBremCounter,PosScatterCounter,ElecScatterCounter;
     G4int PosBhabhaCounter_H,PosBhabhaCounter_S, PosBhabhaCounter_L;
+    G4double bhabha_secRmin;
 
 
     G4double ElecBremPreX[4],ElecBremPreP[4];

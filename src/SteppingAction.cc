@@ -225,35 +225,75 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
                 runAction->SPosBhabha(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
 
                 //and only when a secondary e- is created
-                bool hasElectronSecondary = false;
+                bool EnergyAboveThresh = false;
+                // bool sec_towardsBINA = false;
+                bool sec_towardsWC3 = false;
+                
                 const auto* secondaries = theStep->GetSecondaryInCurrentStep();
                 G4ThreeVector sec_Momentum(0,0,0);
                 float sec_E;
-                
+                G4double R_proj = -1.0;
+
                 if (secondaries) {
+                    G4cout << "----- one step with secondaries -----" << G4endl;
+
                     for (const auto* sec : *secondaries) {
                         if (sec->GetDefinition()->GetParticleName() == "e-") {
                             G4double eKin = sec->GetKineticEnergy();
+                            G4ThreeVector sec_Pos = sec->GetPosition();
+                            sec_Momentum = sec->GetMomentum();
+                            sec_E = sec->GetKineticEnergy();
 
-                            // G4cout << "Electron secondary created with energy: "
-                            //     << eKin / CLHEP::MeV << " MeV" << G4endl;
+                            //want to also check if the secondary e- is heading towards BINA at all
+                            // sec_towardsBINA = PointingIntoBina(sec_Pos, sec_Momentum);
 
-                            //  Minimum energy to traverse all layers: 2.382 MeV
+                            //wc3_r projected
+                            float Z_2front = 54.7;  //Z value of the front of WC3 2nd plane, for compairing with truth hits
+                            float x_proct = sec_Pos[0] + sec_Momentum[0] * (Z_2front - sec_Pos[2])/sec_Momentum[2];
+                            float y_proct = sec_Pos[1] + sec_Momentum[1] * (Z_2front - sec_Pos[2])/sec_Momentum[2];
+                            if (sec_Momentum[2] >= 0){ //only calculate the projected R value if the positron is not going backwards
+                                R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
+                                if(R_proj <= 130.0){ //max R of WC3
+                                    sec_towardsWC3 = true;
+                                }
+                            }
+                            else if(sec_Pos[2] > 55.0){ //if upstream of WC3, then a backwards going e- could cause a track
+                                R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
+                                if(R_proj <= 130.0){ //max R of WC3
+                                    sec_towardsWC3 = true;
+                                    // G4cout << "secondary past wc3 with pz= " << sec_Momentum[2] << ", Rproj: " << R_proj << G4endl;
+                                }
+                            }
+                            else{
+                                R_proj = -1;
+                            }
+
+                            G4cout << "Electron secondary created with energy: "
+                                << eKin / CLHEP::MeV << " MeV, Rproj: " << R_proj << " -> "<< sec_towardsWC3 << G4endl;
+
+                            //  Minimum energy to traverse all layers starting at center of target: 2.382 MeV
                             if (eKin > 2.3){ //MeV
-                                hasElectronSecondary = true;
-                                // G4StepPoint* pPrePoint = theStep->GetPreStepPoint();
-                                sec_Momentum = sec->GetMomentum();
-                                sec_E = sec->GetKineticEnergy();
-
-                                G4cout << "momentum: " << sec_Momentum << G4endl;
+                                //do I want to made this a function depending on where the bhabha occurs roughly?
+                                EnergyAboveThresh = true;
+                                // G4cout << "momentum: " << sec_Momentum << G4endl;
 
                                 break;  // no need to check further
                             }
                         }
                     }
                 }
-                if (hasElectronSecondary){
-                    runAction->SPosBhabha_sec(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy, sec_Momentum, sec_E);
+                // G4cout << "Electron secondary created ? into BINA: " << sec_towardsWC3 << ", Rproj: " << R_proj << G4endl;
+
+                if (EnergyAboveThresh && sec_towardsWC3){
+                    // G4cout << "looking at sec ecut" << G4endl;
+
+                    runAction->SPosBhabha_sec(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy, sec_Momentum, sec_E, R_proj);
+                }
+                if (sec_towardsWC3){
+                    //any energy of electron
+                    // G4cout << "looking at sec any" << G4endl;
+
+                    runAction->SPosBhabha_secAny(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy, sec_Momentum, sec_E);
                 }
             }
         }
@@ -398,6 +438,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
 
 bool SteppingAction::PointingIntoBina(G4ThreeVector Position, G4ThreeVector Momentum)
 {
+    /// NOT CORRECT
     //should double check these values
     // Z of front face in mm
     double binaz = 84.4;
@@ -412,10 +453,12 @@ bool SteppingAction::PointingIntoBina(G4ThreeVector Position, G4ThreeVector Mome
     double py = Momentum.y();
     double pz = Momentum.z();
 
-    //unit vectors
+    //unit vectors - this doesn't work, cause it removes the sign
     px /= pz;
     py /= pz;
     pz /= pz;
+
+    G4cout << "pz check: " << pz << "" << G4endl;
 
     //if particle z position is downstream of the front face of BINA -> false
     if (z > binaz) return false;

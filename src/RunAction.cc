@@ -207,8 +207,8 @@ void RunAction::OpenRoot() {
     aTree->Branch("PosBhabhaCounter_S",&PosBhabhaCounter_S,"PosBhabhaCounter_S/I");
 
     aTree->Branch("PosBhabhaPsec_S",PosBhabhaPsec_S,"PosBhabhaPsec_S[4]/D");
+    aTree->Branch("PosBhabha_secRmin",&bhabha_secRmin,"PosBhabha_secRmin/D");
     
-
     aTree->Branch("PosBhabhaCounter_L",&PosBhabhaCounter_L,"PosBhabhaCounter_L/I");
 
 
@@ -635,9 +635,9 @@ void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector pr
     //   }
 
       //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
-      if ((preE - postE) > 0.001 && pretime > -10000){ 
-          PosBhabhaCounter_L += 1;
-      }
+      // if ((preE - postE) > 0.001 && pretime > -10000){ 
+      //     PosBhabhaCounter_L += 1;
+      // }
     // }
 
     //max set to 100 MeV to not overlap with MSC
@@ -671,16 +671,58 @@ void RunAction::SPosBhabha(G4double pretime, G4double posttime, G4ThreeVector pr
       TotalBhabhaEpos_H += preE - postE;
     }
 
+}
+
+void RunAction::SPosBhabha_secAny(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE, G4ThreeVector secMomentum, G4double secE)
+{
+    //max set to 100 MeV to not overlap with MSC
+    // if ((pretime == -10000)){ //only count steps with more than 1 eV loss from the positron
+      // if ((preE - postE) > MaxBhabhaEpos_S || (pretime == -10000)){ //saves step with biggest energy dep
+      //     PosBhabhaPreX_S[0] = prepos.x();
+      //     PosBhabhaPreX_S[1] = prepos.y();
+      //     PosBhabhaPreX_S[2] = prepos.z();
+      //     PosBhabhaPreX_S[3] = pretime;
+      //     PosBhabhaPreP_S[0] = premom.x();
+      //     PosBhabhaPreP_S[1] = premom.y();
+      //     PosBhabhaPreP_S[2] = premom.z();
+      //     PosBhabhaPreP_S[3] = preE;
+
+      //     PosBhabhaPostX_S[0] = postpos.x();
+      //     PosBhabhaPostX_S[1] = postpos.y();
+      //     PosBhabhaPostX_S[2] = postpos.z();
+      //     PosBhabhaPostX_S[3] = posttime;
+      //     PosBhabhaPostP_S[0] = postmom.x();
+      //     PosBhabhaPostP_S[1] = postmom.y();
+      //     PosBhabhaPostP_S[2] = postmom.z();
+      //     PosBhabhaPostP_S[3] = postE;
+
+      //     PosBhabhaPsec_S[0] = secMomentum.x();
+      //     PosBhabhaPsec_S[1] = secMomentum.y();
+      //     PosBhabhaPsec_S[2] = secMomentum.z();
+      //     PosBhabhaPsec_S[3] = secE;
+
+      //     MaxBhabhaEpos_S = preE - postE;
+      // }
+
+      //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
+      if (pretime > -10000){ 
+          G4cout << "Counted sec any" << G4endl;
+
+          PosBhabhaCounter_L += 1;
+      }
+      // TotalBhabhaEpos_S += preE - postE;
+    // }
+
     //with secondary?
 
 }
 
 
-void RunAction::SPosBhabha_sec(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE, G4ThreeVector secMomentum, G4double secE)
+void RunAction::SPosBhabha_sec(G4double pretime, G4double posttime, G4ThreeVector prepos, G4ThreeVector postpos, G4ThreeVector premom, G4ThreeVector postmom, G4double preE, G4double postE, G4ThreeVector secMomentum, G4double secE, G4double R_proj)
 {
     //max set to 100 MeV to not overlap with MSC
     // if ((pretime == -10000)){ //only count steps with more than 1 eV loss from the positron
-      if ((preE - postE) > MaxBhabhaEpos_S || (pretime == -10000)){ //saves step with biggest energy dep
+      if (R_proj < bhabha_secRmin || (pretime == -10000)){ //saves step with biggest energy dep
           PosBhabhaPreX_S[0] = prepos.x();
           PosBhabhaPreX_S[1] = prepos.y();
           PosBhabhaPreX_S[2] = prepos.z();
@@ -705,9 +747,10 @@ void RunAction::SPosBhabha_sec(G4double pretime, G4double posttime, G4ThreeVecto
           PosBhabhaPsec_S[3] = secE;
 
           MaxBhabhaEpos_S = preE - postE;
+          bhabha_secRmin = R_proj;
       }
 
-      //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
+      //but we will counts all the times there is a secondary e- from bhabah with at least enought energy to get to WC3, and is heading towards it in total for an event
       if (pretime > -10000){ 
           PosBhabhaCounter_S += 1;
       }
@@ -969,7 +1012,10 @@ void RunAction::ClearVariable(){
   RunAction::SPosScatter(temp, temp, tV, tV, tV, tV, temp, temp);
   RunAction::SElecScatter(temp, temp, tV, tV, tV, tV, temp, temp);
   
-  RunAction::SPosBhabha_sec(temp, temp, tV, tV, tV, tV, temp, temp, tV, temp);
+  
+  RunAction::SPosBhabha_secAny(temp, temp, tV, tV, tV, tV, temp, temp, tV, temp);
+
+  RunAction::SPosBhabha_sec(temp, temp, tV, tV, tV, tV, temp, temp, tV, temp, temp);
 
   // RunAction::SeinWC3(tV, temp, tV, temp);
   // RunAction::SprimposinWC3(tV, temp, tV, temp);
@@ -998,6 +1044,7 @@ void RunAction::ClearVariable(){
   MaxBhabhaEpos = 0;
   MaxBhabhaEpos_H = 0;
   MaxBhabhaEpos_S = 0;
+  bhabha_secRmin = 999;
 
   TotalBhabhaEpos = 0;
   TotalBhabhaEpos_H = 0;
