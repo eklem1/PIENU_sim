@@ -80,9 +80,9 @@ class RunAction : public G4UserRunAction {
     void SElecBrem(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
     void SPosScatter(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
     void SElecScatter(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
-    void SPosBhabha(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
+    // void SPosBhabha(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
     void SPosBhabha_sec(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double, G4ThreeVector, G4double, G4double);
-    void SPosBhabha_secAny(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double, G4ThreeVector, G4double);
+    void SPosBhabha_secAny(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double, G4ThreeVector, G4double, G4double);
     
     void SPosAnnihil(G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4double, G4double);
 
@@ -189,9 +189,9 @@ class RunAction : public G4UserRunAction {
 
     G4double PosBremPreX[4],PosBremPreP[4];
     G4double PosBremPostX[4],PosBremPostP[4];
-    G4int PosBremCounter,PosBhabhaCounter,PosAnnihilCounter;
+    G4int PosBremCounter,PosAnnihilCounter;
     G4int ElecBremCounter,PosScatterCounter,ElecScatterCounter;
-    G4int PosBhabhaCounter_H,PosBhabhaCounter_S, PosBhabhaCounter_L;
+    G4int PosBhabhaCounter, PosBhabhaCounter_S;
     G4double bhabha_secRmin;
 
 
@@ -203,14 +203,15 @@ class RunAction : public G4UserRunAction {
     G4double ElecScatterPostX[4],ElecScatterPostP[4];
     G4double PosBhabhaPreX[4],PosBhabhaPreP[4];
     G4double PosBhabhaPostX[4],PosBhabhaPostP[4];
+    G4double PosBhabhaPsec[4];
+
+
     G4double PosAnnihilPreX[4],PosAnnihilPreP[4];
     G4double PosAnnihilPostX[4],PosAnnihilPostP[4];
     // G4double ElecinWC3PreX[4],ElecinWC3PreP[4];
     // G4double PrimPosinWC3PreX[4],PrimPosinWC3PreP[4];
     // G4double SecPosinWC3PreX[4],SecPosinWC3PreP[4];
 
-    G4double PosBhabhaPreX_H[4],PosBhabhaPreP_H[4];
-    G4double PosBhabhaPostX_H[4],PosBhabhaPostP_H[4];
 
     G4double PosBhabhaPreX_S[4],PosBhabhaPreP_S[4];
     G4double PosBhabhaPostX_S[4],PosBhabhaPostP_S[4];
@@ -222,11 +223,9 @@ class RunAction : public G4UserRunAction {
     G4double TotalBremEelec = 0;
 
     G4double MaxBhabhaEpos = 0;
-    G4double MaxBhabhaEpos_H = 0;
     G4double MaxBhabhaEpos_S = 0;
 
     G4double TotalBhabhaEpos = 0;
-    G4double TotalBhabhaEpos_H = 0;
     G4double TotalBhabhaEpos_S = 0;
 
 

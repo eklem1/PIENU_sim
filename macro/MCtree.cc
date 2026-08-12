@@ -340,13 +340,14 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree2->SetBranchAddress("PosBhabhaPostX",&PosBhabhaPostX);
   MCTree2->SetBranchAddress("PosBhabhaPostP",&PosBhabhaPostP);
   MCTree2->SetBranchAddress("PosBhabhaCounter",&PosBhabhaCounter);
+  MCTree2->SetBranchAddress("PosBhabhaPsec",&PosBhabhaPsec);
+
 
   MCTree2->SetBranchAddress("PosBhabhaPreX_S",&PosBhabhaPreX_S);
   MCTree2->SetBranchAddress("PosBhabhaPreP_S",&PosBhabhaPreP_S);
   MCTree2->SetBranchAddress("PosBhabhaPostX_S",&PosBhabhaPostX_S);
   MCTree2->SetBranchAddress("PosBhabhaPostP_S",&PosBhabhaPostP_S);
   MCTree2->SetBranchAddress("PosBhabhaCounter_S",&PosBhabhaCounter_S);
-  MCTree2->SetBranchAddress("PosBhabhaCounter_L",&PosBhabhaCounter_L); //prob not needed
   MCTree2->SetBranchAddress("PosBhabha_secRmin",&PosBhabha_secRmin);
   MCTree2->SetBranchAddress("PosBhabhaPsec_S",&PosBhabhaPsec_S);
 
@@ -808,6 +809,8 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("PosBhabhaPostX",&posbhabhapostx,"PosBhabhaPostX[4]/D");
   OutputTree->Branch("PosBhabhaPostP",&posbhabhapostp,"PosBhabhaPostP[4]/D");
   OutputTree->Branch("PosBhabhaCounter",&posbhabhacounter,"PosBhabhaCounter/I");
+  OutputTree->Branch("PosBhabhaPsec",&posbhabhapsec,"PosBhabhaPsec[4]/D");
+
 
   OutputTree->Branch("PosBhabhaPreX_S",&posbhabhaprex_S,"PosBhabhaPreX_S[4]/D");
   OutputTree->Branch("PosBhabhaPreP_S",&posbhabhaprep_S,"PosBhabhaPreP_S[4]/D");
@@ -2399,6 +2402,8 @@ void MCtree::Loop()
       posbhabhaprep[i] = PosBhabhaPreP[i];
       posbhabhapostx[i] = PosBhabhaPostX[i];
       posbhabhapostp[i] = PosBhabhaPostP[i];
+      posbhabhapsec[i] = PosBhabhaPsec[i];
+
 
       posbhabhaprex_S[i] = PosBhabhaPreX_S[i];
       posbhabhaprep_S[i] = PosBhabhaPreP_S[i];

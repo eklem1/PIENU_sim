@@ -222,7 +222,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
             // This excludes CsI
             if (thePostVolume.find("Crystal") == std::string::npos && thePreVolume.find("Crystal") == std::string::npos) 
             {
-                runAction->SPosBhabha(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
+                // runAction->SPosBhabha(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy);
 
                 //and only when a secondary e- is created
                 bool EnergyAboveThresh = false;
@@ -251,13 +251,14 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
                             float Z_2front = 54.7;  //Z value of the front of WC3 2nd plane, for compairing with truth hits
                             float x_proct = sec_Pos[0] + sec_Momentum[0] * (Z_2front - sec_Pos[2])/sec_Momentum[2];
                             float y_proct = sec_Pos[1] + sec_Momentum[1] * (Z_2front - sec_Pos[2])/sec_Momentum[2];
-                            if (sec_Momentum[2] >= 0){ //only calculate the projected R value if the positron is not going backwards
+                            if (sec_Momentum[2] >= 0 && sec_Pos[2] <= 55.0){ //only calculate the projected R value if the positron is going forwards, and only upstream of WC3
                                 R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
                                 if(R_proj <= 130.0){ //max R of WC3
                                     sec_towardsWC3 = true;
                                 }
                             }
-                            else if(sec_Pos[2] > 55.0){ //if upstream of WC3, then a backwards going e- could cause a track
+                            else if(sec_Pos[2] > 55.0 && sec_Momentum[2] <= 0){ //if downstream of WC3, then a backwards going e- could cause a track
+                                //I should check the e- is going backwards here though
                                 R_proj = sqrt(x_proct*x_proct + y_proct*y_proct);
                                 if(R_proj <= 130.0){ //max R of WC3
                                     sec_towardsWC3 = true;
@@ -268,15 +269,34 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
                                 R_proj = -1;
                             }
 
-                            G4cout << "Electron secondary created with energy: "
-                                << eKin / CLHEP::MeV << " MeV, Rproj: " << R_proj << " -> "<< sec_towardsWC3 << G4endl;
+                            // G4cout << "Electron secondary created with energy: "
+                            //     << eKin / CLHEP::MeV << " MeV, Rproj: " << R_proj << " -> "<< sec_towardsWC3 << G4endl;
 
-                            //  Minimum energy to traverse all layers starting at center of target: 2.382 MeV
-                            if (eKin > 2.3){ //MeV
                                 //do I want to made this a function depending on where the bhabha occurs roughly?
-                                EnergyAboveThresh = true;
-                                // G4cout << "momentum: " << sec_Momentum << G4endl;
 
+                            // if (eKin > 0.000001){ //MeV
+
+                            //  Minimum energy to traverse all layers
+                            if (eKin > 2.4){ //MeV 
+                                EnergyAboveThresh = true;
+                                break;  // no need to check further
+                            }
+                            //  Minimum energy to traverse from center of target: 1.713 MeV
+                            if (sec_Pos[2] >= 0 && eKin > 1.7){ //MeV 
+                                EnergyAboveThresh = true;
+                                break;  // no need to check further
+                            }
+                            else if(sec_Pos[2] > 13.7 && eKin > 1.4){ //downstream of S3
+                                EnergyAboveThresh = true;
+                                break;  // no need to check further
+                            }
+                            else if(sec_Pos[2] > 21.4 && sec_Pos[2] < 71 && eKin > 0.01){ //downstream of T1, but not into T2 yet, very little material in the way now here
+                                EnergyAboveThresh = true;
+                                break;  // no need to check further
+                            }
+                            //now downstream of T2
+                            else if(sec_Pos[2] > 73.5 && eKin > 0.6){ //center of T2, but traveling upstream
+                                EnergyAboveThresh = true;
                                 break;  // no need to check further
                             }
                         }
@@ -293,7 +313,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
                     //any energy of electron
                     // G4cout << "looking at sec any" << G4endl;
 
-                    runAction->SPosBhabha_secAny(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy, sec_Momentum, sec_E);
+                    runAction->SPosBhabha_secAny(preTime, postTime, prePosition, postPosition, preMomentum, postMomentum, preEnergy, postEnergy, sec_Momentum, sec_E, R_proj);
                 }
             }
         }

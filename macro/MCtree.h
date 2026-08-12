@@ -149,8 +149,8 @@ class MCtree {
   Double_t PosBhabhaPreP_S[4];
   Double_t PosBhabhaPostX_S[4];
   Double_t PosBhabhaPostP_S[4], PosBhabha_secRmin;
-  int PosBhabhaCounter_S, PosBhabhaCounter_L;
-  Double_t PosBhabhaPsec_S[4];
+  int PosBhabhaCounter_S;
+  Double_t PosBhabhaPsec_S[4], PosBhabhaPsec[4];
 
 
   Double_t PosAnnihilPreX[4];
@@ -515,8 +515,8 @@ class MCtree {
   Double_t posbhabhaprep_S[4];
   Double_t posbhabhapostx_S[4];
   Double_t posbhabhapostp_S[4], posbhabha_secrmin;
-  int posbhabhacounter_S, posbhabhacounter_L;
-  Double_t posbhabhapsec_S[4];
+  int posbhabhacounter_S;
+  Double_t posbhabhapsec_S[4], posbhabhapsec[4];
 
 
   Double_t posannihilFprex[4];
