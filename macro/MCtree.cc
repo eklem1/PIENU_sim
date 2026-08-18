@@ -380,6 +380,8 @@ void MCtree::SetInputFile(const char* fname) {
   MCTree2->SetBranchAddress("PosTotalBremE", &PosTotalBremE);
   MCTree2->SetBranchAddress("ElecTotalBremE", &ElecTotalBremE);
   MCTree2->SetBranchAddress("PosTotalBhabhaE", &PosTotalBhabhaE);
+  MCTree2->SetBranchAddress("PosTotalBhabhaE_S",&PosTotalBhabhaE_S);
+
   ////////////
   
   //Report
@@ -855,6 +857,7 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("PosTotalBremE",&postotalbreme,"PosTotalBremE/D");
   OutputTree->Branch("ElecTotalBremE",&electotalbreme,"ElecTotalBremE/D");
   OutputTree->Branch("PosTotalBhabhaE",&postotalbhabhae,"PosTotalBhabhaE/D");
+
   //////////
 
   
@@ -2472,7 +2475,7 @@ void MCtree::Loop()
     ///// Additions based on Tristan's work /////
     postotalbreme = PosTotalBremE;
     electotalbreme = ElecTotalBremE;
-    postotalbhabhae = PosTotalBhabhaE;
+    postotalbhabhae = PosTotalBhabhaE_S;
     ////////////
 
     MC.Tpos = Tpos;

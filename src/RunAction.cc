@@ -232,10 +232,9 @@ void RunAction::OpenRoot() {
 
     aTree->Branch("PosTotalBremE",&TotalBremEpos,"PosTotalBremE/D");
     aTree->Branch("ElecTotalBremE",&TotalBremEelec,"ElecTotalBremE[4]/D");
-    aTree->Branch("PosTotalBhabhaE",&TotalBhabhaEpos,"PosTotalBhabhaE/D");
+    aTree->Branch("PosTotalBhabhaE",&PosTotalBhabhaE,"PosTotalBhabhaE/D");
 
     aTree->Branch("PosTotalBhabhaE_S",&TotalBhabhaEpos_S,"PosTotalBhabhaE_S/D");
-
 
     // struct DataArray { double Emu, Pmu, Leaf3; }; DataArray MyDataArray;
     // aTree->Branch("PosBrem", &PB); 

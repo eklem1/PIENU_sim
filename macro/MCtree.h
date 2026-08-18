@@ -181,6 +181,7 @@ class MCtree {
   Double_t PosTotalBremE;
   Double_t ElecTotalBremE;
   Double_t PosTotalBhabhaE;
+  Double_t PosTotalBhabhaE_S;
 
   //Output Variables
 

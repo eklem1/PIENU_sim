@@ -16,7 +16,7 @@
 # /process/inactivate msc
 # /process/inactivate eIoni
 
-# /process/inactivate eBrem
+/process/inactivate eBrem
 # /process/inactivate CoulombScat
 # /process/inactivate phot
 # /process/inactivate compt
