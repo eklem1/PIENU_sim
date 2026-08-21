@@ -519,6 +519,7 @@ class MCtree {
   int posbhabhacounter_S;
   Double_t posbhabhapsec_S[4], posbhabhapsec[4];
 
+  int eIon_eHit_wc3, eIon_gammaHit_wc3, eIon_eHit_s3, eIon_gammaHit_s3;
 
   Double_t posannihilFprex[4];
   Double_t posannihilFprep[4];

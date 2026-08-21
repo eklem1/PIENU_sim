@@ -1,4 +1,4 @@
-//with all NaI and CsI set to air
+///// AIR VERSION /////
 
 #include "globals.hh"
 
@@ -29,8 +29,8 @@
 // and include the required file.
 #undef DETECTOR_CONSTRUCTOR
 #ifndef DETECTOR_CONSTRUCTOR
-#include "CsIConstructorAir.hh"
-#define DETECTOR_CONSTRUCTOR CsIConstructorAir
+#include "CsIConstructor.hh"
+#define DETECTOR_CONSTRUCTOR CsIConstructor
 #define DETECTOR_NAME        "CsI"
 #include "WC3Constructor.hh"
 //#define DETECTOR_CONSTRUCTOR WC3Constructor
@@ -58,7 +58,7 @@
 void WorldConstructor::Init(void)
 {
   SetMessenger(new WorldMessenger(this));
-  AddConstructor(new CsIConstructorAir("CsI",this));
+  AddConstructor(new CsIConstructor("CsI",this));
   AddConstructor(new BeamLineConstructor("BeamLine",this));
   AddConstructor(new SiStripConstructor("SiStrip",this));
   AddConstructor(new BeamWCConstructor("BeamWC",this));
@@ -239,7 +239,6 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
     // Detector --- Construct the toplevel detector volume.
     //------------------------------ 
 
-     /* //completely removing the CsI to remove any backscatter from it
      GeoConstructor& CsI = Get<GeoConstructor>("CsI");
     
      G4LogicalVolume* logCsI = CsI.GetPiece(); // logical volume
@@ -253,7 +252,7 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
                      0);
     
          Region->AddRootLogicalVolume(logCsI);
-    */
+    
 
     GeoConstructor& SiStrip = Get<GeoConstructor>("SiStrip");
 
@@ -835,8 +834,7 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
 
     G4LogicalVolume* bina_shell_log
       = new G4LogicalVolume(bina_shell_tub,
-                            // FindMaterial("G4_Al"),
-                            FindMaterial("G4_AIR"),
+                            FindMaterial("G4_Al"),
                             "shell",0,0,0);
 
     bina_shell_log->SetVisAttributes(visual);
@@ -912,9 +910,7 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
 
     G4LogicalVolume* bina_flange1_log
       = new G4LogicalVolume(bina_flange1_tub,
-                            // FindMaterial("G4_Al"),
-                            FindMaterial("G4_AIR"),
-
+                            FindMaterial("G4_Al"),
                             "flange1",0,0,0);
 
     bina_flange1_log->SetVisAttributes(visual);
@@ -937,9 +933,7 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
 
     G4LogicalVolume* bina_flange2_log
       = new G4LogicalVolume(bina_flange2_tub,
-                            // FindMaterial("G4_Al"),
-                            FindMaterial("G4_AIR"),
-
+                            FindMaterial("G4_Al"),
                             "flange2",0,0,0);
 
     bina_flange2_log->SetVisAttributes(visual);
@@ -987,9 +981,7 @@ G4LogicalVolume *WorldConstructor::GetPiece(void)
 
     G4LogicalVolume* dud_log
       = new G4LogicalVolume(dud_tub,
-                            // FindMaterial("G4_Al"),
-                            FindMaterial("G4_AIR"),
-
+                            FindMaterial("G4_Al"),
                             "dud",0,0,0);
 
     dud_log->SetVisAttributes(visual);
@@ -1021,9 +1013,7 @@ G4PVPlacement(0,G4ThreeVector(0.0,0.0,T1_z-T1_lngth/2.-dud_dz/2.),
 
     G4LogicalVolume* dudm_log
       = new G4LogicalVolume(dudm_tub,
-                            // FindMaterial("G4_MYLAR"),
-                            FindMaterial("G4_AIR"),
-
+                            FindMaterial("G4_MYLAR"),
                             "dudm",0,0,0);
 
     dudm_log->SetVisAttributes(visual);
@@ -1054,9 +1044,7 @@ G4PVPlacement(0,G4ThreeVector(0.0,0.0,T1_z-T1_lngth/2.-dud_dz*1.5),
 
     G4LogicalVolume* dudt_log
       = new G4LogicalVolume(dudt_tub,
-                            // FindMaterial("G4_POLYVINYLIDENE_FLUORIDE"),
-                            FindMaterial("G4_AIR"),
-
+                            FindMaterial("G4_POLYVINYLIDENE_FLUORIDE"),
                             "dudt",0,0,0);
 
     dudt_log->SetVisAttributes(visual);

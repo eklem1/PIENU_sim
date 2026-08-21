@@ -132,6 +132,12 @@ void MCtree::Clear()
 
   bhabhaCreatedE = 0;
 
+  eIon_eHit_wc3 = 0;
+  eIon_gammaHit_wc3 = 0;
+  eIon_eHit_s3 = 0;
+  eIon_gammaHit_s3 = 0;
+
+
   posannihilRcounter = 0;
   posannihilFcounter = 0;
 
@@ -821,6 +827,12 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("PosBhabhaCounter_S",&posbhabhacounter_S,"PosBhabhaCounter_S/I");
   OutputTree->Branch("PosBhabha_secRmin",&posbhabha_secrmin,"PosBhabha_secRmin/I");
   OutputTree->Branch("PosBhabhaPsec_S",&posbhabhapsec_S,"PosBhabhaPsec_S[4]/D");
+
+  //and yet another way to try and get a handle on bhabha
+  OutputTree->Branch("eIon_eHit_wc3",&eIon_eHit_wc3,"eIon_eHit_wc3/I");
+  OutputTree->Branch("eIon_gammaHit_wc3",&eIon_gammaHit_wc3,"eIon_gammaHit_wc3/I");
+  OutputTree->Branch("eIon_eHit_s3",&eIon_eHit_s3,"eIon_eHit_wc3/I");
+  OutputTree->Branch("eIon_gammaHit_s3",&eIon_gammaHit_s3,"eIon_gammaHit_s3/I");
 
   OutputTree->Branch("PosAnnihilRPreX",&posannihilRprex,"PosAnnihilRPreX[4]/D");
   OutputTree->Branch("PosAnnihilRPreP",&posannihilRprep,"PosAnnihilRPreP[4]/D");
@@ -1699,6 +1711,17 @@ void MCtree::Loop()
         // Tristan Sep. 22/17
         if (volumeID0 ==2 && volumeID2>400 && energyDeposit > 0.0005)
           {
+            if (CreatorProcess==2002) { //the particle, looking at e- and gammas, came from eIon (bhabha?)
+              //extra hit from bhabha
+              if (PID == 11) {
+                eIon_eHit_wc3 += 1;
+
+              }
+              if  (PID == 22){
+                eIon_gammaHit_wc3 += 1;
+              }
+            }
+
             if(volumeID2==401)
               {
                 // Tristan Sep. 22/17
@@ -1952,6 +1975,18 @@ void MCtree::Loop()
         // Silicon Detector 2
         if (volumeID0 == 2 && (volumeID2 == 21 || volumeID2 ==22))
           {
+            if (CreatorProcess==2002) { //the particle, looking at e- and gammas, came from eIon (bhabha?)
+              //extra hit from bhabha
+              if (PID == 11) {
+                eIon_eHit_s3 += 1;
+
+              }
+              if  (PID == 22){
+                eIon_gammaHit_s3 += 1;
+
+              }
+            }
+
             if (BINAflag == 1){ //for backscatter
               backscatter_any[9] +=1;
                 // cout << "S2: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;
