@@ -521,6 +521,9 @@ class MCtree {
 
   int eIon_eHit_wc3, eIon_gammaHit_wc3, eIon_eHit_s3, eIon_gammaHit_s3;
 
+  int Comp_eHit_wc3, Comp_eHit_s3;
+  int Conv_eHit_wc3, Conv_eHit_s3, Conv_pHit_wc3, Conv_pHit_s3;
+
   Double_t posannihilFprex[4];
   Double_t posannihilFprep[4];
   Double_t posannihilFpostx[4];

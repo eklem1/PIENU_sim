@@ -132,10 +132,12 @@ void MCtree::Clear()
 
   bhabhaCreatedE = 0;
 
-  eIon_eHit_wc3 = 0;
-  eIon_gammaHit_wc3 = 0;
-  eIon_eHit_s3 = 0;
-  eIon_gammaHit_s3 = 0;
+  eIon_eHit_wc3 = eIon_gammaHit_wc3= 0;
+  eIon_eHit_s3 = eIon_gammaHit_s3 = 0;
+
+  Comp_eHit_wc3 = Comp_eHit_s3 = 0 ;
+  Conv_eHit_wc3 = Conv_eHit_s3 = 0 ;
+  Conv_pHit_wc3 = Conv_pHit_s3 = 0 ;
 
 
   posannihilRcounter = 0;
@@ -833,6 +835,15 @@ void MCtree::SetOutputFile(const char* fname, const char* tname){
   OutputTree->Branch("eIon_gammaHit_wc3",&eIon_gammaHit_wc3,"eIon_gammaHit_wc3/I");
   OutputTree->Branch("eIon_eHit_s3",&eIon_eHit_s3,"eIon_eHit_wc3/I");
   OutputTree->Branch("eIon_gammaHit_s3",&eIon_gammaHit_s3,"eIon_gammaHit_s3/I");
+
+  OutputTree->Branch("Comp_eHit_wc3",&Comp_eHit_wc3,"Comp_eHit_wc3/I");
+  OutputTree->Branch("Comp_eHit_s3",&Comp_eHit_s3,"Comp_eHit_s3/I");
+
+  OutputTree->Branch("Conv_eHit_wc3",&Conv_eHit_wc3,"Conv_eHit_wc3/I");
+  OutputTree->Branch("Conv_eHit_s3",&Conv_eHit_s3,"Conv_eHit_s3/I");
+  OutputTree->Branch("Conv_pHit_wc3",&Conv_pHit_wc3,"Conv_pHit_wc3/I");
+  OutputTree->Branch("Conv_pHit_s3",&Conv_pHit_s3,"Conv_pHit_s3/I");
+
 
   OutputTree->Branch("PosAnnihilRPreX",&posannihilRprex,"PosAnnihilRPreX[4]/D");
   OutputTree->Branch("PosAnnihilRPreP",&posannihilRprep,"PosAnnihilRPreP[4]/D");
@@ -1722,6 +1733,20 @@ void MCtree::Loop()
               }
             }
 
+            if (PID == 11) { 
+              if (CreatorProcess==2013){ //electron from compton scattered
+                Comp_eHit_wc3 += 1;
+              }
+              else if (CreatorProcess==2014){ //electron from conv
+                Conv_eHit_wc3 += 1;
+              }
+            }
+            else if (PID == -11 && CreatorProcess==2014) { //positon from conv
+                Conv_pHit_wc3 += 1;
+            }
+
+
+
             if(volumeID2==401)
               {
                 // Tristan Sep. 22/17
@@ -1973,7 +1998,7 @@ void MCtree::Loop()
           }
         
         // Silicon Detector 2
-        if (volumeID0 == 2 && (volumeID2 == 21 || volumeID2 ==22))
+        if (volumeID0 == 2 && (volumeID2 == 21 || volumeID2 == 22))
           {
             if (CreatorProcess==2002) { //the particle, looking at e- and gammas, came from eIon (bhabha?)
               //extra hit from bhabha
@@ -1985,6 +2010,18 @@ void MCtree::Loop()
                 eIon_gammaHit_s3 += 1;
 
               }
+            }
+
+            if (PID == 11) {
+              if (CreatorProcess==2013){ //electron from compton scattered
+                Comp_eHit_s3 += 1;
+              }
+              else if (CreatorProcess==2014){
+                Conv_eHit_s3 += 1;
+              }
+            }
+            else if (PID == -11 && CreatorProcess==2014) {
+                Conv_pHit_s3 += 1;
             }
 
             if (BINAflag == 1){ //for backscatter
