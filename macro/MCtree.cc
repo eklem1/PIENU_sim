@@ -2000,29 +2000,6 @@ void MCtree::Loop()
         // Silicon Detector 2
         if (volumeID0 == 2 && (volumeID2 == 21 || volumeID2 == 22))
           {
-            if (CreatorProcess==2002) { //the particle, looking at e- and gammas, came from eIon (bhabha?)
-              //extra hit from bhabha
-              if (PID == 11) {
-                eIon_eHit_s3 += 1;
-
-              }
-              if  (PID == 22){
-                eIon_gammaHit_s3 += 1;
-
-              }
-            }
-
-            if (PID == 11) {
-              if (CreatorProcess==2013){ //electron from compton scattered
-                Comp_eHit_s3 += 1;
-              }
-              else if (CreatorProcess==2014){
-                Conv_eHit_s3 += 1;
-              }
-            }
-            else if (PID == -11 && CreatorProcess==2014) {
-                Conv_pHit_s3 += 1;
-            }
 
             if (BINAflag == 1){ //for backscatter
               backscatter_any[9] +=1;
@@ -2092,6 +2069,27 @@ void MCtree::Loop()
         //Tracking threshold study, Tristan, August 16/17
         if (volumeID0 == 2 && (volumeID2 == 31 || volumeID2 == 32) && energyDeposit > 0.02)
           {
+            if (CreatorProcess==2002) { //the particle, looking at e- and gammas, came from eIon (bhabha?)
+              //extra hit from bhabha
+              if (PID == 11) {
+                eIon_eHit_s3 += 1;
+              }
+              if  (PID == 22){
+                eIon_gammaHit_s3 += 1;
+              }
+            }
+            if (PID == 11) {
+              if (CreatorProcess==2013){ //electron from compton scattered
+                Comp_eHit_s3 += 1;
+              }
+              else if (CreatorProcess==2014){
+                Conv_eHit_s3 += 1;
+              }
+            }
+            else if (PID == -11 && CreatorProcess==2014) {
+                Conv_pHit_s3 += 1;
+            }
+
             if (BINAflag == 1){ //for backscatter
               backscatter_any[10] +=1;
                 // cout << "S3: [" << volumeID0 << ", " << volumeID1 << ", " << volumeID2 << "]" << endl;

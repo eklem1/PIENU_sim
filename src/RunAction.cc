@@ -232,7 +232,7 @@ void RunAction::OpenRoot() {
 
     aTree->Branch("PosTotalBremE",&TotalBremEpos,"PosTotalBremE/D");
     aTree->Branch("ElecTotalBremE",&TotalBremEelec,"ElecTotalBremE[4]/D");
-    aTree->Branch("PosTotalBhabhaE",&PosTotalBhabhaE,"PosTotalBhabhaE/D");
+    aTree->Branch("PosTotalBhabhaE",&TotalBhabhaEpos,"PosTotalBhabhaE/D");
 
     aTree->Branch("PosTotalBhabhaE_S",&TotalBhabhaEpos_S,"PosTotalBhabhaE_S/D");
 
@@ -635,8 +635,7 @@ void RunAction::SPosBhabha_secAny(G4double pretime, G4double posttime, G4ThreeVe
 
           PosBhabhaCounter += 1;
       }
-      // TotalBhabhaEpos_S += preE - postE;
-    // }
+      TotalBhabhaEpos += preE - postE;
 
 }
 
