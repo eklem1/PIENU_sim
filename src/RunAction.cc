@@ -631,7 +631,7 @@ void RunAction::SPosBhabha_secAny(G4double pretime, G4double posttime, G4ThreeVe
 
       //counts how many times this process happens in total for an event, prob don't need the extra if with the energy check around this
       if (pretime > -10000){ 
-          G4cout << "Counted sec any" << G4endl;
+          // G4cout << "Counted sec any" << G4endl;
 
           PosBhabhaCounter += 1;
       }

@@ -235,7 +235,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep) {
                 G4double R_proj = -1.0;
 
                 if (secondaries) {
-                    G4cout << "----- one step with secondaries -----" << G4endl;
+                    // G4cout << "----- one step with secondaries -----" << G4endl;
 
                     for (const auto* sec : *secondaries) {
                         if (sec->GetDefinition()->GetParticleName() == "e-") {
@@ -478,7 +478,7 @@ bool SteppingAction::PointingIntoBina(G4ThreeVector Position, G4ThreeVector Mome
     py /= pz;
     pz /= pz;
 
-    G4cout << "pz check: " << pz << "" << G4endl;
+    // G4cout << "pz check: " << pz << "" << G4endl;
 
     //if particle z position is downstream of the front face of BINA -> false
     if (z > binaz) return false;

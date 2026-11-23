@@ -36,5 +36,5 @@
 # /vis/drawVolume
 
 #Number of events to simulate
-/run/beamOn 200000
+/run/beamOn 1600000
 #/run/beamOn 100

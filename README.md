@@ -11,7 +11,7 @@ Run macros: pienu_2012.mac & pimue_2012.mac
     source setup.sh
     Then inside pienu_build/:
         cmake ..
-        make
+        make 
 
 ### Versions
 There are some version of MC building files used to run different versions of the MC.

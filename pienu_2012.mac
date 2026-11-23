@@ -13,14 +13,15 @@
 # /process/em/AddEmRegion Region none #does this work at all?
 
 /process/list
-# /process/inactivate msc
-# /process/inactivate eIoni
+
 
 # /process/inactivate eBrem
 # /process/inactivate CoulombScat
 # /process/inactivate phot
 # /process/inactivate compt
 # /process/inactivate conv
+# /process/inactivate msc
+# /process/inactivate eIoni
 
 # /process/inactivate annihil 
 
@@ -49,4 +50,4 @@
 
 #Number of events to simulate
 # /run/beamOn 200
-/run/beamOn 200000
+/run/beamOn 1600000
